@@ -1,13 +1,13 @@
-import { Inter } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"] });
+import { Layout } from "../components/Layout";
 
 export default function Home() {
     return (
-        <main
-            className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
-        >
-            Hi
-        </main>
+        <Layout>
+            <main
+                className={`text-primary flex min-h-screen flex-col items-center justify-between p-10 text-5xl`}
+            >
+                Hello world
+            </main>
+        </Layout>
     );
 }
