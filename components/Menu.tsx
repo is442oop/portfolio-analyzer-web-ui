@@ -5,6 +5,7 @@ import { sidebarLinks } from "./Sidebar";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { rubik } from "./Layout";
+import SidebarItem from "./SidebarItem";
 
 export function MenuButton() {
     const location = useRouter();
@@ -21,31 +22,12 @@ export function MenuButton() {
             >
                 <ul className="flex flex-col gap-y-2">
                     {sidebarLinks.map((link, index) => (
-                        <Link
-                            href={link.href}
+                        <SidebarItem
+                            link={link}
+                            location={location}
                             key={index}
-                            className={cn("border-l-4 border-transparent", {
-                                " border-primary border-l-4":
-                                    location.pathname === link.href,
-                            })}
-                        >
-                            <li
-                                className={cn(
-                                    "hover:bg-border text-muted-foreground flex cursor-pointer items-center gap-x-2 rounded-lg px-3 py-2 text-base font-normal",
-                                    {
-                                        "rounded-l-none":
-                                            location.pathname === link.href,
-                                    },
-                                )}
-                            >
-                                <span className="p-1.5">{link.icon}</span>
-                                <span
-                                    className={cn("origin-left duration-300")}
-                                >
-                                    {link.title}
-                                </span>
-                            </li>
-                        </Link>
+                            open={true}
+                        />
                     ))}
                 </ul>
             </PopoverContent>
