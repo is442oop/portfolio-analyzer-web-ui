@@ -2,7 +2,6 @@ import { Menu } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/Popover";
 import { cn } from "@/utils/cn";
 import { sidebarLinks } from "./Sidebar";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { rubik } from "./Layout";
 import SidebarItem from "./SidebarItem";
