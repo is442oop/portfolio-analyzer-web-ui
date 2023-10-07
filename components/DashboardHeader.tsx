@@ -8,7 +8,6 @@ export const DashboardHeader = () => {
         previousBalance: 9500, // take it as balance 24 hours ago?
     });
 
-    
     const percentageChange =
         ((portfolioData.currentBalance - portfolioData.previousBalance) /
             portfolioData.previousBalance) *
@@ -37,28 +36,23 @@ export const DashboardHeader = () => {
             </div>
 
             {/* Balance */}
-            {showBalance ? (
-                <div>
-                    <p className="mb-2 text-xl font-semibold">
-                        Current Balance
-                    </p>
-                    <div className="flex items-center justify-between">
+            <div>
+                <p className="mb-2 text-xl font-semibold">Current Balance</p>
+                <div className="flex items-center justify-between">
+                    {showBalance ? (
                         <p className="text-4xl font-bold text-black">
                             ${portfolioData.currentBalance.toFixed(2)}
                         </p>
-                        <button className="rounded-xl bg-blue-600 px-4 py-2 mr-4 text-white hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300">
-                            + Create Portfolio
-                        </button>
-                    </div>
+                    ) : (
+                        <p className="text-4xl font-bold text-black">
+                            •••••••••
+                        </p>
+                    )}
+                    <button className="mr-4 rounded-xl bg-blue-600 px-4 py-2 text-white hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300">
+                        + Create Portfolio
+                    </button>
                 </div>
-            ) : (
-                <div>
-                    <p className="mb-2 text-xl font-semibold">
-                        Current Balance
-                    </p>
-                    <p className="text-4xl font-bold text-black">•••••••••</p>
-                </div>
-            )}
+            </div>
             {/* Percentage Change */}
             <div className="flex items-center space-x-1 ">
                 <p
