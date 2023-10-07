@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import axios from "axios";
 
 import {
     Dialog,
@@ -11,59 +9,61 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-    DialogFooter,
 } from "@/components/ui/Dialog";
 
+// TODO: refactor to be able to be prefilled with data for updating portfolio name
 export const PortfolioModal = () => {
-    const [portfolioName, setPortfolioName] = useState("My New Portfolio");
+    const [portfolioName, setPortfolioName] = useState("");
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log(portfolioName);
-        // axios.post("/api/portfolios", {
-        //     name: portfolioName,
-        // });
-        // change axios post url when backend api endpoints are developed
     };
 
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button className="mr-4 rounded-xl bg-blue-600 px-4 py-2 text-white hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300" variant="outline">+ New Portfolio</Button>
+                <div>
+                    <Button className="hidden w-fit  text-xs sm:block">
+                        + New Portfolio
+                    </Button>
+                    <Button className="w-fit sm:hidden"> + </Button>
+                </div>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="max-w-sm sm:max-w-xl">
                 <DialogHeader>
-                    <DialogTitle>New Portfolio</DialogTitle>
-                    <DialogDescription>
-                        Give your new portfolio a name!
-                    </DialogDescription>
+                    <DialogTitle className="text-primary">
+                        New Portfolio
+                    </DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleSubmit}>
                     <div>
                         <div>
-                            <p className="font-bold">Portfolio Name</p>
+                            <p className="pb-1 font-bold">Portfolio Name</p>
                             <Input
                                 id="name"
                                 className="col-span-3"
-                                value={portfolioName}
+                                placeholder={portfolioName}
+                                autoFocus
                                 onChange={(e) =>
                                     setPortfolioName(e.target.value)
                                 }
                                 maxLength={24}
                             />
                         </div>
-                        <div>
-                            <DialogDescription className="mx-1 my-2">
-                                {portfolioName.length}/24 characters
-                            </DialogDescription>
-                        </div>
-                    </div>
 
-                    <div>
-                        <Button type="submit" disabled={portfolioName.length == 0} className="w-full">
-                            <p className="font-bold">Create portfolio</p>
-                        </Button>
+                        <DialogDescription className="mx-1 my-2">
+                            {portfolioName.length}/24 characters
+                        </DialogDescription>
                     </div>
+                    {/* TODO: close modal on submit */}
+                    <Button
+                        type="submit"
+                        disabled={portfolioName.length == 0}
+                        className="w-full"
+                    >
+                        <p className="font-bold">Create portfolio</p>
+                    </Button>
                 </form>
             </DialogContent>
         </Dialog>

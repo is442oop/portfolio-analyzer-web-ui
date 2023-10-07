@@ -19,7 +19,8 @@ const config: Config = {
             colors: {
                 border: "hsl(var(--border))",
                 input: "hsl(var(--input))",
-                ring: "hsl(var(--ring))",
+                // ring: "hsl(var(--ring))",
+                ring: "#749AC7",
                 background: "hsl(var(--background))",
                 foreground: "hsl(var(--foreground))",
                 primary: {
