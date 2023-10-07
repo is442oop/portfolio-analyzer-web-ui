@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import { PortfolioModal } from "./PortfolioModal";
+import { Button } from "./ui/Button";
+import { Badge } from "./ui/Badge";
 
 export const DashboardHeader = () => {
     const [showBalance, setShowBalance] = useState(true);
+    // TODO: refactor in future when shape of data is out
     const [portfolioData, setPortfolioData] = useState({
         currentBalance: 10000,
-        previousBalance: 9500, // take it as balance 24 hours ago?
+        previousBalance: 9900, // 24hrs ago balance
     });
 
     const percentageChange =
@@ -14,58 +16,67 @@ export const DashboardHeader = () => {
             portfolioData.previousBalance) *
         100;
 
+    const currentBalance = portfolioData.currentBalance.toFixed(2);
+    const isPositiveChange = percentageChange >= 0;
     return (
-        <div className="rounded-lg bg-white p-4 shadow-md">
-            <div className="mb-4 flex items-center space-x-2">
-                <h2 className="text-2xl font-semibold">Portfolio Dashboard</h2>
-                <div className="flex cursor-pointer items-center">
-                    {/* Toggle visibility of balance */}
-                    <div
-                        className={`${
-                            showBalance ? "bg-opacity-100" : "bg-opacity-20"
-                        }`}
-                        onClick={() => setShowBalance(!showBalance)}
-                    >
-                        <Image
-                            src="/icons8-eye-30.png"
-                            alt=""
-                            width={20}
-                            height={20}
-                        />
+        <div className="space-y-4 rounded-lg bg-white p-4">
+            <h2 className="text-2xl font-semibold text-primary">
+                Portfolio Dashboard
+            </h2>
+
+            <div className="space-y-2">
+                {/* Balance */}
+                <div className="flex gap-x-2">
+                    <p className="text-lg text-foreground">Current Balance</p>
+                    <div className="flex cursor-pointer items-center">
+                        {/* Toggle visibility of balance */}
+                        <div
+                            className={`${
+                                showBalance ? "bg-opacity-100" : "bg-opacity-20"
+                            }`}
+                            onClick={() => setShowBalance(!showBalance)}
+                        >
+                            <Image
+                                src="/icons8-eye-30.png"
+                                alt=""
+                                width={20}
+                                height={20}
+                            />
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            {/* Balance */}
-            <div>
-                <p className="mb-2 text-xl font-semibold">Current Balance</p>
                 <div className="flex items-center justify-between">
                     {showBalance ? (
-                        <p className="text-4xl font-bold text-black">
-                            ${portfolioData.currentBalance.toLocaleString('en-US', {minimumFractionDigits: 2})}
+                        <p className="text-2xl font-bold tracking-wider text-black sm:text-3xl">
+                            ${currentBalance}
                         </p>
                     ) : (
-                        <p className="text-4xl font-bold text-black">
+                        <p className="text-2xl font-bold text-black sm:text-3xl">
                             •••••••••
                         </p>
                     )}
-                    <PortfolioModal/>
+
+                    <Button className="hidden w-fit  text-xs sm:block">
+                        {" "}
+                        + Create Portfolio
+                    </Button>
+                    <Button className="w-fit sm:hidden"> + </Button>
                 </div>
-            </div>
-            {/* Percentage Change */}
-            <div className="flex items-center space-x-1 ">
-                <p
-                    className={`mt-2 text-base font-bold ${
-                        percentageChange >= 0
-                            ? "text-green-500"
-                            : "text-red-500"
-                    }`}
-                >
-                    +{percentageChange.toFixed(2)}%
-                </p>
-                <span className="mt-2 rounded bg-gray-200 px-2 py-1 text-xs text-gray-700">
-                    <p>24h</p>
-                </span>
+
+                {/* Percentage Change */}
+                <div className="flex items-center space-x-1 ">
+                    <p
+                        className={`text-base font-bold tracking-wider ${
+                            isPositiveChange
+                                ? "text-green-600"
+                                : "text-destructive"
+                        }`}
+                    >
+                        {isPositiveChange && "+"}
+                        {percentageChange.toFixed(2)}%
+                    </p>
+                    <Badge variant={"secondary"}>24hr</Badge>
+                </div>
             </div>
         </div>
     );
