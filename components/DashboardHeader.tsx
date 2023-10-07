@@ -47,22 +47,26 @@ export const DashboardHeader = () => {
                 </div>
                 <div className="flex items-center justify-between">
                     {showBalance ? (
-                        <p className="text-4xl font-bold tracking-wider text-black">
-                            {currentBalance}
+                        <p className="text-2xl font-bold tracking-wider text-black sm:text-3xl">
+                            ${currentBalance}
                         </p>
                     ) : (
-                        <p className="text-4xl font-bold text-black">
+                        <p className="text-2xl font-bold text-black sm:text-3xl">
                             •••••••••
                         </p>
                     )}
 
-                    <Button> + Create Portfolio</Button>
+                    <Button className="hidden w-fit  text-xs sm:block">
+                        {" "}
+                        + Create Portfolio
+                    </Button>
+                    <Button className="w-fit sm:hidden"> + </Button>
                 </div>
 
                 {/* Percentage Change */}
                 <div className="flex items-center space-x-1 ">
                     <p
-                        className={`text-base font-bold ${
+                        className={`text-base font-bold tracking-wider ${
                             isPositiveChange
                                 ? "text-green-600"
                                 : "text-destructive"
