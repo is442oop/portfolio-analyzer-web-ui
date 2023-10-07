@@ -39,23 +39,25 @@ const Sidebar = () => {
             <div
                 className={`${
                     open ? "w-52" : "w-fit"
-                } bg-muted relative hidden h-screen border-r border-gray-200 p-2 duration-300 sm:block`}
+                } relative hidden h-screen border-r border-gray-200 bg-muted p-2 duration-300 sm:block`}
             >
                 <PanelLeftOpen
                     className={cn(
-                        "text-primary hover:bg-muted absolute -right-11 top-7 h-auto w-fit cursor-pointer rounded-md border p-1.5",
+                        "absolute -right-11 top-7 h-auto w-fit cursor-pointer rounded-md border p-1.5 text-primary hover:bg-muted",
                         { hidden: open },
                     )}
                     onClick={() => setOpen(!open)}
                 />
                 <PanelLeftClose
                     className={cn(
-                        "text-primary hover:bg-muted absolute -right-11 top-7 h-auto w-fit cursor-pointer rounded-md border p-1.5",
+                        "absolute -right-11 top-7 h-auto w-fit cursor-pointer rounded-md border p-1.5 text-primary hover:bg-muted",
                         { hidden: !open },
                     )}
                     onClick={() => setOpen(!open)}
                 />
-
+                <h1 className="w-full p-2 text-center font-bold text-primary">
+                    {open ? "Goldman Sachs" : "GS"}
+                </h1>
                 <ul className="flex flex-col gap-y-2 pt-3">
                     {sidebarLinks.map((link, index) => (
                         <SidebarItem

@@ -3,20 +3,20 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/Popover";
 import { cn } from "@/utils/cn";
 import { sidebarLinks } from "./Sidebar";
 import { useRouter } from "next/router";
-import { rubik } from "./Layout";
 import SidebarItem from "./SidebarItem";
+import { poppins } from "./Layout";
 
 export function MenuButton() {
     const location = useRouter();
     return (
         <Popover>
             <PopoverTrigger asChild>
-                <Menu className="text-primary hover:bg-muted  h-auto w-fit cursor-pointer rounded-md border p-1.5" />
+                <Menu className="h-auto w-fit  cursor-pointer rounded-md border p-1.5 text-primary hover:bg-muted" />
             </PopoverTrigger>
             <PopoverContent
                 className={cn(
-                    "bg-muted/90 ml-3 w-80 font-sans",
-                    rubik.className,
+                    "ml-3 w-80 bg-muted font-sans",
+                    poppins.className,
                 )}
             >
                 <ul className="flex flex-col gap-y-2">

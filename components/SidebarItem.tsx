@@ -15,22 +15,22 @@ const SidebarItem = ({ link, location, open }: SidebarItemProps) => {
         <Link
             href={link.href}
             className={cn("border-l-4 border-transparent", {
-                " border-primary border-l-4": location.pathname === link.href,
+                " border-l-4 border-primary": location.pathname === link.href,
             })}
         >
             <li
                 className={cn(
-                    "hover:bg-border text-muted-foreground flex cursor-pointer items-center gap-x-2 rounded-lg px-3 py-2 text-base font-normal",
+                    "flex cursor-pointer items-center gap-x-2 rounded-lg px-2 py-1 text-base font-normal hover:bg-border",
                     {
                         "rounded-l-none": location.pathname === link.href,
                     },
                 )}
             >
-                <span className="p-1.5">{link.icon}</span>
+                <span className="p-1">{link.icon}</span>
                 <span
                     className={cn(
                         { hidden: !open },
-                        "origin-left duration-300",
+                        "origin-left text-sm font-normal",
                     )}
                 >
                     {link.title}
