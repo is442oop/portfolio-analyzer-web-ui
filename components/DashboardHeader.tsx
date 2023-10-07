@@ -42,7 +42,7 @@ export const DashboardHeader = () => {
                 <div className="flex items-center justify-between">
                     {showBalance ? (
                         <p className="text-4xl font-bold text-black">
-                            ${portfolioData.currentBalance.toFixed(2)}
+                            ${portfolioData.currentBalance.toLocaleString('en-US', {minimumFractionDigits: 2})}
                         </p>
                     ) : (
                         <p className="text-4xl font-bold text-black">
