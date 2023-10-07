@@ -43,14 +43,14 @@ const Sidebar = () => {
             >
                 <PanelLeftOpen
                     className={cn(
-                        "absolute -right-11 top-7 h-auto w-fit cursor-pointer rounded-md border p-1.5 text-primary hover:bg-muted",
+                        "absolute -right-11 top-2 h-auto w-fit cursor-pointer rounded-md border p-1.5 text-primary hover:bg-muted",
                         { hidden: open },
                     )}
                     onClick={() => setOpen(!open)}
                 />
                 <PanelLeftClose
                     className={cn(
-                        "absolute -right-11 top-7 h-auto w-fit cursor-pointer rounded-md border p-1.5 text-primary hover:bg-muted",
+                        "absolute -right-11 top-2 h-auto w-fit cursor-pointer rounded-md border p-1.5 text-primary hover:bg-muted",
                         { hidden: !open },
                     )}
                     onClick={() => setOpen(!open)}
