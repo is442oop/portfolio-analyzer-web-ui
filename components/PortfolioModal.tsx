@@ -29,7 +29,7 @@ export const PortfolioModal = () => {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="outline">+ New Portfolio</Button>
+                <Button className="mr-4 rounded-xl bg-blue-600 px-4 py-2 text-white hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300" variant="outline">+ New Portfolio</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>

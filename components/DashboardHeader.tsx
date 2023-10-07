@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
+import { PortfolioModal } from "./PortfolioModal";
 
 export const DashboardHeader = () => {
     const [showBalance, setShowBalance] = useState(true);
@@ -48,9 +49,7 @@ export const DashboardHeader = () => {
                             •••••••••
                         </p>
                     )}
-                    <button className="mr-4 rounded-xl bg-blue-600 px-4 py-2 text-white hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300">
-                        + Create Portfolio
-                    </button>
+                    <PortfolioModal/>
                 </div>
             </div>
             {/* Percentage Change */}
