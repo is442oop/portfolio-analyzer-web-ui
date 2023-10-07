@@ -19,7 +19,7 @@ export const PortfolioModal = () => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log("submitting");
+        console.log(portfolioName);
         // axios.post("/api/portfolios", {
         //     name: portfolioName,
         // });
