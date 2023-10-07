@@ -16,7 +16,9 @@ export function Layout({ children }: LayoutProps) {
             <div className="flex h-screen flex-auto">
                 <Sidebar />
                 <div className="grow">
-                    <div className="px-5 py-20 sm:px-10">{children}</div>
+                    <div className="h-screen px-5 py-20 sm:px-10">
+                        {children}
+                    </div>
                 </div>
             </div>
         </main>

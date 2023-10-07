@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 
 import { cn } from "@/utils/cn";
-import { SidebarNavItem } from "@/types";
 import {
     CandlestickChart,
     Gauge,
@@ -13,7 +12,7 @@ import {
 import { MenuButton } from "./Menu";
 import SidebarItem from "./SidebarItem";
 
-export const sidebarLinks: SidebarNavItem[] = [
+export const sidebarLinks: SidebarItemType[] = [
     {
         title: "Dashboard",
         href: "/dashboard",
@@ -55,7 +54,7 @@ const Sidebar = () => {
                     )}
                     onClick={() => setOpen(!open)}
                 />
-                <h1 className="w-full p-2 text-center font-bold text-primary">
+                <h1 className="w-full p-2 text-center text-xl font-bold text-primary">
                     {open ? "Goldman Sachs" : "GS"}
                 </h1>
                 <ul className="flex flex-col gap-y-2 pt-3">
@@ -70,7 +69,7 @@ const Sidebar = () => {
                 </ul>
             </div>
             {/* Mobile Menu */}
-            <div className="ml-3 pt-3">
+            <div className="ml-3 pt-3 sm:hidden">
                 <MenuButton />
             </div>
         </div>

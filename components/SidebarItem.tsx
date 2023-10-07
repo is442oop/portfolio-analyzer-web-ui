@@ -1,14 +1,13 @@
-import { SidebarNavItem } from "@/types";
 import { cn } from "@/utils/cn";
 import Link from "next/link";
 import { NextRouter } from "next/router";
 import React from "react";
 
-type SidebarItemProps = {
-    link: SidebarNavItem;
+interface SidebarItemProps {
+    link: SidebarItemType;
     location: NextRouter;
     open: boolean;
-};
+}
 
 const SidebarItem = ({ link, location, open }: SidebarItemProps) => {
     return (
@@ -20,7 +19,7 @@ const SidebarItem = ({ link, location, open }: SidebarItemProps) => {
         >
             <li
                 className={cn(
-                    "flex cursor-pointer items-center gap-x-2 rounded-lg px-2 py-1 text-base font-normal hover:bg-border",
+                    "flex cursor-pointer items-center gap-x-2 rounded-lg px-2 py-1 font-normal text-foreground hover:bg-border",
                     {
                         "rounded-l-none": location.pathname === link.href,
                     },
@@ -30,7 +29,7 @@ const SidebarItem = ({ link, location, open }: SidebarItemProps) => {
                 <span
                     className={cn(
                         { hidden: !open },
-                        "origin-left text-sm font-normal",
+                        "origin-left text-sm font-medium",
                     )}
                 >
                     {link.title}
