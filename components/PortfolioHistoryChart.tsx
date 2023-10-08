@@ -16,7 +16,7 @@ const PortfolioHistoryChart = () => {
 
     return (
         <div className="space-y-2 rounded-xl border px-4 py-5">
-            <div className="flex flex-col items-center justify-between gap-y-2 font-bold sm:flex-row">
+            <div className="flex flex-col items-center justify-between gap-y-2 font-bold md:flex-row">
                 <h1>Historical Trend</h1>
                 <ChartControls
                     selectedPeriod={selectedPeriod}
