@@ -16,14 +16,14 @@ const PortfolioHistoryChart = () => {
 
     return (
         <div className="space-y-2 rounded-xl border px-4 py-5">
-            <div className="flex items-center justify-between font-bold">
+            <div className="flex flex-col items-center justify-between gap-y-2 font-bold sm:flex-row">
                 <h1>Historical Trend</h1>
                 <ChartControls
                     selectedPeriod={selectedPeriod}
                     setSelectedPeriod={setSelectedPeriod}
                 />
             </div>
-            <ResponsiveContainer width="100%" height={400}>
+            <ResponsiveContainer width="99%" height={400}>
                 <AreaChart
                     width={730}
                     height={250}
@@ -55,6 +55,7 @@ const PortfolioHistoryChart = () => {
                     <CartesianGrid strokeDasharray="3 3" />
                     <Tooltip />
                     <Area
+                        isAnimationActive={false}
                         type="monotone"
                         dataKey="balance"
                         stroke="#749AC7"
