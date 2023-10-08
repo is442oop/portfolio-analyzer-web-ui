@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import { Button } from "./ui/Button";
 import { Badge } from "./ui/Badge";
+import { PortfolioModal } from "./PortfolioModal";
 
 export const DashboardHeader = () => {
     const [showBalance, setShowBalance] = useState(true);
@@ -55,12 +55,7 @@ export const DashboardHeader = () => {
                             •••••••••
                         </p>
                     )}
-
-                    <Button className="hidden w-fit  text-xs sm:block">
-                        {" "}
-                        + Create Portfolio
-                    </Button>
-                    <Button className="w-fit sm:hidden"> + </Button>
+                    <PortfolioModal />
                 </div>
 
                 {/* Percentage Change */}
