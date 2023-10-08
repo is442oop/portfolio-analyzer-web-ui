@@ -4,7 +4,6 @@ import { cn } from "@/utils/cn";
 import { sidebarLinks } from "./Sidebar";
 import { useRouter } from "next/router";
 import SidebarItem from "./SidebarItem";
-import { poppins } from "./Layout";
 
 export function MenuButton() {
     const location = useRouter();
@@ -13,12 +12,7 @@ export function MenuButton() {
             <PopoverTrigger asChild>
                 <Menu className="h-auto w-fit  cursor-pointer rounded-md border p-1.5 text-primary hover:bg-muted" />
             </PopoverTrigger>
-            <PopoverContent
-                className={cn(
-                    "ml-3 w-80 bg-muted font-sans",
-                    poppins.className,
-                )}
-            >
+            <PopoverContent className={cn("ml-3 w-80 bg-muted font-sans")}>
                 <ul className="flex flex-col gap-y-2">
                     {sidebarLinks.map((link, index) => (
                         <SidebarItem

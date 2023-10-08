@@ -6,15 +6,10 @@ const dashboard = () => {
     return (
         <>
             <Layout>
-                <main
-                    // className={`text-primary flex min-h-screen flex-col items-center justify-between p-10 text-5xl`}
-                >
-                    {/* Dashboard Page */}
-                    <DashboardHeader/>
+                <main>
+                    <DashboardHeader />
                 </main>
-                
             </Layout>
-
         </>
     );
 };
