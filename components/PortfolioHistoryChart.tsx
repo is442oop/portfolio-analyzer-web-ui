@@ -9,25 +9,27 @@ import {
     ResponsiveContainer,
 } from "recharts";
 import { Button } from "./ui/Button";
+import { ChartControls } from "./ChartControls";
 
 const PortfolioHistoryChart = () => {
-    // TODO: everytime we update selected period, fetch new data and rerender chart
+    // TODO: everytime we update selected period, fetch new data and memoize it
     const [selectedPeriod, setSelectedPeriod] = useState("7D");
 
     return (
-        <div className="space-y-2 rounded-xl border px-4 py-5">
-            <div className="flex flex-col items-center justify-between gap-y-2 font-bold sm:flex-row">
+        <div className="w-full space-y-2 rounded-xl border px-4 py-5 lg:w-1/2">
+            <div className="flex flex-col items-center justify-between gap-y-2 font-bold">
                 <h1>Historical Trend</h1>
                 <ChartControls
                     selectedPeriod={selectedPeriod}
                     setSelectedPeriod={setSelectedPeriod}
+                    periods={["24H", "7D", "30D", "90D", "ALL"]}
                 />
             </div>
-            <ResponsiveContainer width="99%" height={400}>
+            <ResponsiveContainer width="100%" height={400}>
                 <AreaChart
                     width={730}
                     height={250}
-                    data={data}
+                    data={PortfolioHistorydata}
                     margin={{ top: 10, right: 35, left: 0, bottom: 0 }}
                 >
                     <defs>
@@ -70,39 +72,7 @@ const PortfolioHistoryChart = () => {
 
 export default PortfolioHistoryChart;
 
-interface ChartControlsProps {
-    selectedPeriod: string;
-    setSelectedPeriod: (period: string) => void;
-}
-const ChartControls = ({
-    selectedPeriod,
-    setSelectedPeriod,
-}: ChartControlsProps) => {
-    const periods = ["24H", "7D", "30D", "90D", "ALL"];
-
-    return (
-        <div className="rounded-xl p-1" style={{ backgroundColor: "#F2F5F7" }}>
-            {periods.map((period) => (
-                <Button
-                    key={period}
-                    className="rounded-xl"
-                    style={{
-                        color: "#5B7282",
-                        backgroundColor:
-                            selectedPeriod === period
-                                ? "#FFFFFF"
-                                : "transparent",
-                    }}
-                    onClick={() => setSelectedPeriod(period)}
-                >
-                    {period}
-                </Button>
-            ))}
-        </div>
-    );
-};
-
-const data = [
+const PortfolioHistorydata = [
     {
         date: "2022-06-01",
         balance: 10000,
