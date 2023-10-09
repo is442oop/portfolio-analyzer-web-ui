@@ -3,3 +3,9 @@ declare interface SidebarItemType {
     href: string;
     icon: React.ReactElement;
 }
+
+declare interface ChartControlsProps {
+    selectedPeriod: string;
+    setSelectedPeriod: (period: string) => void;
+    periods: string[];
+}
