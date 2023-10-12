@@ -96,73 +96,79 @@ export function AuthCard() {
     };
 
     return (
-        <Card>
-            <CardHeader className="space-y-1">
-                <CardTitle className="text-2xl">{textKeys.title}</CardTitle>
-                <CardDescription>{textKeys.description}</CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-4">
-                <div className="grid gap-2">
-                    <Label htmlFor="email">Email</Label>
-                    {showEmailError ? (
-                        <div className="text-xs text-red-500">
-                            Please enter a valid email address
-                        </div>
-                    ) : null}
-                    <Input
-                        id="email"
-                        placeholder="name@example.com"
-                        type="email"
-                        autoCapitalize="none"
-                        autoComplete="email"
-                        autoCorrect="off"
-                        disabled={isLoading}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </div>
-                <div className="grid gap-2">
-                    <Label htmlFor="password">Password</Label>
-                    {showPwdError ? (
-                        <div className="text-xs text-red-500">
-                            Password must contain:
-                            <br />
-                            <li>8-25 characters</li>
-                            <li>upper and lowercase letters</li>
-                            <li>at least 1 numeral</li>
-                            <li>at least 1 symbol</li>
-                        </div>
-                    ) : null}
-                    <Input
-                        id="password"
-                        type="password"
-                        autoCorrect="off"
-                        disabled={isLoading}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </div>
-            </CardContent>
-            <CardFooter>
-                <Button className="w-full" onClick={handleSubmit}>
-                    {isLoading ? (
-                        <Icons.spinner className="animate-spin " />
-                    ) : (
-                        textKeys.button
-                    )}
-                </Button>
-            </CardFooter>
-            <CardFooter>
-                <div className="relative w-full">
-                    <div className="relative flex gap-1 text-xs">
-                        {textKeys.footer}
-                        <span
-                            className="cursor-pointer font-medium text-blue-600 underline"
-                            onClick={(e) => setIsNewUser(!isNewUser)}
-                        >
-                            {textKeys.footerLink}
-                        </span>
+        <form onSubmit={handleSubmit}>
+            <Card>
+                <CardHeader className="space-y-1">
+                    <CardTitle className="text-2xl">{textKeys.title}</CardTitle>
+                    <CardDescription>{textKeys.description}</CardDescription>
+                </CardHeader>
+                <CardContent className="grid gap-4">
+                    <div className="grid gap-2">
+                        <Label htmlFor="email">Email</Label>
+                        {showEmailError ? (
+                            <div className="text-xs text-destructive">
+                                Please enter a valid email address
+                            </div>
+                        ) : null}
+                        <Input
+                            id="email"
+                            placeholder="name@example.com"
+                            type="email"
+                            autoCapitalize="none"
+                            autoComplete="email"
+                            autoCorrect="off"
+                            disabled={isLoading}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
                     </div>
-                </div>
-            </CardFooter>
-        </Card>
+                    <div className="grid gap-2">
+                        <Label htmlFor="password">Password</Label>
+                        {showPwdError ? (
+                            <div className="text-xs text-destructive">
+                                Password must contain:
+                                <br />
+                                <li>8-25 characters</li>
+                                <li>upper and lowercase letters</li>
+                                <li>at least 1 numeral</li>
+                                <li>at least 1 symbol</li>
+                            </div>
+                        ) : null}
+                        <Input
+                            id="password"
+                            type="password"
+                            autoCorrect="off"
+                            disabled={isLoading}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                    </div>
+                </CardContent>
+                <CardFooter>
+                    <Button
+                        className="w-full"
+                        type="submit"
+                        disabled={!email || !password}
+                    >
+                        {isLoading ? (
+                            <Icons.spinner className="animate-spin" />
+                        ) : (
+                            textKeys.button
+                        )}
+                    </Button>
+                </CardFooter>
+                <CardFooter>
+                    <div className="relative w-full">
+                        <div className="relative flex gap-1 text-xs">
+                            {textKeys.footer}
+                            <span
+                                className="cursor-pointer font-medium text-primary underline"
+                                onClick={() => setIsNewUser(!isNewUser)}
+                            >
+                                {textKeys.footerLink}
+                            </span>
+                        </div>
+                    </div>
+                </CardFooter>
+            </Card>
+        </form>
     );
 }
