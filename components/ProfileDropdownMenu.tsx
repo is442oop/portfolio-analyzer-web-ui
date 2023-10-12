@@ -1,7 +1,6 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/router";
 
-import { Button } from "@/components/ui/Button";
 import {
     DropdownMenu,
     DropdownMenuContent,

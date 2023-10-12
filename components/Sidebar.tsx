@@ -40,7 +40,7 @@ const Sidebar = () => {
             <div
                 className={`${
                     open ? "w-60" : "w-fit"
-                } relative hidden content-between border-r border-gray-200 bg-muted p-2 pb-8 duration-300 sm:grid`}
+                } relative hidden content-between border-r border-border bg-muted p-2 pb-8 duration-300 sm:grid`}
             >
                 <PanelLeftOpen
                     className={cn(
