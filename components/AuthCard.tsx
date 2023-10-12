@@ -41,7 +41,9 @@ const existingUserTextKeys: TextKeys = {
 
 export function AuthCard() {
     const [email, setEmail] = React.useState("");
+    const [showEmailError, setShowEmailError] = React.useState(false);
     const [password, setPassword] = React.useState("");
+    const [showPwdError, setShowPwdError] = React.useState(false);
     const [isNewUser, setIsNewUser] = React.useState(false);
     const [textKeys, setTextKeys] = React.useState<TextKeys>(newUserTextKeys);
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -56,33 +58,40 @@ export function AuthCard() {
     const router = useRouter();
     const supabase = createClientComponentClient();
 
-    const handleSignUp = async () => {
-        setIsLoading(true);
-        const { data, error } = await supabase.auth.signUp({
-            email,
-            password,
-        });
-        if (error) {
-            alert(error);
-            return;
-        }
-        setIsLoading(false);
-        console.log("Sign up:", data);
-        router.push("/dashboard");
+    const isEmailValid = (email: string) => /\S+@\S+\.\S+/.test(email);
+    const isPasswordValid = (password: string) => {
+        const passwordRegex =
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]).{8,25}$/;
+        return passwordRegex.test(password);
     };
 
-    const handleSignIn = async () => {
+    const handleSubmit = async () => {
+        if (!isEmailValid(email)) {
+            setShowEmailError(true);
+            return;
+        }
+        if (isNewUser && !isPasswordValid(password)) {
+            setShowPwdError(true);
+            return;
+        }
         setIsLoading(true);
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-        });
+
+        const { data, error } = isNewUser
+            ? await supabase.auth.signUp({
+                  email,
+                  password,
+              })
+            : await supabase.auth.signInWithPassword({
+                  email,
+                  password,
+              });
+
+        setIsLoading(false);
         if (error) {
             alert(error);
             return;
         }
-        setIsLoading(false);
-        console.log("Login:", data);
+        console.log(data);
         router.push("/dashboard");
     };
 
@@ -95,6 +104,11 @@ export function AuthCard() {
             <CardContent className="grid gap-4">
                 <div className="grid gap-2">
                     <Label htmlFor="email">Email</Label>
+                    {showEmailError ? (
+                        <div className="text-xs text-red-500">
+                            Please enter a valid email address
+                        </div>
+                    ) : null}
                     <Input
                         id="email"
                         placeholder="name@example.com"
@@ -108,6 +122,16 @@ export function AuthCard() {
                 </div>
                 <div className="grid gap-2">
                     <Label htmlFor="password">Password</Label>
+                    {showPwdError ? (
+                        <div className="text-xs text-red-500">
+                            Password must contain:
+                            <br />
+                            <li>8-25 characters</li>
+                            <li>upper and lowercase letters</li>
+                            <li>at least 1 numeral</li>
+                            <li>at least 1 symbol</li>
+                        </div>
+                    ) : null}
                     <Input
                         id="password"
                         type="password"
@@ -118,10 +142,7 @@ export function AuthCard() {
                 </div>
             </CardContent>
             <CardFooter>
-                <Button
-                    className="w-full"
-                    onClick={isNewUser ? handleSignUp : handleSignIn}
-                >
+                <Button className="w-full" onClick={handleSubmit}>
                     {isLoading ? (
                         <Icons.spinner className="animate-spin " />
                     ) : (
