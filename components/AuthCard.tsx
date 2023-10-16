@@ -65,7 +65,8 @@ export function AuthCard() {
         return passwordRegex.test(password);
     };
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         if (!isEmailValid(email)) {
             setShowEmailError(true);
             return;
