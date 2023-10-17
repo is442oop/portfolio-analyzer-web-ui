@@ -1,6 +1,5 @@
 import { Layout } from "@/components/Layout";
 import React from "react";
-import { PortfolioModal } from "@/components/PortfolioModal";
 
 const portfolios = () => {
     return (
@@ -10,6 +9,7 @@ const portfolios = () => {
             >
                 Portfolios Page
             </main>
+            
         </Layout>
     );
 };
