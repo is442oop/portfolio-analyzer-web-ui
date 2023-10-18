@@ -11,6 +11,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/Dialog";
+import { toast } from "./ui/Toaster/use-toast";
 
 interface PortfolioModalProps {
     edit: boolean;
@@ -22,20 +23,18 @@ export const PortfolioModal: React.FC<PortfolioModalProps> = ({ edit }) => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(portfolioName);
+        toast({ variant: "success", title: portfolioName });
     };
 
     useEffect(() => {
-        if (edit) {
-            // fetch("http://localhost:3000/api/portfolios/1")
-            //     .then((res) => res.json())
-            //     .then((data) => {
-            //         console.log(data);
-            //         setPortfolioName(data.name);
-            //     });
-            setPortfolioName("Edit Portfolio");
-        }
-    }, [edit]);
+        // fetch("http://localhost:3000/api/portfolios/1")
+        //     .then((res) => res.json())
+        //     .then((data) => {
+        //         console.log(data);
+        //         setPortfolioName(data.name);
+        //     });
+        setPortfolioName("new portfolio name goes here");
+    }, []);
 
     return (
         <Dialog>
@@ -80,15 +79,9 @@ export const PortfolioModal: React.FC<PortfolioModalProps> = ({ edit }) => {
                         disabled={portfolioName.length == 0}
                         className="inline-flex h-10 w-full items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground ring-offset-background transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
                     >
-                        {/* <Button
-                            type="submit"
-                            disabled={portfolioName.length == 0}
-                            className="w-full"
-                        > */}
                         <p className="font-bold">
                             {edit ? "Save Changes" : "Create portfolio"}
                         </p>
-                        {/* </Button> */}
                     </DialogClose>
                 </form>
             </DialogContent>
