@@ -55,7 +55,7 @@ export const DashboardHeader = () => {
                             •••••••••
                         </p>
                     )}
-                    <PortfolioModal />
+                    <PortfolioModal edit={false} />
                 </div>
 
                 {/* Percentage Change */}
