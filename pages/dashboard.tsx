@@ -2,7 +2,7 @@ import { AssetAllocationChart } from "@/components/AssetAllocationChart";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { Layout } from "@/components/Layout";
 import PortfolioHistoryChart from "@/components/PortfolioHistoryChart";
-import React from "react";
+import AssetTable from "@/components/AssetTable";
 
 const dashboard = () => {
     return (
@@ -14,6 +14,8 @@ const dashboard = () => {
                         <PortfolioHistoryChart />
                         <AssetAllocationChart />
                     </div>
+                    <div className="mt-12 text-xl font-semibold">Holdings</div>
+                    <AssetTable />
                 </main>
             </Layout>
         </>
