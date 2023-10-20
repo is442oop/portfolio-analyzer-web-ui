@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { Badge } from "./ui/Badge";
 import { PortfolioModal } from "./PortfolioModal";
+import { formatPercentage, formatUsd } from "@/utils/functions";
 
 export const DashboardHeader = () => {
     const [showBalance, setShowBalance] = useState(true);
@@ -16,7 +17,6 @@ export const DashboardHeader = () => {
             portfolioData.previousBalance) *
         100;
 
-    const currentBalance = portfolioData.currentBalance.toFixed(2);
     const isPositiveChange = percentageChange >= 0;
     return (
         <div className="space-y-4 rounded-lg bg-white p-4">
@@ -48,7 +48,7 @@ export const DashboardHeader = () => {
                 <div className="flex items-center justify-between">
                     {showBalance ? (
                         <p className="text-2xl font-bold tracking-wider text-black sm:text-3xl">
-                            ${currentBalance}
+                            {formatUsd(portfolioData.currentBalance)}
                         </p>
                     ) : (
                         <p className="text-2xl font-bold text-black sm:text-3xl">
@@ -68,7 +68,7 @@ export const DashboardHeader = () => {
                         }`}
                     >
                         {isPositiveChange && "+"}
-                        {percentageChange.toFixed(2)}%
+                        {formatPercentage(percentageChange)}
                     </p>
                     <Badge variant={"secondary"}>24hr</Badge>
                 </div>
