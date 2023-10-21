@@ -1,4 +1,5 @@
 import { Layout } from "@/components/Layout";
+import { UserWatchlist } from "@/components/UserWatchlist";
 import React from "react";
 
 const watchlist = () => {
@@ -7,8 +8,9 @@ const watchlist = () => {
             <main
                 className={`text-primary flex min-h-screen flex-col items-center justify-between p-10 text-5xl`}
             >
-                Watchlist Page
+                <UserWatchlist />
             </main>
+           
         </Layout>
     );
 };
