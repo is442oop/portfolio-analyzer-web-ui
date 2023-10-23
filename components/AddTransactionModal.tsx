@@ -292,7 +292,7 @@ export const AddTransactionModal = () => {
                     <div className="mt-4 h-[75px] w-full rounded-xl bg-gray-200">
                         <div className="grid w-full max-w-sm items-center gap-1.5 p-4">
                             <Label htmlFor="spent">Total Spent</Label>
-                            <p id="spent">
+                            <p id="spent" className="font-bold text-xl">
                                 ${(quantity * stockPrice).toFixed(2)}
                             </p>
                         </div>
