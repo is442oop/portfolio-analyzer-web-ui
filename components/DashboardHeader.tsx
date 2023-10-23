@@ -36,12 +36,21 @@ export const DashboardHeader = () => {
                             }`}
                             onClick={() => setShowBalance(!showBalance)}
                         >
-                            <Image
-                                src="/icons8-eye-30.png"
-                                alt=""
-                                width={20}
-                                height={20}
-                            />
+                            {showBalance ? (
+                                <Image
+                                    src="/hidden.png"
+                                    alt=""
+                                    width={20}
+                                    height={20}
+                                />
+                            ) : (
+                                <Image
+                                    src="/icons8-eye-30.png"
+                                    alt=""
+                                    width={20}
+                                    height={20}
+                                />
+                            )}
                         </div>
                     </div>
                 </div>
