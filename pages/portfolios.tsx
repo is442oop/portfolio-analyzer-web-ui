@@ -11,6 +11,7 @@ const portfolios = () => {
                 Portfolios Page
                 <AddTransactionModal />
             </main>
+            
         </Layout>
     );
 };
