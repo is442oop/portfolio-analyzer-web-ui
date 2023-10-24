@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import axios from "axios";
 import { cn } from "@/utils/cn";
+import { formatUsd } from "@/utils/functions";
 import { Check, ChevronsUpDown } from "lucide-react";
 import {
     Dialog,
@@ -107,7 +108,7 @@ export const AddTransactionModal = () => {
     // const fetchLogo = async (ticker: string) => {
     //     try {
     //         // const ticker = "AAPL";
-    //         const apiKey = "7S5YGbLiYc2AyLf78JKrsg==XjsnlMf8Lp9Yw7L9"; // Replace with your actual API key
+    //         const apiKey = "APIKEYHERE";
     //         const apiUrl = `https://api.api-ninjas.com/v1/logo?ticker=${ticker}`;
 
     //         const response = await axios.get(apiUrl, {
@@ -293,7 +294,7 @@ export const AddTransactionModal = () => {
                         <div className="grid w-full max-w-sm items-center gap-1.5 p-4">
                             <Label htmlFor="spent">Total Spent</Label>
                             <p id="spent" className="font-bold text-xl">
-                                ${(quantity * stockPrice).toFixed(2)}
+                                ${formatUsd(quantity * stockPrice)}
                             </p>
                         </div>
                     </div>
