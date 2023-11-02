@@ -11,7 +11,7 @@ export function Layout({ children }: LayoutProps) {
         <div className="flex h-screen flex-auto">
             <Sidebar />
             <div className="grow overflow-y-auto overflow-x-hidden">
-                <div className="mx-auto max-w-2xl px-5 py-12 pl-0 md:pl-5 lg:max-w-4xl xl:max-w-6xl">
+                <div className="mx-auto max-w-2xl lg:max-w-4xl xl:max-w-6xl">
                     {children}
                 </div>
             </div>

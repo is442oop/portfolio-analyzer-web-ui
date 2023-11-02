@@ -7,13 +7,15 @@ import AssetTable from "@/components/AssetTable";
 const dashboard = () => {
     return (
         <Layout>
-            <DashboardHeader />
-            <div className="flex flex-col gap-3 lg:flex-row">
-                <PortfolioHistoryChart />
-                <AssetAllocationChart />
+            <div className="p-10">
+                <DashboardHeader />
+                <div className="flex flex-col gap-3 lg:flex-row">
+                    <PortfolioHistoryChart />
+                    <AssetAllocationChart />
+                </div>
+                <div className="mt-12 text-xl font-semibold">Holdings</div>
+                <AssetTable />
             </div>
-            <div className="mt-12 text-xl font-semibold">Holdings</div>
-            <AssetTable />
         </Layout>
     );
 };

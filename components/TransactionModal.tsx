@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
-import axios from "axios";
 import { cn } from "@/utils/cn";
 import { formatUsd } from "@/utils/functions";
 import { Check, ChevronsUpDown } from "lucide-react";
@@ -37,7 +36,7 @@ type ticker = {
 };
 
 // TODO: refactor to be able to be prefilled with data for updating portfolio name
-export const AddTransactionModal = () => {
+export const TransactionModal = () => {
     const tickers: ticker[] = [
         {
             value: "apple",
@@ -72,8 +71,6 @@ export const AddTransactionModal = () => {
 
     const [stockPrice, setStockPrice] = useState(0);
     const [quantity, setQuantity] = useState(0);
-
-
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -126,7 +123,8 @@ export const AddTransactionModal = () => {
                                                 key={ticker.value}
                                                 onSelect={(currentValue) => {
                                                     setTickerValue(
-                                                        currentValue === tickerValue
+                                                        currentValue ===
+                                                            tickerValue
                                                             ? ""
                                                             : currentValue,
                                                     );
@@ -144,7 +142,8 @@ export const AddTransactionModal = () => {
                                                 <Check
                                                     className={cn(
                                                         "mr-2 h-4 w-4",
-                                                        tickerValue === ticker.value
+                                                        tickerValue ===
+                                                            ticker.value
                                                             ? "opacity-100"
                                                             : "opacity-0",
                                                     )}
@@ -225,7 +224,7 @@ export const AddTransactionModal = () => {
                     <div className="mt-4 h-[75px] w-full rounded-xl bg-gray-200">
                         <div className="grid w-full max-w-sm items-center gap-1.5 p-4">
                             <Label htmlFor="spent">Total Spent</Label>
-                            <p id="spent" className="font-bold text-xl">
+                            <p id="spent" className="text-xl font-bold">
                                 ${formatUsd(quantity * stockPrice)}
                             </p>
                         </div>
@@ -233,7 +232,12 @@ export const AddTransactionModal = () => {
 
                     <DialogClose
                         type="submit"
-                        disabled={quantity == 0 || stockPrice == 0 || !date || !tickerValue}
+                        disabled={
+                            quantity == 0 ||
+                            stockPrice == 0 ||
+                            !date ||
+                            !tickerValue
+                        }
                         className="mt-4 inline-flex h-10 w-full items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground ring-offset-background transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
                     >
                         <p className="font-bold">Add Transaction</p>
