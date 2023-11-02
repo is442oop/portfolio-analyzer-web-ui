@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
@@ -10,7 +10,6 @@ import {
     Dialog,
     DialogClose,
     DialogContent,
-    DialogDescription,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
@@ -30,6 +29,12 @@ import {
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/Calendar";
+
+type ticker = {
+    value: string;
+    label: string;
+    ticker: string;
+};
 
 // TODO: refactor to be able to be prefilled with data for updating portfolio name
 export const AddTransactionModal = () => {
@@ -60,83 +65,19 @@ export const AddTransactionModal = () => {
             ticker: "META",
         },
     ];
-    const [logos, setLogos] = useState<{ [ticker: string]: string }>({});
     const [open, setOpen] = React.useState(false);
-    const [value, setValue] = React.useState("");
+    const [tickerValue, setTickerValue] = React.useState("");
     const [ticker, setTicker] = React.useState("");
     const [date, setDate] = React.useState<Date>();
 
     const [stockPrice, setStockPrice] = useState(0);
     const [quantity, setQuantity] = useState(0);
 
-    type ticker = {
-        value: string;
-        label: string;
-        ticker: string;
-    };
+
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
     };
-
-    const fetchLogo = async (ticker: string) => {
-        try {
-            const apiKey = process.env.API_KEY;
-            const apiUrl = `https://api.api-ninjas.com/v1/logo?ticker=${ticker}`;
-
-            const response = await axios.get(apiUrl, {
-                headers: {
-                    "X-Api-Key": apiKey,
-                },
-            });
-
-            // Handle the successful response
-            console.log(response.data);
-
-            // Update the logos object with the fetched logo for this ticker
-            setLogos((prevLogos) => ({
-                ...prevLogos,
-                [ticker]: response.data[0]?.image,
-            }));
-
-            // console.log(logos);
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    };
-
-    // const fetchLogo = async (ticker: string) => {
-    //     try {
-    //         // const ticker = "AAPL";
-    //         const apiKey = "APIKEYHERE";
-    //         const apiUrl = `https://api.api-ninjas.com/v1/logo?ticker=${ticker}`;
-
-    //         const response = await axios.get(apiUrl, {
-    //             headers: {
-    //                 "X-Api-Key": apiKey,
-    //             },
-    //         });
-
-    //         // Handle the successful response
-    //         console.log(response.data);
-    //         setLogos((prevLogos) => ({
-    //             ...prevLogos,
-    //             [ticker]: response.data[0].image,
-    //         }));
-    //     } catch (error) {
-    //         console.error("Error:", error);
-    //     }
-    // };
-
-    // useEffect(() => {
-    //     tickers.forEach((ticker) => {
-    //         fetchLogo(ticker.ticker);
-    //     });
-    // }, []);
-
-    {
-        /* this is supposed to render logos beside the stocks, but they don't come in a square format...*/
-    }
 
     return (
         <Dialog>
@@ -164,10 +105,10 @@ export const AddTransactionModal = () => {
                                     aria-expanded={open}
                                     className="w-full justify-between"
                                 >
-                                    {value
+                                    {tickerValue
                                         ? tickers.find(
                                               (ticker) =>
-                                                  ticker.value === value,
+                                                  ticker.value === tickerValue,
                                           )?.label
                                         : "Select tickers..."}
                                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -184,8 +125,8 @@ export const AddTransactionModal = () => {
                                             <CommandItem
                                                 key={ticker.value}
                                                 onSelect={(currentValue) => {
-                                                    setValue(
-                                                        currentValue === value
+                                                    setTickerValue(
+                                                        currentValue === tickerValue
                                                             ? ""
                                                             : currentValue,
                                                     );
@@ -203,22 +144,12 @@ export const AddTransactionModal = () => {
                                                 <Check
                                                     className={cn(
                                                         "mr-2 h-4 w-4",
-                                                        value === ticker.value
+                                                        tickerValue === ticker.value
                                                             ? "opacity-100"
                                                             : "opacity-0",
                                                     )}
                                                 />
-                                                <div className="flex justify-end">
-                                                    {/* <img
-                                                        src={
-                                                            logos[
-                                                                ticker.ticker
-                                                            ]
-                                                        }
-                                                        alt={ticker.label}
-                                                        className="min-content mr-2 h-4"
-                                                    /> */}{" "}
-                                                    {/* this is supposed to render logos beside the stocks, but they don't come in a square format...*/}
+                                                <div className="flex justify-center">
                                                     <p>
                                                         {ticker.label}{" "}
                                                         <span className="text-[#c5c7c9]">
@@ -302,7 +233,7 @@ export const AddTransactionModal = () => {
 
                     <DialogClose
                         type="submit"
-                        disabled={quantity == 0 || stockPrice == 0 || !date || !value}
+                        disabled={quantity == 0 || stockPrice == 0 || !date || !tickerValue}
                         className="mt-4 inline-flex h-10 w-full items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground ring-offset-background transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
                     >
                         <p className="font-bold">Add Transaction</p>
