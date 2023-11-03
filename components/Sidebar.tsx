@@ -72,26 +72,6 @@ const Sidebar = () => {
                     </ul>
                 </div>
                 <Profile open={open} />
-                {/* <ProfileDropdownMenu>
-                    <div className="flex items-center gap-x-2 rounded-lg px-2 py-1 font-normal text-foreground hover:bg-border">
-                        <Avatar>
-                            <AvatarImage src="/avatars/01.png" />
-                            <AvatarFallback className="border-2 bg-primary-foreground">
-                                OM
-                            </AvatarFallback>
-                        </Avatar>
-                        {open ? (
-                            <div className="text-left">
-                                <p className="text-sm font-medium leading-none">
-                                    John Smith
-                                </p>
-                                <p className="text-sm text-muted-foreground">
-                                    name@example.com
-                                </p>
-                            </div>
-                        ) : null}
-                    </div>
-                </ProfileDropdownMenu> */}
             </div>
             {/* Mobile Menu */}
             <div className="h-fit pl-1 pt-3 sm:hidden">
