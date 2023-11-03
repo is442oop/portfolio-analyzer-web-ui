@@ -19,3 +19,7 @@ export const formatNumber = (amount: number) => {
         maximumFractionDigits: 2,
     }).format(amount);
 };
+
+export const formatAvatarFallback = (email: string) => {
+    if (email) return email.substring(0, 2).toUpperCase();
+};
