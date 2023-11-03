@@ -9,7 +9,6 @@ type ProfileProps = {
 
 export const Profile = ({ open }: ProfileProps) => {
     const userDetails = useSessionDetails();
-    console.log(userDetails);
     const email = userDetails?.email;
     const avatarFallback = formatAvatarFallback(email!);
 
