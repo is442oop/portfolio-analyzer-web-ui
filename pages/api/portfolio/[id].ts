@@ -9,7 +9,7 @@ export default async function handler(
     try {
         const { id } = req.query;
         const response = await axios.get(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/users/${id}/portfolios`,
+            `${process.env.API_URL}/api/users/${id}/portfolios`,
         );
         return res.status(200).json(response.data);
     } catch (error) {
