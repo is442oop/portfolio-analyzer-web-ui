@@ -16,7 +16,7 @@ export const Profile = ({ open }: ProfileProps) => {
         <ProfileDropdownMenu>
             <div className="flex items-center gap-x-2 rounded-lg px-2 py-1 font-normal text-foreground hover:bg-border">
                 <Avatar>
-                    <AvatarImage src="/avatars/01.png" />
+                    <AvatarImage src="" />
                     <AvatarFallback className="border-2 bg-primary-foreground">
                         {avatarFallback}
                     </AvatarFallback>
