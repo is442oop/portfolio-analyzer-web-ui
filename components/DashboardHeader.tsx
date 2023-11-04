@@ -4,26 +4,39 @@ import { Badge } from "./ui/Badge";
 import { PortfolioModal } from "./PortfolioModal";
 import { formatPercentage, formatUsd } from "@/utils/functions";
 
-export const DashboardHeader = () => {
+type DashboardHeaderProps = {
+    portfolioData: {
+        currentBalance: number;
+        previousBalance: number;
+    };
+    edit?: boolean;
+    portfolioName?: string;
+    portfolioDesc?: string;
+};
+
+export const DashboardHeader = ({
+    edit = false,
+    portfolioData,
+    portfolioName = "",
+    portfolioDesc = "",
+}: DashboardHeaderProps) => {
     const [showBalance, setShowBalance] = useState(true);
-    // TODO: refactor in future when shape of data is out
-    const [portfolioData, setPortfolioData] = useState({
-        currentBalance: 10000,
-        previousBalance: 9900, // 24hrs ago balance
-    });
 
     const percentageChange =
-        ((portfolioData.currentBalance - portfolioData.previousBalance) /
-            portfolioData.previousBalance) *
-        100;
+        portfolioData.currentBalance === 0 &&
+        portfolioData.previousBalance === 0
+            ? 0
+            : ((portfolioData.currentBalance - portfolioData.previousBalance) /
+                  portfolioData.previousBalance) *
+              100;
 
     const isPositiveChange = percentageChange >= 0;
     return (
         <div className="space-y-4 rounded-lg bg-white p-4">
-            <h2 className="text-2xl font-semibold text-primary">
-                Portfolio Dashboard
-            </h2>
-
+            <h1 className="text-2xl font-semibold text-primary">
+                {portfolioName === "" ? "Dashboard" : portfolioName}
+            </h1>
+            <h2 className="text-sm text-primary">{portfolioDesc}</h2>
             <div className="space-y-2">
                 {/* Balance */}
                 <div className="flex gap-x-2">
@@ -64,7 +77,13 @@ export const DashboardHeader = () => {
                             •••••••••
                         </p>
                     )}
-                    <PortfolioModal edit={false} />
+                    <PortfolioModal
+                        edit={edit}
+                        prefilledPortfolioDetails={{
+                            portfolioName: portfolioName,
+                            portfolioDesc: portfolioDesc,
+                        }}
+                    />
                 </div>
 
                 {/* Percentage Change */}

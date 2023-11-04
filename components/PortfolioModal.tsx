@@ -17,6 +17,10 @@ import axios from "axios";
 
 type PortfolioModalProps = {
     edit: boolean;
+    prefilledPortfolioDetails: {
+        portfolioName: string;
+        portfolioDesc: string;
+    };
 };
 
 type portfolioDetails = {
@@ -25,7 +29,10 @@ type portfolioDetails = {
     description: string;
 };
 // TODO: refactor to be able to be prefilled with data for updating portfolio name
-export const PortfolioModal: React.FC<PortfolioModalProps> = ({ edit }) => {
+export const PortfolioModal: React.FC<PortfolioModalProps> = ({
+    edit,
+    prefilledPortfolioDetails,
+}) => {
     const queryClient = useQueryClient();
     const [portfolioDetails, setPortfolioDetails] = useState<portfolioDetails>({
         userId: 1,
@@ -39,7 +46,7 @@ export const PortfolioModal: React.FC<PortfolioModalProps> = ({ edit }) => {
     };
 
     const { mutate } = useMutation(createPortfolio, {
-        onSuccess: (data) => {
+        onSuccess: () => {
             toast({
                 variant: "success",
                 title: `Successfully created portfolio: ${portfolioDetails.portfolioName}!`,
@@ -60,7 +67,12 @@ export const PortfolioModal: React.FC<PortfolioModalProps> = ({ edit }) => {
 
     useEffect(() => {
         // TODO: preset portfolio details
-    }, []);
+        setPortfolioDetails((prev) => ({
+            ...prev,
+            portfolioName: prefilledPortfolioDetails.portfolioName,
+            description: prefilledPortfolioDetails.portfolioDesc,
+        }));
+    }, [prefilledPortfolioDetails]);
 
     return (
         <Dialog>
