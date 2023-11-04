@@ -14,6 +14,12 @@ import {
 import { toast } from "./ui/Toaster/use-toast";
 import { useMutation, useQueryClient } from "react-query";
 import axios from "axios";
+import { usePortfolioDetails } from "@/hooks/usePortfolioDetails";
+
+const toastMessage = {
+    createSuccess: "Successfully created portfolio!",
+    editSuccess: "Successfully edited portfolio!",
+};
 
 type PortfolioModalProps = {
     edit: boolean;
@@ -28,46 +34,70 @@ type portfolioDetails = {
     portfolioName: string;
     description: string;
 };
-// TODO: refactor to be able to be prefilled with data for updating portfolio name
+
 export const PortfolioModal: React.FC<PortfolioModalProps> = ({
     edit,
     prefilledPortfolioDetails,
 }) => {
     const queryClient = useQueryClient();
-    const [portfolioDetails, setPortfolioDetails] = useState<portfolioDetails>({
-        userId: 1,
-        portfolioName: "",
-        description: "",
-    });
+    const { portfolioDetails, isPortfolioDetailsLoading } =
+        usePortfolioDetails();
 
-    const createPortfolio = async (data: portfolioDetails) => {
-        const response = await axios.post("/api/portfolios", portfolioDetails);
+    const [portfolioModalDetails, setPortfolioModalDetails] =
+        useState<portfolioDetails>({
+            // TODO change userId to be dynamic
+            userId: 1,
+            portfolioName: "",
+            description: "",
+        });
+
+    const createPortfolioReq = async (data: portfolioDetails) => {
+        const response = await axios.post(
+            "/api/portfolio",
+            portfolioModalDetails,
+        );
         return response.data;
     };
 
-    const { mutate } = useMutation(createPortfolio, {
-        onSuccess: () => {
-            toast({
-                variant: "success",
-                title: `Successfully created portfolio: ${portfolioDetails.portfolioName}!`,
-            });
-            setPortfolioDetails((prev) => ({
-                ...prev,
-                portfolioName: "",
-                description: "",
-            }));
-            queryClient.invalidateQueries("portfolioList");
+    const updatePortfolioReq = async (data: portfolioDetails) => {
+        const response = await axios.put(
+            `/api/portfolio/${portfolioDetails.pid}`,
+            {
+                portfolioName: portfolioModalDetails.portfolioName,
+                description: portfolioModalDetails.description,
+            },
+        );
+        return response.data;
+    };
+
+    const { mutate } = useMutation(
+        edit ? updatePortfolioReq : createPortfolioReq,
+        {
+            onSuccess: () => {
+                toast({
+                    variant: "success",
+                    title: edit
+                        ? `${toastMessage.editSuccess}`
+                        : `${toastMessage.createSuccess}`,
+                });
+                setPortfolioModalDetails((prev) => ({
+                    ...prev,
+                    portfolioName: "",
+                    description: "",
+                }));
+                queryClient.invalidateQueries("portfolioDetails");
+                queryClient.invalidateQueries("portfolioList");
+            },
         },
-    });
+    );
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        mutate(portfolioDetails);
+        mutate(portfolioModalDetails);
     };
 
     useEffect(() => {
-        // TODO: preset portfolio details
-        setPortfolioDetails((prev) => ({
+        setPortfolioModalDetails((prev) => ({
             ...prev,
             portfolioName: prefilledPortfolioDetails.portfolioName,
             description: prefilledPortfolioDetails.portfolioDesc,
@@ -98,10 +128,10 @@ export const PortfolioModal: React.FC<PortfolioModalProps> = ({
                                 id="name"
                                 className="col-span-3"
                                 placeholder="A portfolio name"
-                                value={portfolioDetails.portfolioName}
+                                value={portfolioModalDetails.portfolioName}
                                 autoFocus
                                 onChange={(e) =>
-                                    setPortfolioDetails((prev) => ({
+                                    setPortfolioModalDetails((prev) => ({
                                         ...prev,
                                         portfolioName: e.target.value,
                                     }))
@@ -115,9 +145,9 @@ export const PortfolioModal: React.FC<PortfolioModalProps> = ({
                                 id="description"
                                 className="col-span-3"
                                 placeholder="A short description"
-                                value={portfolioDetails.description}
+                                value={portfolioModalDetails.description}
                                 onChange={(e) =>
-                                    setPortfolioDetails((prev) => ({
+                                    setPortfolioModalDetails((prev) => ({
                                         ...prev,
                                         description: e.target.value,
                                     }))
@@ -127,15 +157,15 @@ export const PortfolioModal: React.FC<PortfolioModalProps> = ({
                         </div>
 
                         <DialogDescription className="mx-1 my-2">
-                            {portfolioDetails.portfolioName.length}/50
-                            characters
+                            {portfolioModalDetails.portfolioName.length}/50
+                            characters used for description
                         </DialogDescription>
                     </div>
                     <DialogClose
                         type="submit"
                         disabled={
-                            portfolioDetails.portfolioName.length == 0 ||
-                            portfolioDetails.description.length == 0
+                            portfolioModalDetails.portfolioName.length == 0 ||
+                            portfolioModalDetails.description.length == 0
                         }
                         className="inline-flex h-10 w-full items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground ring-offset-background transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
                     >

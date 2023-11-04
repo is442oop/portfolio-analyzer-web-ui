@@ -34,7 +34,7 @@ const portfolios = () => {
         "portfolioList",
         async () => {
             // TODO: replace 1 with userDetails id
-            const response = await fetch(`/api/portfolios/1`);
+            const response = await fetch(`/api/users/1/portfolios`);
             const portfolioList = await response.json();
             return portfolioList;
         },

@@ -1,22 +1,23 @@
 import React, { useState } from "react";
-import { useRouter } from "next/router";
 import { Layout } from "@/components/Layout";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { TransactionModal } from "@/components/TransactionModal";
 import PortfolioHistoryChart from "@/components/PortfolioHistoryChart";
 import { AssetAllocationChart } from "@/components/AssetAllocationChart";
 import AssetTable from "@/components/AssetTable";
-import { useQuery } from "react-query";
 import { Icons } from "@/components/ui/Icons";
+import { usePortfolioDetails } from "@/hooks/usePortfolioDetails";
 
 const IndividualPortfolio = () => {
-    const router = useRouter();
-    const pid = router.query.pid;
+    const { portfolioDetails, isPortfolioDetailsLoading } =
+        usePortfolioDetails();
+
     // TODO: get portfolio balance from db
     const [individualPortfolioData, setIndividualPortfolioData] = useState({
         currentBalance: 0,
         previousBalance: 0, // 24hrs ago balance
     });
+
     // TODO: get portfolio assets from db
     const [individualPortfolioAssets, setIndividualPortfolioAssets] = useState<
         Asset[]
@@ -42,17 +43,6 @@ const IndividualPortfolio = () => {
             value: 210.3 * 41,
         },
     ]);
-
-    const { data: portfolioDetails, isLoading: isPortfolioDetailsLoading } =
-        useQuery(
-            "portfolioDetails",
-            async () => {
-                const response = await fetch(`/api/portfolio/${pid}`);
-                const portfolioDetails = await response.json();
-                return portfolioDetails;
-            },
-            { enabled: router.isReady },
-        );
 
     // const { data, isLoading: tableData } = useQuery("data", async () => {
     //     const response = await fetch("/api/users/test/assets");
