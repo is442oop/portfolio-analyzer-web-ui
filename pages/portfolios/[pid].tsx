@@ -87,13 +87,16 @@ const IndividualPortfolio = () => {
                         <TransactionModal />
                     </div>
                 ) : (
-                    <div>
+                    <div className="p-4">
                         <div className="flex flex-col gap-3 lg:flex-row">
                             <PortfolioHistoryChart />
                             <AssetAllocationChart />
                         </div>
-                        <div className="mt-12 text-xl font-semibold">
-                            Holdings
+                        <div className="mt-12 flex items-center justify-between">
+                            <div className="text-xl font-semibold">
+                                Holdings
+                            </div>
+                            <TransactionModal />
                         </div>
                         {/* <AssetTable
                             data={individualPortfolioAssets}
