@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 
@@ -12,28 +12,54 @@ import {
     DialogTrigger,
 } from "@/components/ui/Dialog";
 import { toast } from "./ui/Toaster/use-toast";
+import { useMutation, useQueryClient } from "react-query";
+import axios from "axios";
 
-interface PortfolioModalProps {
+type PortfolioModalProps = {
     edit: boolean;
-}
+};
 
+type portfolioDetails = {
+    userId: 1;
+    portfolioName: string;
+    description: string;
+};
 // TODO: refactor to be able to be prefilled with data for updating portfolio name
 export const PortfolioModal: React.FC<PortfolioModalProps> = ({ edit }) => {
-    const [portfolioName, setPortfolioName] = useState("");
+    const queryClient = useQueryClient();
+    const [portfolioDetails, setPortfolioDetails] = useState<portfolioDetails>({
+        userId: 1,
+        portfolioName: "",
+        description: "",
+    });
+
+    const createPortfolio = async (data: portfolioDetails) => {
+        const response = await axios.post("/api/portfolios", portfolioDetails);
+        return response.data;
+    };
+
+    const { mutate } = useMutation(createPortfolio, {
+        onSuccess: (data) => {
+            toast({
+                variant: "success",
+                title: `Successfully created portfolio: ${portfolioDetails.portfolioName}!`,
+            });
+            setPortfolioDetails((prev) => ({
+                ...prev,
+                portfolioName: "",
+                description: "",
+            }));
+            queryClient.invalidateQueries("portfolioList");
+        },
+    });
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        toast({ variant: "success", title: portfolioName });
+        mutate(portfolioDetails);
     };
 
     useEffect(() => {
-        // fetch("http://localhost:3000/api/portfolios/1")
-        //     .then((res) => res.json())
-        //     .then((data) => {
-        //         console.log(data);
-        //         setPortfolioName(data.name);
-        //     });
-        setPortfolioName("new portfolio name goes here");
+        // TODO: preset portfolio details
     }, []);
 
     return (
@@ -53,30 +79,52 @@ export const PortfolioModal: React.FC<PortfolioModalProps> = ({ edit }) => {
                     </DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleSubmit}>
-                    <div>
+                    <div className="space-y-2">
                         <div>
-                            <p className="pb-1 font-bold">Portfolio Name</p>
+                            <p className="pb-1 font-bold">Name</p>
                             <Input
                                 id="name"
                                 className="col-span-3"
-                                placeholder="e.g. 'My Portfolio'"
-                                value={portfolioName}
+                                placeholder="A portfolio name"
+                                value={portfolioDetails.portfolioName}
                                 autoFocus
                                 onChange={(e) =>
-                                    setPortfolioName(e.target.value)
+                                    setPortfolioDetails((prev) => ({
+                                        ...prev,
+                                        portfolioName: e.target.value,
+                                    }))
                                 }
-                                maxLength={24}
+                                maxLength={50}
+                            />
+                        </div>
+                        <div>
+                            <p className="pb-1 font-bold">Description</p>
+                            <Input
+                                id="description"
+                                className="col-span-3"
+                                placeholder="A short description"
+                                value={portfolioDetails.description}
+                                onChange={(e) =>
+                                    setPortfolioDetails((prev) => ({
+                                        ...prev,
+                                        description: e.target.value,
+                                    }))
+                                }
+                                maxLength={50}
                             />
                         </div>
 
                         <DialogDescription className="mx-1 my-2">
-                            {portfolioName.length}/24 characters
+                            {portfolioDetails.portfolioName.length}/50
+                            characters
                         </DialogDescription>
                     </div>
-                    {/* TODO: close modal on submit */}
                     <DialogClose
                         type="submit"
-                        disabled={portfolioName.length == 0}
+                        disabled={
+                            portfolioDetails.portfolioName.length == 0 ||
+                            portfolioDetails.description.length == 0
+                        }
                         className="inline-flex h-10 w-full items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground ring-offset-background transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
                     >
                         <p className="font-bold">

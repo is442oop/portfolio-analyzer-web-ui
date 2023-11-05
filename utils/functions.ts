@@ -20,6 +20,7 @@ export const formatNumber = (amount: number) => {
     }).format(amount);
 };
 
+
 export const formatUsdWatchlist = (amount: number) => {
     let formattedAmount = amount;
     let finalformattedAmount
@@ -39,3 +40,8 @@ export const formatUsdWatchlist = (amount: number) => {
     finalformattedAmount = finalformattedAmount + format;
     return finalformattedAmount;
 };
+
+export const formatAvatarFallback = (email: string) => {
+    if (email) return email.substring(0, 2).toUpperCase();
+};
+
