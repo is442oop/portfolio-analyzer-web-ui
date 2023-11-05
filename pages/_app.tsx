@@ -11,16 +11,16 @@ const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }: AppProps) {
     return (
-        <QueryClientProvider client={queryClient}>
-            <main className={cn(inter.className, "")}>
-                <style jsx global>{`
-                    html {
-                        font-family: ${inter.style.fontFamily};
-                    }
-                `}</style>
+        <main className={cn(inter.className, "")}>
+            <style jsx global>{`
+                html {
+                    font-family: ${inter.style.fontFamily};
+                }
+            `}</style>
 
+            <QueryClientProvider client={queryClient}>
                 <Component {...pageProps} />
-            </main>
-        </QueryClientProvider>
+            </QueryClientProvider>
+        </main>
     );
 }
