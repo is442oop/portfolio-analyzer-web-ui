@@ -81,7 +81,7 @@ export const TransactionModal = () => {
             <DialogTrigger asChild>
                 <div>
                     <Button className="hidden w-fit text-xs sm:block">
-                        Add Transaction
+                        + Add Transaction
                     </Button>
                     <Button className="w-fit sm:hidden"> + </Button>
                 </div>
