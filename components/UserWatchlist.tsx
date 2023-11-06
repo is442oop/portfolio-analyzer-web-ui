@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
 import { Columns } from "@/components/WatchlistAssetTableColumn";
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import { DataTable } from "@/components/ui/DataTable";
@@ -9,29 +8,6 @@ const AssetData = () => {
         const assets = await response.json();
         return assets;
     });
-
-    // TESTNG PERFORMANCE OF USEMEMO VS REACTQUERY
-
-    // const [assets, setAssets] = useState();
-    // const [isLoading, setIsLoading] = useState<boolean>(true);
-    // const getAssets = async () => {
-    //     const response = await fetch("/api/users/1/watchlistAssets");
-    //     const assets = await response.json();
-    //     return assets;
-    // };
-
-    // const results = useMemo(
-    //     () => async () => {
-    //         const data = await getAssets();
-    //         setAssets(data);
-    //         setIsLoading(false);
-    //     },
-    //     [assets],
-    // );
-
-    // useEffect(() => {
-    //     results();
-    // }, [results]);
 
     return (
         <div>
