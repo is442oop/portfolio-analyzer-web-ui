@@ -5,10 +5,7 @@ import { PortfolioModal } from "./PortfolioModal";
 import { formatPercentage, formatUsd } from "@/utils/functions";
 
 type DashboardHeaderProps = {
-    portfolioData: {
-        currentBalance: number;
-        previousBalance: number;
-    };
+    currentBalance: number;
     edit?: boolean;
     portfolioName?: string;
     portfolioDesc?: string;
@@ -16,21 +13,21 @@ type DashboardHeaderProps = {
 
 export const DashboardHeader = ({
     edit = false,
-    portfolioData,
+    currentBalance = 0,
     portfolioName = "",
     portfolioDesc = "",
 }: DashboardHeaderProps) => {
     const [showBalance, setShowBalance] = useState(true);
 
-    const percentageChange =
-        portfolioData.currentBalance === 0 &&
-        portfolioData.previousBalance === 0
-            ? 0
-            : ((portfolioData.currentBalance - portfolioData.previousBalance) /
-                  portfolioData.previousBalance) *
-              100;
+    // const percentageChange =
+    //     portfolioData.currentBalance === 0 &&
+    //     portfolioData.previousBalance === 0
+    //         ? 0
+    //         : ((portfolioData.currentBalance - portfolioData.previousBalance) /
+    //               portfolioData.previousBalance) *
+    //           100;
 
-    const isPositiveChange = percentageChange >= 0;
+    // const isPositiveChange = percentageChange >= 0;
     return (
         <div className="space-y-4 rounded-lg bg-white p-4">
             <h1 className="text-2xl font-semibold text-primary">
@@ -70,7 +67,8 @@ export const DashboardHeader = ({
                 <div className="flex items-center justify-between">
                     {showBalance ? (
                         <p className="text-2xl font-bold tracking-wider text-black sm:text-3xl">
-                            {formatUsd(portfolioData.currentBalance)}
+                            {formatUsd(currentBalance)}
+                            {/* {formatUsd(portfolioData.currentBalance)} */}
                         </p>
                     ) : (
                         <p className="text-2xl font-bold text-black sm:text-3xl">
@@ -86,7 +84,7 @@ export const DashboardHeader = ({
                     />
                 </div>
 
-                {/* Percentage Change */}
+                {/* Percentage Change
                 <div className="flex items-center space-x-1 ">
                     <p
                         className={`text-base font-bold tracking-wider ${
@@ -99,7 +97,7 @@ export const DashboardHeader = ({
                         {formatPercentage(percentageChange)}
                     </p>
                     <Badge variant={"secondary"}>24hr</Badge>
-                </div>
+                </div> */}
             </div>
         </div>
     );
