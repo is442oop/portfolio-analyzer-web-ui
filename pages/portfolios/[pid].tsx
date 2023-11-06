@@ -15,13 +15,7 @@ const IndividualPortfolio = () => {
     const { portfolioDetails, isPortfolioDetailsLoading } =
         usePortfolioDetails();
 
-    // TODO: get portfolio balance from db
-    const [individualPortfolioData, setIndividualPortfolioData] = useState<any>(
-        {
-            currentBalance: 0,
-            previousBalance: 0, // 24hrs ago balance
-        },
-    );
+    const [currentBalance, setCurrentBalance] = useState<number>();
 
     const {
         data: individualPortfolioAssets,
@@ -37,16 +31,28 @@ const IndividualPortfolio = () => {
             return res.portfolioAssetList;
         },
         {
+            onSuccess: (individualPortfolioAssets) => {
+                individualPortfolioAssets?.forEach(
+                    (portfolio: PortfolioResponse) => {
+                        portfolio.value =
+                            portfolio.quantity * portfolio.averagePrice;
+                    },
+                );
+
+                // get balance for current portfolio
+                const initialValue = 0;
+                const currentBalance = individualPortfolioAssets?.reduce(
+                    (accumulator: number, currentValue: PortfolioResponse) => {
+                        return accumulator + currentValue.value;
+                    },
+                    initialValue,
+                );
+                setCurrentBalance(currentBalance);
+            },
             enabled: !!router.query.pid,
         },
     );
 
-    if (individualPortfolioAssets) {
-        individualPortfolioAssets.forEach((portfolio: PortfolioResponse) => {
-            portfolio.value = portfolio.quantity * portfolio.averagePrice;
-        });
-        console.log(individualPortfolioAssets);
-    }
     return (
         <Layout>
             <div className="h-fit min-h-screen py-10 pl-0 pr-10 sm:p-10">
@@ -56,7 +62,7 @@ const IndividualPortfolio = () => {
                 {portfolioDetails && (
                     <DashboardHeader
                         edit={true}
-                        portfolioData={individualPortfolioData}
+                        currentBalance={currentBalance!}
                         portfolioName={portfolioDetails.portfolioName}
                         portfolioDesc={portfolioDetails.description}
                     />
@@ -76,27 +82,28 @@ const IndividualPortfolio = () => {
                             <TransactionModal />
                         </div>
                     )}
-                {individualPortfolioAssets && (
-                    <div className="p-4">
-                        <div className="flex flex-col gap-3 lg:flex-row">
-                            <PortfolioHistoryChart />
-                            <AssetAllocationChart
-                                isIndividualPortfolio={true}
-                                pid={parseInt(router.query.pid as string)}
+                {individualPortfolioAssets &&
+                    individualPortfolioAssets.length !== 0 && (
+                        <div className="p-4">
+                            <div className="flex flex-col gap-3 lg:flex-row">
+                                <PortfolioHistoryChart />
+                                <AssetAllocationChart
+                                    isIndividualPortfolio={true}
+                                    pid={parseInt(router.query.pid as string)}
+                                />
+                            </div>
+                            <div className="mt-12 flex items-center justify-between pb-5">
+                                <div className="text-xl font-semibold">
+                                    Holdings
+                                </div>
+                                <TransactionModal />
+                            </div>
+                            <AssetTable
+                                data={individualPortfolioAssets}
+                                isLoading={individualPortfolioAssetsLoading}
                             />
                         </div>
-                        <div className="mt-12 flex items-center justify-between pb-5">
-                            <div className="text-xl font-semibold">
-                                Holdings
-                            </div>
-                            <TransactionModal />
-                        </div>
-                        <AssetTable
-                            data={individualPortfolioAssets}
-                            isLoading={individualPortfolioAssetsLoading}
-                        />
-                    </div>
-                )}
+                    )}
             </div>
         </Layout>
     );
