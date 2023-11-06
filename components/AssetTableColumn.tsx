@@ -5,42 +5,36 @@ import { formatNumber, formatUsd } from "@/utils/functions";
 
 export const Columns: ColumnDef<Asset>[] = [
     {
-        accessorKey: "ticker",
+        accessorKey: "assetTicker",
         header: () => <div className="w-60 text-left">Asset</div>,
         cell: ({ row }) => {
             const asset = row.original;
             return (
                 <div className="flex w-60 items-center gap-2">
-                    <img
-                        src={asset.logoUrl}
-                        alt={asset.name}
-                        className="mr-2 h-6 w-6 rounded-full"
-                    />
                     <div className="flex items-baseline gap-1">
-                        <span>{asset.name}</span>
-                        <span className="text-gray-400">{asset.ticker}</span>
+                        <span>{asset.assetTicker}</span>
                     </div>
                 </div>
             );
         },
     },
     {
-        accessorKey: "price",
-        header: () => <div className="text-right">Price (24h %)</div>,
+        accessorKey: "averagePrice",
+        header: () => <div className="text-right">Price</div>,
         cell: ({ row }) => {
             return (
                 <div className="text-right">
-                    {formatUsd(row.getValue("price"))}
+                    {formatUsd(row.getValue("averagePrice"))}
                 </div>
             );
         },
     },
     {
-        accessorKey: "balance",
+        accessorKey: "quantity",
         header: () => <div className="text-right">Balance</div>,
         cell: ({ row }) => (
             <div className="text-right">
-                {formatNumber(row.getValue("balance"))}
+                {formatNumber(row.getValue("quantity"))}
             </div>
         ),
     },
@@ -66,11 +60,8 @@ export const Columns: ColumnDef<Asset>[] = [
             );
         },
         cell: ({ row }) => {
-            return (
-                <div className="text-right">
-                    {formatUsd(row.getValue("value"))}
-                </div>
-            );
+            const value = row.original.averagePrice * row.original.quantity;
+            return <div className="text-right">{formatUsd(value)}</div>;
         },
     },
 ];

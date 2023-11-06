@@ -8,6 +8,7 @@ import { Icons } from "@/components/ui/Icons";
 import { usePortfolioDetails } from "@/hooks/usePortfolioDetails";
 import AssetAllocationChart from "@/components/AssetAllocationChart";
 import { useRouter } from "next/router";
+import { useQuery } from "react-query";
 
 const IndividualPortfolio = () => {
     const router = useRouter();
@@ -15,43 +16,37 @@ const IndividualPortfolio = () => {
         usePortfolioDetails();
 
     // TODO: get portfolio balance from db
-    const [individualPortfolioData, setIndividualPortfolioData] = useState({
-        currentBalance: 0,
-        previousBalance: 0, // 24hrs ago balance
-    });
-
-    // TODO: get portfolio assets from db
-    const [individualPortfolioAssets, setIndividualPortfolioAssets] = useState<
-        Asset[]
-    >([
+    const [individualPortfolioData, setIndividualPortfolioData] = useState<any>(
         {
-            ticker: "BTC",
-            name: "Bitcoin",
-            logoUrl:
-                "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png",
-            balance: 1.0,
-            price: 28000.9,
-            price24hDeltaPercentage: 0.23,
-            value: 28000.9,
+            currentBalance: 0,
+            previousBalance: 0, // 24hrs ago balance
+        },
+    );
+
+    const {
+        data: individualPortfolioAssets,
+        isLoading: individualPortfolioAssetsLoading,
+    } = useQuery(
+        "individualPortfolioAssets",
+        async () => {
+            const response = await fetch(
+                `/api/portfolio/assets/${router.query.pid}`,
+            );
+            const res = await response.json();
+
+            return res.portfolioAssetList;
         },
         {
-            ticker: "BNB",
-            name: "BNB",
-            logoUrl:
-                "https://s2.coinmarketcap.com/static/img/coins/64x64/1839.png",
-            balance: 41,
-            price: 210.3,
-            price24hDeltaPercentage: 0.23,
-            value: 210.3 * 41,
+            enabled: !!router.query.pid,
         },
-    ]);
+    );
 
-    // const { data, isLoading: tableData } = useQuery("data", async () => {
-    //     const response = await fetch("/api/users/test/assets");
-    //     const assets = await response.json();
-    //     return assets;
-    // });
-
+    if (individualPortfolioAssets) {
+        individualPortfolioAssets.forEach((portfolio: PortfolioResponse) => {
+            portfolio.value = portfolio.quantity * portfolio.averagePrice;
+        });
+        console.log(individualPortfolioAssets);
+    }
     return (
         <Layout>
             <div className="h-fit min-h-screen py-10 pl-0 pr-10 sm:p-10">
@@ -66,20 +61,22 @@ const IndividualPortfolio = () => {
                         portfolioDesc={portfolioDetails.description}
                     />
                 )}
-                {individualPortfolioAssets.length === 0 ? (
-                    <div className="my-auto flex h-fit flex-col items-center justify-center gap-y-3 pt-20">
-                        <div className="space-y-1 text-center">
-                            <h1 className="font-semibold">
-                                This portfolio needs some final touches ...
-                            </h1>
-                            <h2 className="text-gray-400">
-                                Add an asset to get started
-                            </h2>
-                        </div>
+                {individualPortfolioAssets &&
+                    individualPortfolioAssets.length === 0 && (
+                        <div className="my-auto flex h-fit flex-col items-center justify-center gap-y-3 pt-20">
+                            <div className="space-y-1 text-center">
+                                <h1 className="font-semibold">
+                                    This portfolio needs some final touches ...
+                                </h1>
+                                <h2 className="text-gray-400">
+                                    Add an asset to get started
+                                </h2>
+                            </div>
 
-                        <TransactionModal />
-                    </div>
-                ) : (
+                            <TransactionModal />
+                        </div>
+                    )}
+                {individualPortfolioAssets && (
                     <div className="p-4">
                         <div className="flex flex-col gap-3 lg:flex-row">
                             <PortfolioHistoryChart />
@@ -88,16 +85,16 @@ const IndividualPortfolio = () => {
                                 pid={parseInt(router.query.pid as string)}
                             />
                         </div>
-                        <div className="mt-12 flex items-center justify-between">
+                        <div className="mt-12 flex items-center justify-between pb-5">
                             <div className="text-xl font-semibold">
                                 Holdings
                             </div>
                             <TransactionModal />
                         </div>
-                        {/* <AssetTable
+                        <AssetTable
                             data={individualPortfolioAssets}
-                            isLoading={tableData}
-                        /> */}
+                            isLoading={individualPortfolioAssetsLoading}
+                        />
                     </div>
                 )}
             </div>

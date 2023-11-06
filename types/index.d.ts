@@ -11,12 +11,9 @@ declare type ChartControlsProps = {
 };
 
 declare type Asset = {
-    ticker: string;
-    name: string;
-    logoUrl: string;
-    balance: number;
-    price: number;
-    price24hDeltaPercentage: number;
+    assetTicker: string;
+    averagePrice: number;
+    quantity: number;
     value: number;
 };
 
@@ -45,4 +42,17 @@ declare type Portfolio = {
 declare type AllocationChartProps = {
     stock: string;
     percentage: number;
+};
+
+declare type PortfolioResponse = {
+    assetTicker: string;
+    averagePrice: number;
+    dateCreated: number;
+    dateCreatedStringMap: { dateCreated: string };
+    dateModified: number;
+    dateModifiedStringMap: { dateModified: string };
+    portfolioAssetId: number;
+    portfolioId: number;
+    quantity: number;
+    value: number;
 };
