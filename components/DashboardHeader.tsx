@@ -29,7 +29,7 @@ export const DashboardHeader = ({
 
     // const isPositiveChange = percentageChange >= 0;
     return (
-        <div className="space-y-4 rounded-lg bg-white p-4">
+        <div className="space-y-4 rounded-lg bg-white py-4">
             <h1 className="text-2xl font-semibold text-primary">
                 {portfolioName === "" ? "Dashboard" : portfolioName}
             </h1>

@@ -40,7 +40,7 @@ const AssetAllocationChart = ({
             { enabled: router.isReady },
         );
     return (
-        <div className="mx-auto w-full space-y-2 rounded-xl border px-4 py-5 lg:w-1/2">
+        <div className="mx-auto w-full space-y-2 rounded-xl border px-1 py-5 xl:w-1/2">
             <div className="flex flex-col items-center justify-center gap-y-2 font-bold">
                 <h1>Asset Allocation</h1>
                 <ChartControls

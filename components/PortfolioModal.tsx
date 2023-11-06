@@ -110,7 +110,9 @@ export const PortfolioModal: React.FC<PortfolioModalProps> = ({
                     <Button className="hidden w-fit  text-xs sm:block">
                         {edit ? "Edit Portfolio" : "+ New Portfolio"}
                     </Button>
-                    <Button className="w-fit sm:hidden"> + </Button>
+                    <Button className="w-fit sm:hidden">
+                        {edit ? "Edit" : "+"}
+                    </Button>
                 </div>
             </DialogTrigger>
             <DialogContent className="max-w-sm sm:max-w-xl">

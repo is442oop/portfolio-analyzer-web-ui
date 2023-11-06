@@ -84,8 +84,8 @@ const IndividualPortfolio = () => {
                     )}
                 {individualPortfolioAssets &&
                     individualPortfolioAssets.length !== 0 && (
-                        <div className="p-4">
-                            <div className="flex flex-col gap-3 lg:flex-row">
+                        <div>
+                            <div className="flex flex-col gap-3 xl:flex-row">
                                 <PortfolioHistoryChart />
                                 <AssetAllocationChart
                                     isIndividualPortfolio={true}

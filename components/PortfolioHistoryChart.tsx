@@ -16,7 +16,7 @@ const PortfolioHistoryChart = () => {
     const [selectedPeriod, setSelectedPeriod] = useState("7D");
 
     return (
-        <div className="w-full space-y-2 rounded-xl border px-4 py-5 lg:w-1/2">
+        <div className="w-full space-y-2 rounded-xl border px-1 py-5 xl:w-1/2">
             <div className="flex flex-col items-center justify-between gap-y-2 font-bold">
                 <h1>Historical Trend</h1>
                 <ChartControls
