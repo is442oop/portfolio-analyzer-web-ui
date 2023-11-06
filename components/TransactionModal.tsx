@@ -28,6 +28,8 @@ import {
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/Calendar";
+import { useRouter } from "next/router";
+import axios from "axios";
 
 type ticker = {
     value: string;
@@ -71,9 +73,23 @@ export const TransactionModal = () => {
 
     const [stockPrice, setStockPrice] = useState(0);
     const [quantity, setQuantity] = useState(0);
+    const router = useRouter();
+    const { pid } = router.query;
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        console.log(pid);
+        console.log(ticker);
+        console.log(stockPrice);
+        console.log(quantity);
+        const response = await axios.post(`/api/portfolio/asset`, {
+            portfolioId: pid,
+            assetTicker: ticker,
+            price: stockPrice,
+            quantity: quantity,
+        });
+        console.log("response");
+        console.log(response);
     };
 
     return (
@@ -225,7 +241,7 @@ export const TransactionModal = () => {
                         <div className="grid w-full max-w-sm items-center gap-1.5 p-4">
                             <Label htmlFor="spent">Total Spent</Label>
                             <p id="spent" className="text-xl font-bold">
-                                ${formatUsd(quantity * stockPrice)}
+                                {formatUsd(quantity * stockPrice)}
                             </p>
                         </div>
                     </div>
