@@ -38,10 +38,8 @@ type portfolioDetails = {
 export const PortfolioModal: React.FC<PortfolioModalProps> = ({
     edit,
     prefilledPortfolioDetails,
-}) => {
+}: PortfolioModalProps) => {
     const queryClient = useQueryClient();
-    const { portfolioDetails, isPortfolioDetailsLoading } =
-        usePortfolioDetails();
 
     const [portfolioModalDetails, setPortfolioModalDetails] =
         useState<portfolioDetails>({
@@ -60,6 +58,7 @@ export const PortfolioModal: React.FC<PortfolioModalProps> = ({
     };
 
     const updatePortfolioReq = async (data: portfolioDetails) => {
+        const { portfolioDetails } = usePortfolioDetails();
         const response = await axios.put(
             `/api/portfolio/${portfolioDetails.pid}`,
             {
@@ -157,7 +156,7 @@ export const PortfolioModal: React.FC<PortfolioModalProps> = ({
                         </div>
 
                         <DialogDescription className="mx-1 my-2">
-                            {portfolioModalDetails.portfolioName.length}/50
+                            {portfolioModalDetails.description.length}/50
                             characters used for description
                         </DialogDescription>
                     </div>

@@ -1,10 +1,10 @@
-import { AssetAllocationChart } from "@/components/AssetAllocationChart";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { Layout } from "@/components/Layout";
 import PortfolioHistoryChart from "@/components/PortfolioHistoryChart";
 import AssetTable from "@/components/AssetTable";
 import { useState } from "react";
 import { useQuery } from "react-query";
+import AssetAllocationChart from "@/components/AssetAllocationChart";
 
 const dashboard = () => {
     const [portfolioData, setPortfolioData] = useState({
@@ -22,7 +22,7 @@ const dashboard = () => {
                 <DashboardHeader portfolioData={portfolioData} />
                 <div className="flex flex-col gap-3 lg:flex-row">
                     <PortfolioHistoryChart />
-                    <AssetAllocationChart />
+                    <AssetAllocationChart isIndividualPortfolio={false} />
                 </div>
                 <div className="mt-12 text-xl font-semibold">Holdings</div>
                 {data && <AssetTable data={data} isLoading={isLoading} />}

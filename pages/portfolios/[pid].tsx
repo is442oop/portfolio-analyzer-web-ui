@@ -3,12 +3,14 @@ import { Layout } from "@/components/Layout";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { TransactionModal } from "@/components/TransactionModal";
 import PortfolioHistoryChart from "@/components/PortfolioHistoryChart";
-import { AssetAllocationChart } from "@/components/AssetAllocationChart";
 import AssetTable from "@/components/AssetTable";
 import { Icons } from "@/components/ui/Icons";
 import { usePortfolioDetails } from "@/hooks/usePortfolioDetails";
+import AssetAllocationChart from "@/components/AssetAllocationChart";
+import { useRouter } from "next/router";
 
 const IndividualPortfolio = () => {
+    const router = useRouter();
     const { portfolioDetails, isPortfolioDetailsLoading } =
         usePortfolioDetails();
 
@@ -49,6 +51,7 @@ const IndividualPortfolio = () => {
     //     const assets = await response.json();
     //     return assets;
     // });
+
     return (
         <Layout>
             <div className="h-fit min-h-screen py-10 pl-0 pr-10 sm:p-10">
@@ -80,7 +83,10 @@ const IndividualPortfolio = () => {
                     <div className="p-4">
                         <div className="flex flex-col gap-3 lg:flex-row">
                             <PortfolioHistoryChart />
-                            <AssetAllocationChart />
+                            <AssetAllocationChart
+                                isIndividualPortfolio={true}
+                                pid={parseInt(router.query.pid as string)}
+                            />
                         </div>
                         <div className="mt-12 flex items-center justify-between">
                             <div className="text-xl font-semibold">
