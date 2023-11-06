@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { Icons } from "./ui/Icons";
 import axios from "axios";
+import { toast } from "./ui/Toaster/use-toast";
 
 type TextKeys = {
     title: string;
@@ -102,8 +103,19 @@ export function AuthCard() {
 
         setIsLoading(false);
         if (error) {
-            alert(error);
+            const msg = isNewUser
+                ? "failed to create account"
+                : "failed to login";
+            toast({
+                variant: "destructive",
+                title: msg + ": " + error.message,
+            });
             return;
+        } else {
+            toast({
+                variant: "success",
+                title: `Welcome, ${data.user!.email}!`,
+            });
         }
         console.log(data);
         router.push("/dashboard");
