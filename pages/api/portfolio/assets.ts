@@ -17,7 +17,7 @@ export default async function handler(
         console.log(price);
         console.log(quantity);
     
-    const response = await axios.post(`${process.env.API_URL}/api/portfolio/asset`, {
+    const response = await axios.post(`${process.env.API_URL}/api/portfolio/assets`, {
         portfolioId: portfolioId,
         assetTicker: assetTicker,
         price: price,
