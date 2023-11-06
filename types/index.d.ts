@@ -18,7 +18,7 @@ declare type Asset = {
     price: number;
     price24hDeltaPercentage: number;
     value: number;
-}
+};
 
 declare type WatchlistAsset = {
     ticker: string;
@@ -31,7 +31,6 @@ declare type WatchlistAsset = {
     sparkline: Record<string, any>[];
 };
 
-
 declare interface TimeSeriesData {
     "4. close": number;
 }
@@ -41,4 +40,9 @@ declare type Portfolio = {
     userId: number;
     portfolioName: String;
     description: String;
+};
+
+declare type AllocationChartProps = {
+    stock: string;
+    percentage: number;
 };
