@@ -82,7 +82,7 @@ export const TransactionModal = () => {
         console.log(ticker);
         console.log(stockPrice);
         console.log(quantity);
-        const response = await axios.post(`/api/portfolio/assets`, {
+        const response = await axios.post(`/api/portfolio/asset`, {
             portfolioId: pid,
             assetTicker: ticker,
             price: stockPrice,

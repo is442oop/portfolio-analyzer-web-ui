@@ -17,14 +17,14 @@ export default async function handler(
         console.log(price);
         console.log(quantity);
     
-    const response = await axios.post(`${process.env.API_URL}/api/portfolio/assets`, {
-        portfolioId: portfolioId,
-        assetTicker: assetTicker,
-        price: price,
-        quantity: quantity,
-    });
-    const data = response.data;
-    console.log(response);
-    return res.status(200).json(data);
+      const response = await axios.post(`${process.env.API_URL}/api/portfolio/asset`, {
+          portfolioId: portfolioId,
+          assetTicker: assetTicker,
+          price: price,
+          quantity: quantity,
+      });
+      const data = response.data;
+      console.log(response);
+      return res.status(200).json(data);
     }
 }
