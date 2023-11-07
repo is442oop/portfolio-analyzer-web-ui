@@ -34,8 +34,7 @@ const IndividualPortfolio = () => {
             onSuccess: (individualPortfolioAssets) => {
                 individualPortfolioAssets?.forEach(
                     (portfolio: PortfolioResponse) => {
-                        portfolio.value =
-                            portfolio.quantity * portfolio.averagePrice;
+                        portfolio.value = portfolio.quantity * portfolio.price;
                     },
                 );
 

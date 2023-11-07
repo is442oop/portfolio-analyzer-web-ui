@@ -21,12 +21,12 @@ export const Columns: ColumnDef<Asset>[] = [
         },
     },
     {
-        accessorKey: "averagePrice",
+        accessorKey: "price",
         header: () => <div className="text-right">Price</div>,
         cell: ({ row }) => {
             return (
                 <div className="text-right">
-                    {formatUsd(row.getValue("averagePrice"))}
+                    {formatUsd(row.getValue("price"))}
                 </div>
             );
         },
@@ -62,7 +62,7 @@ export const Columns: ColumnDef<Asset>[] = [
             );
         },
         cell: ({ row }) => {
-            const value = row.original.averagePrice * row.original.quantity;
+            const value = row.original.price * row.original.quantity;
             return <div className="text-right">{formatUsd(value)}</div>;
         },
     },

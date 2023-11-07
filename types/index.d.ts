@@ -12,7 +12,7 @@ declare type ChartControlsProps = {
 
 declare type Asset = {
     assetTicker: string;
-    averagePrice: number;
+    price: number;
     quantity: number;
     value: number;
 };
@@ -46,7 +46,7 @@ declare type AllocationChartProps = {
 
 declare type PortfolioResponse = {
     assetTicker: string;
-    averagePrice: number;
+    price: number;
     dateCreated: number;
     dateCreatedStringMap: { dateCreated: string };
     dateModified: number;
