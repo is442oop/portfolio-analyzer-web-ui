@@ -8,14 +8,13 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
     return (
-        <div className="flex h-screen flex-auto">
+        <div className="flex h-screen flex-auto items-stretch">
             <Sidebar />
-            <div className="grow overflow-y-auto overflow-x-hidden">
-                <div className="mx-auto max-w-2xl lg:max-w-4xl xl:max-w-6xl">
-                    {children}
-                </div>
+            <div className="mx-auto max-w-2xl grow overflow-y-auto overflow-x-hidden lg:max-w-4xl xl:max-w-6xl">
+                {children}
             </div>
             <TailwindIndicator />
+            <Toaster />
         </div>
     );
 }
