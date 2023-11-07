@@ -75,7 +75,11 @@ export function AuthCard() {
         if (error) {
             return { data, error };
         }
-        const res = await axios.post("/api/users", { email });
+        const res = await axios.post("/api/users", {
+            id: data.user!.id,
+            email: email,
+            username: email,
+        });
         if (res.status !== 200) {
             return { data, error: res.data };
         }
