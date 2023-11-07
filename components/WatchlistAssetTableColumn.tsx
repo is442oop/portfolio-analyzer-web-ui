@@ -11,7 +11,7 @@ export const Columns: ColumnDef<WatchlistAsset>[] = [
             const asset = row.original;
             return (
                 <div className="text-left">
-                    <span className="rounded border-2 border-primary bg-primary px-1 text-white">
+                    <span className="rounded-md border bg-primary px-1.5 py-0.5 text-primary-foreground">
                         {asset.ticker}
                     </span>
                 </div>

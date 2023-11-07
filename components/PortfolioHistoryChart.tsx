@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+
 import {
     AreaChart,
     Area,
@@ -8,7 +9,6 @@ import {
     Tooltip,
     ResponsiveContainer,
 } from "recharts";
-import { Button } from "./ui/Button";
 import { ChartControls } from "./ChartControls";
 
 const PortfolioHistoryChart = () => {
@@ -57,7 +57,7 @@ const PortfolioHistoryChart = () => {
                     <CartesianGrid strokeDasharray="3 3" />
                     <Tooltip />
                     <Area
-                        isAnimationActive={false}
+                        animationDuration={500}
                         type="monotone"
                         dataKey="balance"
                         stroke="#749AC7"

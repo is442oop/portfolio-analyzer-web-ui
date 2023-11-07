@@ -12,7 +12,9 @@ export const Columns: ColumnDef<Asset>[] = [
             return (
                 <div className="flex w-60 items-center gap-2">
                     <div className="flex items-baseline gap-1">
-                        <span>{asset.assetTicker}</span>
+                        <span className="rounded-md border bg-primary px-1.5 py-0.5 text-primary-foreground">
+                            {asset.assetTicker}
+                        </span>
                     </div>
                 </div>
             );

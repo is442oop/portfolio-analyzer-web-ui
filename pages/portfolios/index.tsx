@@ -1,10 +1,10 @@
+import { useEffect, useState } from "react";
 import { Icons } from "@/components/ui/Icons";
 import { Layout } from "@/components/Layout";
 import {
     User,
     createClientComponentClient,
 } from "@supabase/auth-helpers-nextjs";
-import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import PortfolioList from "@/components/PortfolioList";
 
