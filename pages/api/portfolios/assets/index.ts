@@ -10,7 +10,7 @@ export default async function handler(
             const { portfolioId, assetTicker, price, quantity } = req.body;
 
             const response = await axios.post(
-                `${process.env.API_URL}/api/portfolio/asset`,
+                `${process.env.API_URL}/api/portfolios/assets`,
                 {
                     portfolioId: portfolioId,
                     assetTicker: assetTicker,
@@ -30,7 +30,7 @@ export default async function handler(
             console.log(req.body);
 
             const response = await axios.delete(
-                `${process.env.API_URL}/api/portfolio/asset/delete`,
+                `${process.env.API_URL}/api/portfolios/assets`,
                 {
                     data: req.body,
                 },

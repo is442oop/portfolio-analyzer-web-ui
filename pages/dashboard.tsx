@@ -29,6 +29,10 @@ const dashboard = () => {
             enabled: !!userId,
         },
     );
+
+    const { data: portfolioAssetList, isLoading: portfolioAssetListLoading } =
+        useQuery("portfolioAssetList");
+
     return (
         <Layout>
             <div className="h-fit min-h-screen space-y-10 py-10 pl-0 pr-10 sm:p-10">

@@ -89,7 +89,7 @@ export const Columns: ColumnDef<Asset>[] = [
             const asset = row.original;
             // console.log(asset);
             const deleteTransactionReq = async (data: DeleteAsset) => {
-                const response = await axios.delete("/api/portfolio/asset", {
+                const response = await axios.delete("/api/portfolios/assets", {
                     data: {
                         portfolioId: data.portfolioId,
                         assetTicker: data.assetTicker,

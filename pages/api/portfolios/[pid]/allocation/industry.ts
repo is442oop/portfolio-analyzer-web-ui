@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
 
-// This endpoint gets allocation of assets based on tickers for a given portfolio id
+// This endpoint gets allocation of assets based on industry for a given portfolio id
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse,
@@ -10,7 +10,7 @@ export default async function handler(
         try {
             const { pid } = req.query;
             const response = await axios.get(
-                `${process.env.API_URL}/api/portfolio/${pid}/allocation/ticker`,
+                `${process.env.API_URL}/api/portfolios/${pid}/allocation/industry`,
             );
 
             // format the percentage to * 100 and round to 2 decimal places
@@ -19,9 +19,10 @@ export default async function handler(
                     (element.percentage * 100).toFixed(2),
                 );
             });
+
             return res.status(200).json(response.data);
         } catch (error) {
-            return res.status(500).json({ message: error });
+            return res.status(200).json([]);
         }
     }
 }

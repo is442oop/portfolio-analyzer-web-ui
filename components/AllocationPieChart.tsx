@@ -1,3 +1,4 @@
+import { all } from "axios";
 import {
     PieChart,
     Pie,
@@ -16,6 +17,7 @@ const AllocationPieChart = ({
     allocationData: AllocationChartProps[];
     selectedAllocation: string;
 }) => {
+    console.log(allocationData);
     return (
         <>
             {selectedAllocation && allocationData && (

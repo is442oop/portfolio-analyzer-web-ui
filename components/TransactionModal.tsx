@@ -331,7 +331,7 @@ export const TransactionModal = () => {
         price: number;
         quantity: number;
     }) => {
-        const response = await axios.post(`/api/portfolio/asset`, {
+        const response = await axios.post(`/api/portfolios/assets`, {
             portfolioId: pid,
             assetTicker: ticker,
             price: parseFloat(stockPrice),

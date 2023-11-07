@@ -24,7 +24,7 @@ const IndividualPortfolio = () => {
         "individualPortfolioAssets",
         async () => {
             const response = await fetch(
-                `/api/portfolio/assets/${router.query.pid}`,
+                `/api/portfolios/assets/${router.query.pid}`,
             );
             const res = await response.json();
             return res.portfolioAssetList;

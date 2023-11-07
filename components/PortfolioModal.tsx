@@ -55,7 +55,7 @@ export const PortfolioModal: React.FC<PortfolioModalProps> = ({
 
     const createPortfolioReq = async (data: PortfolioDetails) => {
         const response = await axios.post(
-            "/api/portfolio",
+            "/api/portfolios",
             portfolioModalDetails,
         );
         return response.data;
@@ -63,7 +63,7 @@ export const PortfolioModal: React.FC<PortfolioModalProps> = ({
 
     const updatePortfolioReq = async (data: PortfolioDetails) => {
         const response = await axios.put(
-            `/api/portfolio/${portfolioDetails.pid}`,
+            `/api/portfolios/${portfolioDetails.pid}`,
             {
                 portfolioName: portfolioModalDetails.portfolioName,
                 description: portfolioModalDetails.description,

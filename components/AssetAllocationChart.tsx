@@ -3,6 +3,7 @@ import AllocationPieChart from "./AllocationPieChart";
 import { useQuery } from "react-query";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useSessionDetails } from "@/hooks/useSessionDetails";
 
 const AssetAllocationChart = ({
     isIndividualPortfolio = true,
@@ -13,22 +14,22 @@ const AssetAllocationChart = ({
 }) => {
     const router = useRouter();
     const [selectedAllocation, setSelectedAllocation] = useState("Ticker");
+    const userDetails = useSessionDetails();
+    const userId = userDetails?.id;
 
     const getIndivAllocationData = async () => {
         const response = await fetch(
-            `/api/portfolio/${
+            `/api/portfolios/${
                 router.query.pid
             }/allocation/${selectedAllocation.toLowerCase()}`,
         );
         return await response.json();
     };
     const getAllPortfolioAllocationData = async () => {
-        return [
-            { stock: "AAPL", percentage: 40 },
-            { stock: "NVDA", percentage: 30 },
-            { stock: "TSLA", percentage: 30 },
-            { stock: "NDX", percentage: 20 },
-        ];
+        const response = await fetch(
+            `/api/users/d988bdd8-e569-4026-970a-dd6c286ebe6d/portfolios/allocation/${selectedAllocation.toLowerCase()}`,
+        );
+        return await response.json();
     };
 
     const {
