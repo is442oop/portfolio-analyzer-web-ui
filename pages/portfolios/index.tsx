@@ -3,7 +3,6 @@ import { Layout } from "@/components/Layout";
 import { useQuery } from "react-query";
 import PortfolioList from "@/components/PortfolioList";
 import { useSessionDetails } from "@/hooks/useSessionDetails";
-import { useContext } from "react";
 
 const portfolios = () => {
     const userDetails = useSessionDetails();
@@ -28,6 +27,7 @@ const portfolios = () => {
                         <Icons.spinner className="animate-spin text-primary" />
                     </div>
                 )}
+
                 <div className="p-4">
                     {portfolioObj && userId && (
                         <PortfolioList

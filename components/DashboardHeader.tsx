@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Badge } from "./ui/Badge";
 import { PortfolioModal } from "./PortfolioModal";
 import { formatPercentage, formatUsd } from "@/utils/functions";
+import { useSessionDetails } from "@/hooks/useSessionDetails";
 
 type DashboardHeaderProps = {
     currentBalance: number;
@@ -18,7 +19,8 @@ export const DashboardHeader = ({
     portfolioDesc = "",
 }: DashboardHeaderProps) => {
     const [showBalance, setShowBalance] = useState(true);
-
+    const userDetails = useSessionDetails();
+    const userId = userDetails?.id;
     // const percentageChange =
     //     portfolioData.currentBalance === 0 &&
     //     portfolioData.previousBalance === 0
@@ -76,6 +78,7 @@ export const DashboardHeader = ({
                         </p>
                     )}
                     <PortfolioModal
+                        id={userId!}
                         edit={edit}
                         prefilledPortfolioDetails={{
                             portfolioName: portfolioName,
