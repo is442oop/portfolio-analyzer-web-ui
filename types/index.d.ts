@@ -15,6 +15,7 @@ declare type Asset = {
     price: number;
     quantity: number;
     value: number;
+    portfolioId: string;
 };
 
 declare type WatchlistAsset = {

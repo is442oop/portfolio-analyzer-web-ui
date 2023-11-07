@@ -350,6 +350,7 @@ export const TransactionModal = () => {
             setQuantity("");
             setStockPrice("");
             queryClient.invalidateQueries("individualPortfolioAssets");
+            queryClient.invalidateQueries("portfolioDetails");
         },
     });
 

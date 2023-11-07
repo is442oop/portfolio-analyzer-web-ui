@@ -30,4 +30,16 @@ export default async function handler(
             return res.status(500).json({ message: error });
         }
     }
+
+    if (req.method === "DELETE") {
+        try {
+            const { pid } = req.query;
+            const response = await axios.delete(
+                `${process.env.API_URL}/api/portfolio/${pid}`,
+            );
+            return res.status(200).json(response.data);
+        } catch (error) {
+            return res.status(500).json({ message: error });
+        }
+    }
 }

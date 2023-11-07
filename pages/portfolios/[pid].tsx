@@ -47,7 +47,7 @@ const IndividualPortfolio = () => {
                 );
                 setCurrentBalance(currentBalance);
             },
-            enabled: !!router.query.pid,
+            enabled: !!router.isReady,
         },
     );
 

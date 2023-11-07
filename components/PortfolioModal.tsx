@@ -30,7 +30,7 @@ type PortfolioModalProps = {
     id: string;
 };
 
-type portfolioDetails = {
+type PortfolioDetails = {
     userId: string;
     portfolioName: string;
     description: string;
@@ -47,13 +47,13 @@ export const PortfolioModal: React.FC<PortfolioModalProps> = ({
     const queryClient = useQueryClient();
 
     const [portfolioModalDetails, setPortfolioModalDetails] =
-        useState<portfolioDetails>({
+        useState<PortfolioDetails>({
             userId: id,
             portfolioName: "",
             description: "",
         });
 
-    const createPortfolioReq = async (data: portfolioDetails) => {
+    const createPortfolioReq = async (data: PortfolioDetails) => {
         const response = await axios.post(
             "/api/portfolio",
             portfolioModalDetails,
@@ -61,7 +61,7 @@ export const PortfolioModal: React.FC<PortfolioModalProps> = ({
         return response.data;
     };
 
-    const updatePortfolioReq = async (data: portfolioDetails) => {
+    const updatePortfolioReq = async (data: PortfolioDetails) => {
         const response = await axios.put(
             `/api/portfolio/${portfolioDetails.pid}`,
             {
@@ -87,8 +87,10 @@ export const PortfolioModal: React.FC<PortfolioModalProps> = ({
                     portfolioName: "",
                     description: "",
                 }));
+                // queryClient.invalidateQueries();
                 queryClient.invalidateQueries("portfolioDetails");
                 queryClient.invalidateQueries("portfolioList");
+                queryClient.invalidateQueries("allocationData");
             },
         },
     );

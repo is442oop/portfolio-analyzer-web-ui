@@ -12,7 +12,7 @@ const AssetAllocationChart = ({
     pid?: number;
 }) => {
     const router = useRouter();
-    const [selectedAllocation, setSelectedAllocation] = useState("Industry");
+    const [selectedAllocation, setSelectedAllocation] = useState("Ticker");
 
     const getIndivAllocationData = async () => {
         const response = await fetch(
@@ -54,7 +54,7 @@ const AssetAllocationChart = ({
                 <ChartControls
                     selectedPeriod={selectedAllocation}
                     setSelectedPeriod={setSelectedAllocation}
-                    periods={["Industry", "Ticker"]}
+                    periods={["Ticker", "Industry"]}
                 />
             </div>
             {assetAllocationData && (
