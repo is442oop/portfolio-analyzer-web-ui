@@ -34,8 +34,7 @@ type ticker = {
     label: string;
     ticker: string;
 };
-
-// TODO: refactor to be able to be prefilled with data for updating portfolio name
+// TODO: integrate wtih backend
 export const TransactionModal = () => {
     const tickers: ticker[] = [
         {
@@ -81,7 +80,7 @@ export const TransactionModal = () => {
             <DialogTrigger asChild>
                 <div>
                     <Button className="hidden w-fit text-xs sm:block">
-                        + Add Transaction
+                        + Add Ticker
                     </Button>
                     <Button className="w-fit sm:hidden"> + </Button>
                 </div>
@@ -89,7 +88,7 @@ export const TransactionModal = () => {
             <DialogContent className="max-w-fit px-8 sm:max-w-fit">
                 <DialogHeader>
                     <DialogTitle className="text-primary">
-                        Add a Transaction
+                        Add a ticker
                     </DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleSubmit}>

@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 const AssetAllocationChart = ({
-    isIndividualPortfolio,
+    isIndividualPortfolio = true,
     pid,
 }: {
     isIndividualPortfolio: boolean;
@@ -40,7 +40,7 @@ const AssetAllocationChart = ({
         isIndividualPortfolio
             ? getIndivAllocationData
             : getAllPortfolioAllocationData,
-        { enabled: router.isReady },
+        { enabled: !!router.isReady, initialData: [] },
     );
 
     useEffect(() => {

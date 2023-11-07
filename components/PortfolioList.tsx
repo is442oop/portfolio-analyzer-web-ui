@@ -7,7 +7,13 @@ import {
 import { PortfolioModal } from "./PortfolioModal";
 import Link from "next/link";
 
-const PortfolioList = ({ portfolioList }: { portfolioList: Portfolio[] }) => {
+const PortfolioList = ({
+    portfolioList,
+    id,
+}: {
+    portfolioList: Portfolio[];
+    id: string;
+}) => {
     return (
         <div>
             {portfolioList ? (
@@ -21,6 +27,7 @@ const PortfolioList = ({ portfolioList }: { portfolioList: Portfolio[] }) => {
                                 portfolioName: "",
                                 portfolioDesc: "",
                             }}
+                            id={id}
                             edit={false}
                         />
                     </div>
@@ -57,6 +64,7 @@ const PortfolioList = ({ portfolioList }: { portfolioList: Portfolio[] }) => {
                                 portfolioName: "",
                                 portfolioDesc: "",
                             }}
+                            id={id}
                             edit={false}
                         />
                     </div>

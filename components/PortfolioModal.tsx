@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 
@@ -27,10 +27,11 @@ type PortfolioModalProps = {
         portfolioName: string;
         portfolioDesc: string;
     };
+    id: string;
 };
 
 type portfolioDetails = {
-    userId: 1;
+    userId: string;
     portfolioName: string;
     description: string;
 };
@@ -38,13 +39,16 @@ type portfolioDetails = {
 export const PortfolioModal: React.FC<PortfolioModalProps> = ({
     edit,
     prefilledPortfolioDetails,
+    id,
 }: PortfolioModalProps) => {
+    const { portfolioDetails } = edit
+        ? usePortfolioDetails()
+        : { portfolioDetails: null };
     const queryClient = useQueryClient();
 
     const [portfolioModalDetails, setPortfolioModalDetails] =
         useState<portfolioDetails>({
-            // TODO change userId to be dynamic
-            userId: 1,
+            userId: id,
             portfolioName: "",
             description: "",
         });
@@ -58,7 +62,6 @@ export const PortfolioModal: React.FC<PortfolioModalProps> = ({
     };
 
     const updatePortfolioReq = async (data: portfolioDetails) => {
-        const { portfolioDetails } = usePortfolioDetails();
         const response = await axios.put(
             `/api/portfolio/${portfolioDetails.pid}`,
             {

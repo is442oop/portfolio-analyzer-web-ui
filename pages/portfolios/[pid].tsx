@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Layout } from "@/components/Layout";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { TransactionModal } from "@/components/TransactionModal";
@@ -27,7 +27,6 @@ const IndividualPortfolio = () => {
                 `/api/portfolio/assets/${router.query.pid}`,
             );
             const res = await response.json();
-
             return res.portfolioAssetList;
         },
         {
@@ -66,21 +65,21 @@ const IndividualPortfolio = () => {
                         portfolioDesc={portfolioDetails.description}
                     />
                 )}
-                {individualPortfolioAssets &&
-                    individualPortfolioAssets.length === 0 && (
+                {!individualPortfolioAssets ||
+                    (individualPortfolioAssets.length === 0 && (
                         <div className="my-auto flex h-fit flex-col items-center justify-center gap-y-3 pt-20">
                             <div className="space-y-1 text-center">
                                 <h1 className="font-semibold">
                                     This portfolio needs some final touches ...
                                 </h1>
                                 <h2 className="text-gray-400">
-                                    Add an asset to get started
+                                    Add a ticker to get started
                                 </h2>
                             </div>
 
                             <TransactionModal />
                         </div>
-                    )}
+                    ))}
                 {individualPortfolioAssets &&
                     individualPortfolioAssets.length !== 0 && (
                         <div>

@@ -6,9 +6,12 @@ import { useState } from "react";
 import { useQuery } from "react-query";
 import AssetAllocationChart from "@/components/AssetAllocationChart";
 import PortfolioList from "@/components/PortfolioList";
+import { useSessionDetails } from "@/hooks/useSessionDetails";
 
 const dashboard = () => {
     const [currentBalance, setCurrentBalance] = useState(10000);
+    const userDetails = useSessionDetails();
+    const userId = userDetails?.id;
     // const { data, isLoading } = useQuery("data", async () => {
     //     const response = await fetch("/api/users/test/assets");
     //     const assets = await response.json();
@@ -18,10 +21,12 @@ const dashboard = () => {
     const { data: portfolioObj, isLoading: portfolioObjLoading } = useQuery(
         "portfolioList",
         async () => {
-            // TODO: replace 1 with userDetails id
-            const response = await fetch(`/api/users/1/portfolios`);
+            const response = await fetch(`/api/users/${userId}/portfolios`);
             const portfolioList = await response.json();
             return portfolioList;
+        },
+        {
+            enabled: !!userId,
         },
     );
     return (
@@ -39,7 +44,10 @@ const dashboard = () => {
                     {/* {data && <AssetTable data={data} isLoading={isLoading} />} */}
                 </div>
                 {portfolioObj && (
-                    <PortfolioList portfolioList={portfolioObj.portfolioList} />
+                    <PortfolioList
+                        id={userId!}
+                        portfolioList={portfolioObj.portfolioList}
+                    />
                 )}
             </div>
         </Layout>

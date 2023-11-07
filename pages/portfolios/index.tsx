@@ -1,38 +1,22 @@
-import { useEffect, useState } from "react";
 import { Icons } from "@/components/ui/Icons";
 import { Layout } from "@/components/Layout";
-import {
-    User,
-    createClientComponentClient,
-} from "@supabase/auth-helpers-nextjs";
 import { useQuery } from "react-query";
 import PortfolioList from "@/components/PortfolioList";
+import { useSessionDetails } from "@/hooks/useSessionDetails";
+import { useContext } from "react";
 
 const portfolios = () => {
-    const [userDetails, setUserDetails] = useState<User>();
-    const supabase = createClientComponentClient();
-    useEffect(() => {
-        getUser();
-    }, []);
-
-    const getUser = async () => {
-        const {
-            data: { user },
-        } = await supabase.auth.getUser();
-        setUserDetails(user!);
-        return user;
-    };
-    useEffect(() => {
-        console.log(userDetails);
-    }, [userDetails]);
-
+    const userDetails = useSessionDetails();
+    const userId = userDetails?.id;
     const { data: portfolioObj, isLoading } = useQuery(
         "portfolioList",
         async () => {
-            // TODO: replace 1 with userDetails id
-            const response = await fetch(`/api/users/1/portfolios`);
+            const response = await fetch(`/api/users/${userId}/portfolios`);
             const portfolioList = await response.json();
             return portfolioList;
+        },
+        {
+            enabled: !!userId,
         },
     );
 
@@ -45,9 +29,10 @@ const portfolios = () => {
                     </div>
                 )}
                 <div className="p-4">
-                    {portfolioObj && (
+                    {portfolioObj && userId && (
                         <PortfolioList
                             portfolioList={portfolioObj.portfolioList}
+                            id={userId}
                         />
                     )}
                 </div>

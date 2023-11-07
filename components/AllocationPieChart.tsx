@@ -16,7 +16,6 @@ const AllocationPieChart = ({
     allocationData: AllocationChartProps[];
     selectedAllocation: string;
 }) => {
-    console.log(allocationData);
     return (
         <>
             {selectedAllocation && allocationData && (
@@ -35,7 +34,7 @@ const AllocationPieChart = ({
                             paddingAngle={0.5}
                             label
                         >
-                            {allocationData.map((entry, index) => (
+                            {allocationData?.map((entry, index) => (
                                 <Cell
                                     key={`cell-${index}`}
                                     fill={COLORS[index % COLORS.length]}
