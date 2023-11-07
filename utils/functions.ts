@@ -1,8 +1,10 @@
 export const formatUsd = (amount: number) => {
-    return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-    }).format(amount);
+    return Number.isNaN(amount)
+        ? 0
+        : new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "USD",
+          }).format(amount);
 };
 
 export const formatPercentage = (amount: number) => {
