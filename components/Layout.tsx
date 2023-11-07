@@ -15,7 +15,6 @@ export function Layout({ children }: LayoutProps) {
                     {children}
                 </div>
             </div>
-            <Toaster />
             <TailwindIndicator />
         </div>
     );

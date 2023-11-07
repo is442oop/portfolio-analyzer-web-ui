@@ -14,6 +14,8 @@ import {
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { Icons } from "./ui/Icons";
+import axios from "axios";
+import { toast } from "./ui/Toaster/use-toast";
 
 type TextKeys = {
     title: string;
@@ -65,6 +67,25 @@ export function AuthCard() {
         return passwordRegex.test(password);
     };
 
+    const createAccount = async () => {
+        const { data, error } = await supabase.auth.signUp({
+            email,
+            password,
+        });
+        if (error) {
+            return { data, error };
+        }
+        const res = await axios.post("/api/users", {
+            id: data.user!.id,
+            email: email,
+            username: email,
+        });
+        if (res.status !== 200) {
+            return { data, error: res.data };
+        }
+        return { data, error };
+    };
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!isEmailValid(email)) {
@@ -78,10 +99,7 @@ export function AuthCard() {
         setIsLoading(true);
 
         const { data, error } = isNewUser
-            ? await supabase.auth.signUp({
-                  email,
-                  password,
-              })
+            ? await createAccount()
             : await supabase.auth.signInWithPassword({
                   email,
                   password,
@@ -89,8 +107,19 @@ export function AuthCard() {
 
         setIsLoading(false);
         if (error) {
-            alert(error);
+            const msg = isNewUser
+                ? "failed to create account"
+                : "failed to login";
+            toast({
+                variant: "destructive",
+                title: msg + ": " + error.message,
+            });
             return;
+        } else {
+            toast({
+                variant: "success",
+                title: `Welcome, ${data.user!.email}!`,
+            });
         }
         console.log(data);
         router.push("/dashboard");
