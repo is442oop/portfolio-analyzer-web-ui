@@ -1,21 +1,20 @@
 import Sidebar from "./Sidebar";
 import { TailwindIndicator } from "./TailwindIndicator";
-import { Toaster } from "./ui/Toaster/toaster";
 
 interface LayoutProps {
-    children?: React.ReactElement[] | React.ReactElement;
+    children?: React.ReactElement;
 }
 
 export function Layout({ children }: LayoutProps) {
     return (
-        <div className="flex h-screen flex-auto">
+        <main className="flex h-screen flex-auto">
             <Sidebar />
-            <div className="grow overflow-y-auto overflow-x-hidden">
-                <div className="mx-auto max-w-2xl lg:max-w-4xl xl:max-w-6xl">
+            <div className="grow">
+                <div className="no-scrollbar mx-auto h-screen max-w-2xl overflow-y-scroll px-5 py-20 pl-0 md:pl-5 lg:max-w-4xl xl:max-w-6xl">
                     {children}
                 </div>
             </div>
             <TailwindIndicator />
-        </div>
+        </main>
     );
 }
