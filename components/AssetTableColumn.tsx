@@ -1,7 +1,23 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { ChevronUpIcon, ChevronDownIcon } from "lucide-react";
+import { ChevronUpIcon, ChevronDownIcon, XIcon } from "lucide-react";
 
 import { formatNumber, formatUsd } from "@/utils/functions";
+import { useMutation, useQueryClient } from "react-query";
+import axios from "axios";
+import { toast } from "./ui/Toaster/use-toast";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuTrigger,
+} from "@/components/ui/DropdownMenu";
+import { Button } from "./ui/Button";
+
+type DeleteAsset = {
+    portfolioId: string;
+    assetTicker: string;
+};
 
 export const Columns: ColumnDef<Asset>[] = [
     {
@@ -22,7 +38,7 @@ export const Columns: ColumnDef<Asset>[] = [
     },
     {
         accessorKey: "price",
-        header: () => <div className="text-right">Price</div>,
+        header: () => <div className="text-right">Average Price</div>,
         cell: ({ row }) => {
             return (
                 <div className="text-right">
@@ -64,6 +80,60 @@ export const Columns: ColumnDef<Asset>[] = [
         cell: ({ row }) => {
             const value = row.original.price * row.original.quantity;
             return <div className="text-right">{formatUsd(value)}</div>;
+        },
+    },
+    {
+        id: "actions",
+        cell: ({ row }) => {
+            const queryClient = useQueryClient();
+            const asset = row.original;
+            // console.log(asset);
+            const deleteTransactionReq = async (data: DeleteAsset) => {
+                const response = await axios.delete("/api/portfolio/asset", {
+                    data: {
+                        portfolioId: data.portfolioId,
+                        assetTicker: data.assetTicker,
+                    },
+                });
+            };
+            const { mutate } = useMutation(deleteTransactionReq, {
+                onSuccess: () => {
+                    toast({
+                        variant: "success",
+                        title: "Asset deleted successfully",
+                    });
+                    queryClient.invalidateQueries("individualPortfolioAssets");
+                },
+            });
+            return (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button
+                            className="h-fit border px-0.5 py-0.5 hover:bg-destructive/20"
+                            variant={"ghost"}
+                        >
+                            <XIcon className="h-5 w-5 text-destructive" />
+                        </Button>
+                        {/* <span className="sr-only">Open menu</span> */}
+                        {/* </Button> */}
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuLabel className="text-destructive">
+                            Confirm delete?
+                        </DropdownMenuLabel>
+                        <DropdownMenuItem
+                            onClick={() =>
+                                mutate({
+                                    portfolioId: asset.portfolioId,
+                                    assetTicker: asset.assetTicker,
+                                })
+                            }
+                        >
+                            Yes
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            );
         },
     },
 ];
