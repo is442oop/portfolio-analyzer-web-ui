@@ -1,5 +1,5 @@
 import { Columns } from "@/components/WatchlistAssetTableColumn";
-import { QueryClient, QueryClientProvider, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import { DataTable } from "@/components/ui/DataTable";
 import { Icons } from "./ui/Icons";
 const AssetData = () => {
@@ -20,12 +20,7 @@ const AssetData = () => {
 };
 
 const UserWatchlist = () => {
-    const queryClient = new QueryClient();
-    return (
-        <QueryClientProvider client={queryClient}>
-            <AssetData />
-        </QueryClientProvider>
-    );
+    return <AssetData />;
 };
 
 export default UserWatchlist;

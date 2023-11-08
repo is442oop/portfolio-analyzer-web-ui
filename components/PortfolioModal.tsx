@@ -87,7 +87,6 @@ export const PortfolioModal: React.FC<PortfolioModalProps> = ({
                     portfolioName: "",
                     description: "",
                 }));
-                // queryClient.invalidateQueries();
                 queryClient.invalidateQueries("portfolioDetails");
                 queryClient.invalidateQueries("portfolioList");
                 queryClient.invalidateQueries("allocationData");
