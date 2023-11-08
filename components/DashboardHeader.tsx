@@ -14,11 +14,13 @@ type DashboardHeaderProps = {
     edit?: boolean;
     portfolioName?: string;
     portfolioDesc?: string;
-    isLoading?: boolean;
+    portfolioAssets?: PortfolioResponse[];
+    userId: string;
 };
 
 export const DashboardHeader = ({
-    isLoading,
+    portfolioAssets,
+    userId,
     balance,
     edit = false,
     latestPrices = 0,
@@ -26,25 +28,15 @@ export const DashboardHeader = ({
     portfolioDesc = "",
 }: DashboardHeaderProps) => {
     const [showBalance, setShowBalance] = useState(true);
-    const userDetails = useSessionDetails();
-    const userId = userDetails?.id;
-    // const percentageChange =
-    //     portfolioData.currentBalance === 0 &&
-    //     portfolioData.previousBalance === 0
-    //         ? 0
-    //         : ((portfolioData.currentBalance - portfolioData.previousBalance) /
-    //               portfolioData.previousBalance) *
-    //           100;
-
-    // const isPositiveChange = percentageChange >= 0;
-
+    // const userDetails = useSessionDetails();
+    // const userId = userDetails?.id;
+    console.log(portfolioAssets, latestPrices, balance);
     const percentageChange =
         balance === 0 && latestPrices === 0
             ? 0
             : (latestPrices - balance) / balance;
 
     const isPositiveChange = percentageChange >= 0;
-    console.log(latestPrices);
     return (
         <div className="space-y-4 rounded-lg bg-white py-4">
             <h1 className="text-2xl font-semibold text-primary">
@@ -83,7 +75,7 @@ export const DashboardHeader = ({
                 </div>
                 <div className="flex items-center justify-between">
                     <div className="space-y-1">
-                        {latestPrices === 0 ? (
+                        {latestPrices === 0 && portfolioAssets?.length !== 0 ? (
                             <Icons.spinner className="animate-spin text-primary" />
                         ) : showBalance ? (
                             <p

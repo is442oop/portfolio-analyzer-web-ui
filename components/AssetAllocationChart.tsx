@@ -4,24 +4,23 @@ import { useQuery } from "react-query";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useSessionDetails } from "@/hooks/useSessionDetails";
+import { User, createPagesServerClient } from "@supabase/auth-helpers-nextjs";
 
 const AssetAllocationChart = ({
     isIndividualPortfolio = true,
     pid,
+    userId,
 }: {
     isIndividualPortfolio: boolean;
-    pid?: number;
+    pid?: string;
+    userId: string;
 }) => {
     const router = useRouter();
     const [selectedAllocation, setSelectedAllocation] = useState("Ticker");
-    const userDetails = useSessionDetails();
-    const userId = userDetails?.id;
 
     const getIndivAllocationData = async () => {
         const response = await fetch(
-            `/api/portfolios/${
-                router.query.pid
-            }/allocation/${selectedAllocation.toLowerCase()}`,
+            `/api/portfolios/${pid}/allocation/${selectedAllocation.toLowerCase()}`,
         );
         return await response.json();
     };
