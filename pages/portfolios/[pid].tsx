@@ -15,9 +15,8 @@ const IndividualPortfolio = () => {
     const [selectedPeriod, setSelectedPeriod] = useState("7");
     const { portfolioDetails, isPortfolioDetailsLoading } =
         usePortfolioDetails();
-    const [valuation, setValuation] = useState<number>();
     const [latestPrices, setLatestPrices] = useState();
-
+    const [isLoading, setIsLoading] = useState(true);
     const [currentBalance, setCurrentBalance] = useState<number>();
 
     const {
@@ -53,7 +52,10 @@ const IndividualPortfolio = () => {
             enabled: !!router.isReady,
         },
     );
-
+    useEffect(() => {
+        console.log(router.query.id);
+        if (router.query.id !== undefined) setIsLoading(false);
+    }, [router.query.id]);
     // historical data for portfolio
     const {
         data: portfolioAssetHistory,
@@ -62,8 +64,6 @@ const IndividualPortfolio = () => {
     } = useQuery(
         "portfolioAssetHistory",
         async () => {
-            console.log(router.query.pid);
-
             const response = await fetch(
                 `/api/portfolios/${router.query.pid}/balance?duration=${
                     selectedPeriod === "1" ? "2" : selectedPeriod
@@ -83,15 +83,14 @@ const IndividualPortfolio = () => {
                     );
                 }
             },
+            enabled: !!router.query.pid,
         },
-        // {
-        //     enabled: !!router.query.pid,
-        // },
     );
 
     useEffect(() => {
-        setValuation(latestPrices! - currentBalance!);
-    }, [currentBalance, latestPrices]);
+        if (router.isReady) refetchHistory();
+    }, [router.isReady]);
+
     useEffect(() => {
         refetchHistory();
     }, [selectedPeriod]);
@@ -104,8 +103,10 @@ const IndividualPortfolio = () => {
                 )}
                 {portfolioDetails && (
                     <DashboardHeader
+                        balance={currentBalance!}
                         edit={true}
-                        valuation={valuation!}
+                        latestPrices={latestPrices!}
+                        isLoading={isLoading && portfolioAssetListLoading}
                         portfolioName={portfolioDetails.portfolioName}
                         portfolioDesc={portfolioDetails.description}
                     />
@@ -135,10 +136,9 @@ const IndividualPortfolio = () => {
                                     }
                                     setSelectedPeriod={setSelectedPeriod}
                                     selectedPeriod={selectedPeriod}
-                                    portfolioAssetListLoading={
-                                        portfolioAssetListLoading
-                                    }
+                                    portfolioAssetListLoading={isLoading}
                                 />
+
                                 <AssetAllocationChart
                                     isIndividualPortfolio={true}
                                     pid={parseInt(router.query.pid as string)}

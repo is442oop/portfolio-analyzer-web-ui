@@ -11,10 +11,9 @@ import { useSessionDetails } from "@/hooks/useSessionDetails";
 const dashboard = () => {
     const [currentBalance, setCurrentBalance] = useState<number>(0);
     const [selectedPeriod, setSelectedPeriod] = useState("7");
-    const [valuation, setValuation] = useState<number>();
     const userDetails = useSessionDetails();
     const [latestPrices, setLatestPrices] = useState();
-
+    const [isLoading, setIsLoading] = useState(true);
     const userId = userDetails?.id;
 
     const { data: allAssetsList, isLoading: allAssetsListLoading } = useQuery(
@@ -90,8 +89,8 @@ const dashboard = () => {
     );
 
     useEffect(() => {
-        setValuation(latestPrices! - currentBalance!);
-    }, [currentBalance, latestPrices]);
+        if (userId !== undefined) setIsLoading(false);
+    }, [userId]);
 
     useEffect(() => {
         refetchHistory();
@@ -103,14 +102,18 @@ const dashboard = () => {
         <Layout>
             <div className="h-fit min-h-screen space-y-10 py-10 pl-0 pr-10 sm:p-10">
                 <div>
-                    <DashboardHeader valuation={valuation!} />
+                    <DashboardHeader
+                        latestPrices={latestPrices!}
+                        isLoading={isLoading}
+                        balance={currentBalance!}
+                    />
                     <div className="flex flex-col gap-1 xl:flex-row xl:justify-center">
                         <PortfolioHistoryChart
                             portfolioAssetHistory={portfolioAssetHistory}
                             setSelectedPeriod={setSelectedPeriod}
                             selectedPeriod={selectedPeriod}
                             portfolioAssetListLoading={
-                                portfolioAssetListLoading
+                                isLoading && !portfolioAssetHistory
                             }
                         />
 

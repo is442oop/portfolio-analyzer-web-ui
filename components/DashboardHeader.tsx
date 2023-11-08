@@ -1,21 +1,27 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import { Badge } from "./ui/Badge";
 import { PortfolioModal } from "./PortfolioModal";
 import { formatPercentage, formatUsd } from "@/utils/functions";
 import { useSessionDetails } from "@/hooks/useSessionDetails";
 import { cn } from "@/utils/cn";
+import { Icons } from "./ui/Icons";
+import { Ballet } from "next/font/google";
+import { Badge } from "./ui/Badge";
 
 type DashboardHeaderProps = {
-    valuation: number;
+    latestPrices: number;
+    balance: number;
     edit?: boolean;
     portfolioName?: string;
     portfolioDesc?: string;
+    isLoading?: boolean;
 };
 
 export const DashboardHeader = ({
+    isLoading,
+    balance,
     edit = false,
-    valuation = 0,
+    latestPrices = 0,
     portfolioName = "",
     portfolioDesc = "",
 }: DashboardHeaderProps) => {
@@ -31,6 +37,14 @@ export const DashboardHeader = ({
     //           100;
 
     // const isPositiveChange = percentageChange >= 0;
+
+    const percentageChange =
+        balance === 0 && latestPrices === 0
+            ? 0
+            : (latestPrices - balance) / balance;
+
+    const isPositiveChange = percentageChange >= 0;
+    console.log(latestPrices);
     return (
         <div className="space-y-4 rounded-lg bg-white py-4">
             <h1 className="text-2xl font-semibold text-primary">
@@ -40,7 +54,7 @@ export const DashboardHeader = ({
             <div className="space-y-2">
                 {/* Balance */}
                 <div className="flex gap-x-2">
-                    <p className="text-lg text-foreground">Current valuation</p>
+                    <p className="text-lg text-foreground">Current Balance</p>
                     <div className="flex cursor-pointer items-center">
                         {/* Toggle visibility of balance */}
                         <div
@@ -68,23 +82,39 @@ export const DashboardHeader = ({
                     </div>
                 </div>
                 <div className="flex items-center justify-between">
-                    {showBalance ? (
-                        <p
-                            className={cn(
-                                "text-2xl font-bold tracking-wider sm:text-3xl",
-                                valuation > 0
-                                    ? " text-green-400"
-                                    : "text-destructive",
-                            )}
-                        >
-                            {formatUsd(valuation)}
-                            {/* {formatUsd(portfolioData.currentBalance)} */}
-                        </p>
-                    ) : (
-                        <p className="text-2xl font-bold text-black sm:text-3xl">
-                            •••••••••
-                        </p>
-                    )}
+                    <div className="space-y-1">
+                        {latestPrices === 0 ? (
+                            <Icons.spinner className="animate-spin text-primary" />
+                        ) : showBalance ? (
+                            <p
+                                className={cn(
+                                    "text-2xl font-bold tracking-wider text-black sm:text-3xl",
+                                )}
+                            >
+                                {formatUsd(latestPrices)}
+                                {/* {formatUsd(portfolioData.currentBalance)} */}
+                            </p>
+                        ) : (
+                            <p className="text-2xl font-bold text-black sm:text-3xl">
+                                •••••••••
+                            </p>
+                        )}
+                        {latestPrices !== 0 && (
+                            <div className="flex items-center space-x-1 ">
+                                <p
+                                    className={`text-base font-bold tracking-wider ${
+                                        isPositiveChange
+                                            ? "text-green-600"
+                                            : "text-destructive"
+                                    }`}
+                                >
+                                    {isPositiveChange && "+"}
+                                    {formatPercentage(percentageChange)}
+                                </p>
+                                <Badge variant={"secondary"}>24hr</Badge>
+                            </div>
+                        )}
+                    </div>
                     <PortfolioModal
                         id={userId!}
                         edit={edit}
@@ -94,21 +124,6 @@ export const DashboardHeader = ({
                         }}
                     />
                 </div>
-
-                {/* Percentage Change
-                <div className="flex items-center space-x-1 ">
-                    <p
-                        className={`text-base font-bold tracking-wider ${
-                            isPositiveChange
-                                ? "text-green-600"
-                                : "text-destructive"
-                        }`}
-                    >
-                        {isPositiveChange && "+"}
-                        {formatPercentage(percentageChange)}
-                    </p>
-                    <Badge variant={"secondary"}>24hr</Badge>
-                </div> */}
             </div>
         </div>
     );
