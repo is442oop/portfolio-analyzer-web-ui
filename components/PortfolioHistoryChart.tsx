@@ -24,9 +24,6 @@ const PortfolioHistoryChart = ({
     portfolioAssetHistory: { date: string; balance: number }[];
     portfolioAssetListLoading: boolean;
 }) => {
-    const userDetails = useSessionDetails();
-    const userId = userDetails?.id;
-
     return (
         <div className="w-full space-y-2 rounded-xl border px-1 py-5 xl:w-1/2">
             <div className="flex flex-col items-center justify-between gap-y-2 font-bold">
@@ -39,7 +36,7 @@ const PortfolioHistoryChart = ({
                 />
             </div>
             {portfolioAssetListLoading && !portfolioAssetHistory ? (
-                <Icons.spinner className="mx-auto  animate-spin text-primary" />
+                <Icons.spinner className="mx-auto h-full animate-spin text-primary" />
             ) : (
                 <ResponsiveContainer width="100%" height={400}>
                     <AreaChart
