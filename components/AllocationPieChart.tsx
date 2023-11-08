@@ -23,7 +23,7 @@ const AllocationPieChart = ({
                 <ResponsiveContainer width="100%" height={400}>
                     <PieChart>
                         <Pie
-                            animationDuration={800}
+                            isAnimationActive={false}
                             nameKey={selectedAllocation}
                             dataKey="percentage"
                             data={allocationData}

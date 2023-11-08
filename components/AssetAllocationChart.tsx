@@ -52,7 +52,7 @@ const AssetAllocationChart = ({
         { enabled: !!userId, initialData: [] },
     );
     useEffect(() => {
-        refetch();
+        isIndividualPortfolio ? refetch() : refetchAll();
     }, [selectedAllocation]);
 
     return (
