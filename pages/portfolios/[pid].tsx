@@ -174,11 +174,11 @@ export default IndividualPortfolio;
 export const getServerSideProps = async (context: any) => {
     const supabase = createPagesServerClient(context);
     const {
-        data: { session },
+        data: { user },
         error,
-    } = await supabase.auth.getSession();
-    console.log(session);
-    if (error || !session)
+    } = await supabase.auth.getUser();
+
+    if (error || !user)
         return {
             redirect: {
                 destination: "/auth",
