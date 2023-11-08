@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 import { Inter } from "next/font/google";
 import { cn } from "@/utils/cn";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { Toaster } from "@/components/ui/Toaster/toaster";
 
 export const inter = Inter({
     subsets: ["latin"],
@@ -21,6 +22,8 @@ export default function App({ Component, pageProps }: AppProps) {
             <QueryClientProvider client={queryClient}>
                 <Component {...pageProps} />
             </QueryClientProvider>
+
+            <Toaster />
         </main>
     );
 }

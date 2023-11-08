@@ -17,7 +17,6 @@ export default async function handler(
     const assets = [];
     const apiKey = process.env.ALPHA_VANTAGE_API_KEY;
 
-
     const promises = watchlistTickers.map(async (ticker) => {
         const intraday = await fetch(
             `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${ticker}&interval=60min&outputsize=full&apikey=${apiKey}`,

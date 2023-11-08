@@ -34,7 +34,7 @@ const portfolios = () => {
         "portfolioList",
         async () => {
             // TODO: replace 1 with userDetails id
-            const response = await fetch(`/api/portfolios/1`);
+            const response = await fetch(`/api/users/1/portfolios`);
             const portfolioList = await response.json();
             return portfolioList;
         },
@@ -42,7 +42,7 @@ const portfolios = () => {
 
     return (
         <Layout>
-            <div className="h-screen py-10 pl-0 pr-10 sm:p-10">
+            <div className="h-fit min-h-screen py-10 pl-0 pr-10 sm:p-10">
                 {isLoading && (
                     <div className="flex h-full items-center justify-center text-center">
                         <Icons.spinner className="animate-spin text-primary" />
@@ -55,14 +55,20 @@ const portfolios = () => {
                             <h2 className="text-2xl font-semibold text-primary">
                                 My Portfolios
                             </h2>
-                            <PortfolioModal edit={false} />
+                            <PortfolioModal
+                                prefilledPortfolioDetails={{
+                                    portfolioName: "",
+                                    portfolioDesc: "",
+                                }}
+                                edit={false}
+                            />
                         </div>
                         <div className="flex flex-col gap-4">
                             {portfolioObj.portfolioList.map(
                                 (portfolio: Portfolio) => {
                                     return (
                                         <Link
-                                            href={`/portfolios/${portfolio.portfolioName}`}
+                                            href={`/portfolios/${portfolio.pid}`}
                                             key={portfolio.pid}
                                         >
                                             <Card className="w-full duration-300 hover:scale-[101%] hover:cursor-pointer hover:shadow-primary">
@@ -89,7 +95,13 @@ const portfolios = () => {
                             <div className="font-semibold">
                                 Looks like you don&#39;t have any portfolios ...
                             </div>
-                            <PortfolioModal edit={false} />
+                            <PortfolioModal
+                                prefilledPortfolioDetails={{
+                                    portfolioName: "",
+                                    portfolioDesc: "",
+                                }}
+                                edit={false}
+                            />
                         </div>
                     </div>
                 )}
