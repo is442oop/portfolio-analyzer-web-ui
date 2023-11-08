@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 
@@ -27,10 +27,11 @@ type PortfolioModalProps = {
         portfolioName: string;
         portfolioDesc: string;
     };
+    id: string;
 };
 
-type portfolioDetails = {
-    userId: 1;
+type PortfolioDetails = {
+    userId: string;
     portfolioName: string;
     description: string;
 };
@@ -38,30 +39,31 @@ type portfolioDetails = {
 export const PortfolioModal: React.FC<PortfolioModalProps> = ({
     edit,
     prefilledPortfolioDetails,
-}) => {
+    id,
+}: PortfolioModalProps) => {
+    const { portfolioDetails } = edit
+        ? usePortfolioDetails()
+        : { portfolioDetails: null };
     const queryClient = useQueryClient();
-    const { portfolioDetails, isPortfolioDetailsLoading } =
-        usePortfolioDetails();
 
     const [portfolioModalDetails, setPortfolioModalDetails] =
-        useState<portfolioDetails>({
-            // TODO change userId to be dynamic
-            userId: 1,
+        useState<PortfolioDetails>({
+            userId: id,
             portfolioName: "",
             description: "",
         });
 
-    const createPortfolioReq = async (data: portfolioDetails) => {
+    const createPortfolioReq = async (data: PortfolioDetails) => {
         const response = await axios.post(
-            "/api/portfolio",
+            "/api/portfolios",
             portfolioModalDetails,
         );
         return response.data;
     };
 
-    const updatePortfolioReq = async (data: portfolioDetails) => {
+    const updatePortfolioReq = async (data: PortfolioDetails) => {
         const response = await axios.put(
-            `/api/portfolio/${portfolioDetails.pid}`,
+            `/api/portfolios/${portfolioDetails.pid}`,
             {
                 portfolioName: portfolioModalDetails.portfolioName,
                 description: portfolioModalDetails.description,
@@ -87,6 +89,10 @@ export const PortfolioModal: React.FC<PortfolioModalProps> = ({
                 }));
                 queryClient.invalidateQueries("portfolioDetails");
                 queryClient.invalidateQueries("portfolioList");
+                queryClient.invalidateQueries("indivAllocationData");
+                queryClient.invalidateQueries("allAllocationData");
+                queryClient.invalidateQueries("portfolioAssetHistory");
+                queryClient.invalidateQueries("allPortfolioAssetHistory");
             },
         },
     );
@@ -111,7 +117,9 @@ export const PortfolioModal: React.FC<PortfolioModalProps> = ({
                     <Button className="hidden w-fit  text-xs sm:block">
                         {edit ? "Edit Portfolio" : "+ New Portfolio"}
                     </Button>
-                    <Button className="w-fit sm:hidden"> + </Button>
+                    <Button className="w-fit sm:hidden">
+                        {edit ? "Edit" : "+"}
+                    </Button>
                 </div>
             </DialogTrigger>
             <DialogContent className="max-w-sm sm:max-w-xl">
@@ -157,7 +165,7 @@ export const PortfolioModal: React.FC<PortfolioModalProps> = ({
                         </div>
 
                         <DialogDescription className="mx-1 my-2">
-                            {portfolioModalDetails.portfolioName.length}/50
+                            {portfolioModalDetails.description.length}/50
                             characters used for description
                         </DialogDescription>
                     </div>
