@@ -17,6 +17,7 @@ const dashboard = ({ user }: { user: User }) => {
     // const [isLoading, setIsLoading] = useState(true);
     const userId = user.id;
     console.log(user.id);
+
     // Data for the table
     const { data: allAssetsList, isLoading: allAssetsListLoading } = useQuery(
         "allAssetsList",
@@ -151,19 +152,20 @@ export default dashboard;
 export const getServerSideProps = async (context: any) => {
     const supabase = createPagesServerClient(context);
     const {
-        data: { session },
-    } = await supabase.auth.getSession();
-    if (!session)
+        data: { user },
+        error,
+    } = await supabase.auth.getUser();
+    if (error || !user)
         return {
             redirect: {
-                destination: "/",
+                destination: "/auth",
                 permanent: false,
             },
         };
 
     return {
         props: {
-            user: session.user,
+            user: user,
         },
     };
 };
