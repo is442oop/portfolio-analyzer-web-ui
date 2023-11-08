@@ -17,7 +17,6 @@ const AllocationPieChart = ({
     allocationData: AllocationChartProps[];
     selectedAllocation: string;
 }) => {
-    console.log(allocationData);
     return (
         <>
             {selectedAllocation && allocationData && (

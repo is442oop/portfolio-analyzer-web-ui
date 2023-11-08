@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Layout } from "@/components/Layout";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { TransactionModal } from "@/components/TransactionModal";
@@ -12,6 +12,7 @@ import { useQuery } from "react-query";
 
 const IndividualPortfolio = () => {
     const router = useRouter();
+    const [selectedPeriod, setSelectedPeriod] = useState("7");
     const { portfolioDetails, isPortfolioDetailsLoading } =
         usePortfolioDetails();
 
@@ -51,6 +52,31 @@ const IndividualPortfolio = () => {
         },
     );
 
+    // historical data for portfolio
+    const {
+        data: portfolioAssetHistory,
+        isLoading: portfolioAssetListLoading,
+        refetch: refetchHistory,
+    } = useQuery(
+        "portfolioAssetHistory",
+        async () => {
+            console.log(router.query.pid);
+            const response = await fetch(
+                `/api/portfolios/${router.query.pid}/balance?duration=${selectedPeriod}`,
+            );
+            const res = await response.json();
+            console.log(res);
+
+            return res.portfolioHistoryData;
+        },
+        {
+            enabled: !!router.query.pid,
+        },
+    );
+    if (portfolioAssetHistory) console.log(portfolioAssetHistory);
+    useEffect(() => {
+        refetchHistory();
+    }, [selectedPeriod]);
     return (
         <Layout>
             <div className="h-fit min-h-screen py-10 pl-0 pr-10 sm:p-10">
@@ -84,7 +110,16 @@ const IndividualPortfolio = () => {
                     individualPortfolioAssets.length !== 0 && (
                         <div>
                             <div className="flex flex-col gap-3 xl:flex-row">
-                                <PortfolioHistoryChart />
+                                <PortfolioHistoryChart
+                                    portfolioAssetHistory={
+                                        portfolioAssetHistory
+                                    }
+                                    setSelectedPeriod={setSelectedPeriod}
+                                    selectedPeriod={selectedPeriod}
+                                    portfolioAssetListLoading={
+                                        portfolioAssetListLoading
+                                    }
+                                />
                                 <AssetAllocationChart
                                     isIndividualPortfolio={true}
                                     pid={parseInt(router.query.pid as string)}
