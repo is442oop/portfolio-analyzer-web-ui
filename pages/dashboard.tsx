@@ -11,7 +11,10 @@ import { useSessionDetails } from "@/hooks/useSessionDetails";
 const dashboard = () => {
     const [currentBalance, setCurrentBalance] = useState<number>(0);
     const [selectedPeriod, setSelectedPeriod] = useState("7");
+    const [valuation, setValuation] = useState<number>();
     const userDetails = useSessionDetails();
+    const [latestPrices, setLatestPrices] = useState();
+
     const userId = userDetails?.id;
 
     const { data: allAssetsList, isLoading: allAssetsListLoading } = useQuery(
@@ -25,9 +28,24 @@ const dashboard = () => {
         },
         {
             enabled: !!userId,
+            onSuccess: (allAssetsList) => {
+                allAssetsList?.forEach((asset: PortfolioResponse) => {
+                    asset.value = asset.quantity * asset.price;
+                });
+
+                // get balance for current portfolio
+                const initialValue = 0;
+                const currentBalance = allAssetsList?.reduce(
+                    (accumulator: number, currentValue: PortfolioResponse) => {
+                        return accumulator + currentValue.value;
+                    },
+                    initialValue,
+                );
+                setCurrentBalance(currentBalance);
+            },
         },
     );
-
+    if (allAssetsList) console.log(allAssetsList);
     const { data: portfolioObj, isLoading: portfolioObjLoading } = useQuery(
         "portfolioList",
         async () => {
@@ -61,7 +79,7 @@ const dashboard = () => {
             onSuccess: async (portfolioAssetHistory) => {
                 console.log(portfolioAssetHistory);
                 if (portfolioAssetHistory !== undefined) {
-                    setCurrentBalance(
+                    setLatestPrices(
                         portfolioAssetHistory[portfolioAssetHistory?.length - 1]
                             .balance,
                     );
@@ -71,10 +89,9 @@ const dashboard = () => {
         },
     );
 
-    useEffect(
-        () => console.log("current Balcne", currentBalance),
-        [currentBalance],
-    );
+    useEffect(() => {
+        setValuation(latestPrices! - currentBalance!);
+    }, [currentBalance, latestPrices]);
 
     useEffect(() => {
         refetchHistory();
@@ -86,7 +103,7 @@ const dashboard = () => {
         <Layout>
             <div className="h-fit min-h-screen space-y-10 py-10 pl-0 pr-10 sm:p-10">
                 <div>
-                    <DashboardHeader currentBalance={currentBalance!} />
+                    <DashboardHeader valuation={valuation!} />
                     <div className="flex flex-col gap-1 xl:flex-row xl:justify-center">
                         <PortfolioHistoryChart
                             portfolioAssetHistory={portfolioAssetHistory}

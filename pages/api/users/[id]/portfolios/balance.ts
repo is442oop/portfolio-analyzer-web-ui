@@ -9,16 +9,15 @@ export default async function handler(
     try {
         const { id, duration } = req.query;
         // const balance = URLSearchParams;
-        const trimmedId = id?.toString().trim();
         const response = await axios.get(
             `${
                 process.env.API_URL
-            }/api/users/${trimmedId}/portfolios/balance?duration=${parseInt(
+            }/api/users/${id}/portfolios/balance?duration=${parseInt(
                 duration as string,
             )}`,
         );
         return res.status(200).json(response.data);
     } catch (error) {
-        return res.status(200).json({ message: error });
+        return res.status(500).json({ message: error });
     }
 }

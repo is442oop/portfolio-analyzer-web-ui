@@ -4,9 +4,10 @@ import { Badge } from "./ui/Badge";
 import { PortfolioModal } from "./PortfolioModal";
 import { formatPercentage, formatUsd } from "@/utils/functions";
 import { useSessionDetails } from "@/hooks/useSessionDetails";
+import { cn } from "@/utils/cn";
 
 type DashboardHeaderProps = {
-    currentBalance: number;
+    valuation: number;
     edit?: boolean;
     portfolioName?: string;
     portfolioDesc?: string;
@@ -14,7 +15,7 @@ type DashboardHeaderProps = {
 
 export const DashboardHeader = ({
     edit = false,
-    currentBalance = 0,
+    valuation = 0,
     portfolioName = "",
     portfolioDesc = "",
 }: DashboardHeaderProps) => {
@@ -39,7 +40,7 @@ export const DashboardHeader = ({
             <div className="space-y-2">
                 {/* Balance */}
                 <div className="flex gap-x-2">
-                    <p className="text-lg text-foreground">Current Balance</p>
+                    <p className="text-lg text-foreground">Current valuation</p>
                     <div className="flex cursor-pointer items-center">
                         {/* Toggle visibility of balance */}
                         <div
@@ -68,8 +69,15 @@ export const DashboardHeader = ({
                 </div>
                 <div className="flex items-center justify-between">
                     {showBalance ? (
-                        <p className="text-2xl font-bold tracking-wider text-black sm:text-3xl">
-                            {formatUsd(currentBalance)}
+                        <p
+                            className={cn(
+                                "text-2xl font-bold tracking-wider sm:text-3xl",
+                                valuation > 0
+                                    ? " text-green-400"
+                                    : "text-destructive",
+                            )}
+                        >
+                            {formatUsd(valuation)}
                             {/* {formatUsd(portfolioData.currentBalance)} */}
                         </p>
                     ) : (
