@@ -15,8 +15,10 @@ const watchlist = () => {
                     {/* TODO add ticker logic */}
                     <Button> + Ticker</Button>
                 </div>
-                <UserWatchlist />
-                <PerspectiveViewer />
+                <div className="flex grow flex-col space-y-6 pt-2">
+                    <UserWatchlist />
+                    <PerspectiveViewer />
+                </div>
             </div>
         </Layout>
     );
