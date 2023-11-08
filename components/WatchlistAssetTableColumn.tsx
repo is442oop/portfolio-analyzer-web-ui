@@ -19,6 +19,7 @@ export const Columns: ColumnDef<WatchlistAsset>[] = [
         },
     },
     {
+        id: "assetTicker",
         accessorKey: "ticker",
         header: () => <div className="w-60 text-left">Tickers</div>,
         cell: ({ row }) => {
