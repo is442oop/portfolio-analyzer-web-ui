@@ -62,7 +62,7 @@ export const Columns: ColumnDef<WatchlistAsset>[] = [
                 style={{
                     color:
                         (row as { getValue: (key: string) => any }).getValue(
-                            "price24hDeltaPercentage",
+                            "price7dDeltaPercentage",
                         ) < 0
                             ? "#cd4a60"
                             : "#55bd7d",
