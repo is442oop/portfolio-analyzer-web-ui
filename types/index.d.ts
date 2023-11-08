@@ -40,7 +40,6 @@ declare type Portfolio = {
     description: String;
 };
 
-<<<<<<< HEAD
 declare type TickerPrice = {
     price : number;
 }
@@ -55,7 +54,7 @@ declare type TickerPriceData = {
     volume24h: number,
     sparkline: { value: number}[],
 }
-=======
+
 declare type AllocationChartProps = {
     stock: string;
     percentage: number;
@@ -73,4 +72,3 @@ declare type PortfolioResponse = {
     quantity: number;
     value: number;
 };
->>>>>>> 2c513a9f29a960f61ddf7f91e74467a1abce1dc4
