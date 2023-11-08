@@ -2,21 +2,16 @@ import { DashboardHeader } from "@/components/DashboardHeader";
 import { Layout } from "@/components/Layout";
 import PortfolioHistoryChart from "@/components/PortfolioHistoryChart";
 import AssetTable from "@/components/AssetTable";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import AssetAllocationChart from "@/components/AssetAllocationChart";
 import PortfolioList from "@/components/PortfolioList";
-import { useSessionDetails } from "@/hooks/useSessionDetails";
-import { User, createPagesServerClient } from "@supabase/auth-helpers-nextjs";
+import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
 
 const dashboard = ({ userId }: { userId: string }) => {
     const [currentBalance, setCurrentBalance] = useState<number>(0);
     const [selectedPeriod, setSelectedPeriod] = useState("7");
-    // const userDetails = useSessionDetails();
     const [latestPrices, setLatestPrices] = useState();
-    // const [isLoading, setIsLoading] = useState(true);
-    // const userId = user.id;
-    // console.log(user.id);
 
     // Data for the table
     const { data: allAssetsList, isLoading: allAssetsListLoading } = useQuery(
@@ -79,7 +74,6 @@ const dashboard = ({ userId }: { userId: string }) => {
         },
         {
             onSuccess: async (portfolioAssetHistory) => {
-                console.log(portfolioAssetHistory);
                 if (portfolioAssetHistory !== undefined) {
                     setLatestPrices(
                         portfolioAssetHistory[portfolioAssetHistory?.length - 1]
@@ -90,11 +84,6 @@ const dashboard = ({ userId }: { userId: string }) => {
             enabled: !!userId,
         },
     );
-
-    // useEffect(() => {
-    //     if (userId !== undefined) setIsLoading(false);
-    //     refetchHistory();
-    // }, [userId]);
 
     useEffect(() => {
         refetchHistory();
@@ -155,7 +144,6 @@ export const getServerSideProps = async (context: any) => {
         data: { user },
         error,
     } = await supabase.auth.getUser();
-    console.log(user);
     if (error || !user)
         return {
             redirect: {

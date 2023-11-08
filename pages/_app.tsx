@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/Toaster/toaster";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { Inter } from "next/font/google";
@@ -18,7 +19,8 @@ export default function App({ Component, pageProps }: AppProps) {
             `}</style>
             <QueryClientProvider client={queryClient}>
                 <Component {...pageProps} />
-            </QueryClientProvider>{" "}
+            </QueryClientProvider>
+            <Toaster />
         </main>
     );
 }

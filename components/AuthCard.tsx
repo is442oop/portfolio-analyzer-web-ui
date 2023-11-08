@@ -105,7 +105,6 @@ export function AuthCard() {
                   password,
               });
 
-        setIsLoading(false);
         if (error) {
             const msg = isNewUser
                 ? "failed to create account"
@@ -121,7 +120,7 @@ export function AuthCard() {
                 title: `Welcome, ${data.user!.email}!`,
             });
         }
-        console.log(data);
+        setIsLoading(false);
         router.push("/dashboard");
     };
 

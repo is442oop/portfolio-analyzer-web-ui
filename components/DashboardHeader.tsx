@@ -30,7 +30,6 @@ export const DashboardHeader = ({
     const [showBalance, setShowBalance] = useState(true);
     // const userDetails = useSessionDetails();
     // const userId = userDetails?.id;
-    console.log(portfolioAssets, latestPrices, balance);
     const percentageChange =
         balance === 0 && latestPrices === 0
             ? 0

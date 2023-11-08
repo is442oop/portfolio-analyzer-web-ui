@@ -28,15 +28,12 @@ export default async function handler(
 
     if (req.method == "DELETE") {
         try {
-            console.log(req.body);
-
             const response = await axios.delete(
                 `${process.env.API_URL}/api/portfolios/assets`,
                 {
                     data: req.body,
                 },
             );
-            console.log(response.data);
             return res.status(200).json(response.data);
         } catch (error) {
             return res.status(500).json({ message: error });
