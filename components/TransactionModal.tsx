@@ -524,7 +524,7 @@ export const TransactionModal = () => {
                                 <Label htmlFor="spent">Total Spent</Label>
                                 <p
                                     id="spent"
-                                    className=" overflow-x-scroll pb-2 text-xl font-bold"
+                                    className="scrollbar-transparent overflow-x-scroll text-xl font-bold"
                                 >
                                     {formatUsd(
                                         parseFloat(quantity) *
