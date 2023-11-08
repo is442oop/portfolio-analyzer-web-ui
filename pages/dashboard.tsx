@@ -12,11 +12,7 @@ import { PortfolioModal } from "@/components/PortfolioModal";
 const dashboard = ({ userId }: { userId: string }) => {
     const [currentBalance, setCurrentBalance] = useState<number>(0);
     const [selectedPeriod, setSelectedPeriod] = useState("7");
-    // const userDetails = useSessionDetails();
     const [latestPrices, setLatestPrices] = useState();
-    // const [isLoading, setIsLoading] = useState(true);
-    // const userId = user.id;
-    // console.log(user.id);
 
     // Data for the table
     const { data: allAssetsList, isLoading: allAssetsListLoading } = useQuery(
@@ -79,7 +75,6 @@ const dashboard = ({ userId }: { userId: string }) => {
         },
         {
             onSuccess: async (portfolioAssetHistory) => {
-                console.log(portfolioAssetHistory);
                 if (portfolioAssetHistory !== undefined) {
                     setLatestPrices(
                         portfolioAssetHistory[portfolioAssetHistory?.length - 1]
