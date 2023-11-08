@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export async function middleware(req: NextRequest) {
-    console.log("middleware", req.nextUrl.pathname);
     const res = NextResponse.next();
     const supabase = createMiddlewareClient({ req, res });
     const { data, error } = await supabase.auth.getSession();

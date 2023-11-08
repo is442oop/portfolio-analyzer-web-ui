@@ -5,86 +5,56 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<WatchlistAsset[]>,
 ) {
-    // TODO: convert this to a POST request and pass in the tickers as a body when "add ticker" logic is ready
-    // const watchlistTickers = [
-    //     "AAPL",
-    //     "MSFT",
-    //     "GOOG",
-    //     "GOOGL",
-    //     "AMZN",
-    //     "NVDA",
-    //     "META",
-    // ];
-    const { id }  = req.query;
+    const { id } = req.query;
     const assets = [];
     const apiKey = process.env.ALPHA_VANTAGE_API_KEY;
 
     let watchlistTickers = [];
-    
-    
+    let toRet: TickerPriceData[] = [];
+
     try {
-        const response = await axios.get(`${process.env.API_URL}/api/watchlist/user/${id}`);
-        const data = await response.data;
-        watchlistTickers = data.watchlist_assets;
+        const response = await axios.get(`${process.env.API_URL}/api/watchlist/user/${id}/prices`);
+        const data = await response.data["watchlistAssetPriceMap"];
+        const responseTicker = await axios.get(`${process.env.API_URL}/api/watchlist/user/${id}`);
+        const dataTicker = await responseTicker.data;
+        watchlistTickers = dataTicker.watchlist_assets;
 
-    const promises = watchlistTickers.map(async (ticker: any) => {
-        const intraday = await fetch(
-            `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${ticker}&interval=60min&outputsize=full&apikey=${apiKey}`,
+            for (let i = 0; i < watchlistTickers.length; i++) {
+                let ticker = watchlistTickers[i];
+                let tickerdata = data[i][ticker];
+                const timeSeries60minArray = Object.values(
+                    tickerdata["AssetIntraday"]
+                ) as number[];
+                const timeSeries7days = timeSeries60minArray.slice(0, 168);
+                const percent24h = (timeSeries60minArray[0] - timeSeries60minArray[23]) / timeSeries60minArray[23];
+                const percent7d = (timeSeries60minArray[0] - timeSeries60minArray[167]) / timeSeries60minArray[167];
+                const price = tickerdata["Global Quote Price"];
+                const volume24h = Number(tickerdata["Global Quote Volume"]);
+                const marketCap = Number(tickerdata["AssetOverview MarketCapitalization"]);
+                const name = tickerdata["AssetOverview Name"];
+                const chartData = timeSeries7days
+                    .map((item) => ({
+                        value: item,
+                    }))
+                    .reverse();
+
+                toRet.push({
+                    ticker: ticker,
+                    name: name,
+                    price: price,
+                    price24hDeltaPercentage: percent24h,
+                    price7dDeltaPercentage: percent7d,
+                    marketCap: marketCap,
+                    volume24h: volume24h,
+                    sparkline: chartData,
+                });
+            }
+        // }
+        res.status(200).json(
+            toRet.map((toRet) => {
+                return { ...toRet };
+            })
         );
-        const intradaydata = await intraday.json();
-        const rates = await fetch(
-            `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${ticker}&apikey=${apiKey}`,
-        );
-        const ratesdata = await rates.json();
-        const companyInfo = await fetch(
-            `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${ticker}&apikey=${apiKey}`,
-        );
-        const companyInfoData = await companyInfo.json();
-
-        const timeSeries60min = intradaydata["Time Series (60min)"];
-        const timeSeries60minArray = Object.values(
-            timeSeries60min,
-        ) as TimeSeriesData[];
-        const timeSeries7days = timeSeries60minArray.slice(0, 113);
-        const percent24h =
-            (timeSeries60minArray[0]["4. close"] -
-                timeSeries60minArray[16]["4. close"]) /
-            timeSeries60minArray[16]["4. close"];
-        const percent7d =
-            (timeSeries60minArray[0]["4. close"] -
-                timeSeries60minArray[112]["4. close"]) /
-            timeSeries60minArray[112]["4. close"];
-        const price = ratesdata["Global Quote"]["05. price"];
-        const volume24h = Number(ratesdata["Global Quote"]["06. volume"]);
-        const marketCap = Number(companyInfoData["MarketCapitalization"]);
-        const name = companyInfoData["Name"];
-        const chartData = (
-            Object.values(timeSeries7days) as { "4. close": number }[]
-        )
-            .map((item) => ({
-                value: item["4. close"],
-            }))
-            .reverse();
-
-        return {
-            ticker: ticker,
-            name: name,
-            price: price,
-            price24hDeltaPercentage: percent24h,
-            price7dDeltaPercentage: percent7d,
-            marketCap: marketCap,
-            volume24h: volume24h,
-            sparkline: chartData,
-        };
-    });
-
-    const results = await Promise.all(promises);
-    assets.push(...results);
-    res.status(200).json(
-        assets.map((assets) => {
-            return { ...assets };
-        }),
-    );
     } catch (error) {
         console.log(error);
     }

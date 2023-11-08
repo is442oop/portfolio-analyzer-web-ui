@@ -8,8 +8,9 @@ export default async function handler(
 ) {
     try {
         const { id } = req.query;
-        const response = await axios.get(
-            `${process.env.API_URL}/api/users/${id}/portfolios`,
+        const response = await axios.post(
+            `${process.env.API_URL}/api/watchlist`,
+            req.body,
         );
         return res.status(200).json(response.data);
     } catch (error) {

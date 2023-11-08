@@ -14,11 +14,13 @@ export const ChartControls = ({
                     style={{
                         color: "#5B7282",
                         backgroundColor:
-                            selectedPeriod === period
+                            selectedPeriod === period.split(" ")[0]
                                 ? "#FFFFFF"
                                 : "transparent",
                     }}
-                    onClick={() => setSelectedPeriod(period)}
+                    onClick={() => {
+                        setSelectedPeriod(period.split(" ")[0]);
+                    }}
                 >
                     {period}
                 </Button>
