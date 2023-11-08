@@ -173,7 +173,6 @@ export const getServerSideProps = async (context: any) => {
     } = await supabase.auth.getUser();
 
     if (error || !user)
-
         return {
             redirect: {
                 destination: "/auth",
@@ -460,7 +459,7 @@ export const getServerSideProps = async (context: any) => {
         props: {
             pid,
             userId: user.id,
-
+            tickers,
         },
     };
 };
