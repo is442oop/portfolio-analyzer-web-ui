@@ -2,33 +2,29 @@ import { DashboardHeader } from "@/components/DashboardHeader";
 import { Layout } from "@/components/Layout";
 import PortfolioHistoryChart from "@/components/PortfolioHistoryChart";
 import AssetTable from "@/components/AssetTable";
-import { use, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import AssetAllocationChart from "@/components/AssetAllocationChart";
 import PortfolioList from "@/components/PortfolioList";
 import { useSessionDetails } from "@/hooks/useSessionDetails";
-import { Icons } from "@/components/ui/Icons";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const dashboard = () => {
     const [currentBalance, setCurrentBalance] = useState<number>(0);
     const [selectedPeriod, setSelectedPeriod] = useState("7");
     const userDetails = useSessionDetails();
     const userId = userDetails?.id;
-    // const { data, isLoading } = useQuery("data", async () => {
-    //     const response = await fetch("/api/users/test/assets");
-    //     const assets = await response.json();
-    //     return assets;
-    // });
 
     const { data: allAssetsList, isLoading: allAssetsListLoading } = useQuery(
         "allAssetsList",
         async () => {
             const response = await fetch(
-                "/api/portfolios/assets/user/d988bdd8-e569-4026-970a-dd6c286ebe6d",
+                `/api/portfolios/assets/user/${userId}`,
             );
             const assets = await response.json();
             return assets.portfolioAssetList;
+        },
+        {
+            enabled: !!userId,
         },
     );
 
@@ -45,6 +41,7 @@ const dashboard = () => {
         },
     );
 
+    // TEST
     const {
         data: portfolioAssetHistory,
         isLoading: portfolioAssetListLoading,
@@ -55,7 +52,7 @@ const dashboard = () => {
             console.log(userId);
             // await new Promise((resolve) => setTimeout(resolve, 1000));
             const response = await fetch(
-                `/api/users/d988bdd8-e569-4026-970a-dd6c286ebe6d/portfolios/balance?duration=${selectedPeriod}`,
+                `/api/users/${userId}/portfolios/balance?duration=${selectedPeriod}`,
             );
             const res = await response.json();
             return res.overallPortfolioHistoryData;
@@ -70,7 +67,7 @@ const dashboard = () => {
                     );
                 }
             },
-            enabled: !!selectedPeriod,
+            enabled: !!selectedPeriod && !!userId,
         },
     );
 
@@ -103,7 +100,9 @@ const dashboard = () => {
                     </div>
                 </div>
                 <div>
-                    <div className="mt-12 text-xl font-semibold">Holdings</div>
+                    <div className="mt-12 py-4 text-2xl font-semibold text-primary">
+                        Holdings
+                    </div>
                     {allAssetsList && (
                         <AssetTable
                             data={allAssetsList}

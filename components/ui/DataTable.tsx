@@ -140,7 +140,7 @@ export function DataTable<TData, TValue>({
                     </TableBody>
                 </Table>
             </div>
-            <div className="flex items-center justify-end gap-5 pt-8">
+            <div className="flex items-center justify-end gap-5 pt-1">
                 <div className="flex items-center space-x-2">
                     <Button
                         variant="outline"

@@ -61,7 +61,7 @@ export default function PerspectiveViewer({
     configProp,
     portfolios = PORTFOLIOS,
     tickers = TICKERS,
-    refreshRateMillis = 100,
+    refreshRateMillis = 500,
     shouldRefresh = true,
 }: PerspectiveViewerProps) {
     function newRows() {
@@ -114,9 +114,11 @@ export default function PerspectiveViewer({
     }, [ref]);
 
     return (
-        <perspective-viewer
-            ref={ref}
-            style={{ minHeight: "800px", height: "100%", width: "100%" }} // somehow tailwind doesn't work here
-        ></perspective-viewer>
+        <div className="aspect-square overflow-auto rounded-md border p-3">
+            <perspective-viewer
+                ref={ref}
+                style={{ minHeight: "800px", height: "100%", width: "100%" }} // somehow tailwind doesn't work here
+            ></perspective-viewer>
+        </div>
     );
 }
