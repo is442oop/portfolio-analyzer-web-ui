@@ -190,7 +190,7 @@ export const getServerSideProps = async (context: any) => {
     return {
         props: {
             pid,
-            userId: session.user.id,
+            userId: user.id,
         },
     };
 };
