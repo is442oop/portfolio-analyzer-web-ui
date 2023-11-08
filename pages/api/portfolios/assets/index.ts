@@ -7,8 +7,8 @@ export default async function handler(
 ) {
     if (req.method == "POST") {
         try {
-            const { portfolioId, assetTicker, price, quantity } = req.body;
-
+            const { portfolioId, assetTicker, price, quantity, date } =
+                req.body;
             const response = await axios.post(
                 `${process.env.API_URL}/api/portfolios/assets`,
                 {
@@ -16,6 +16,7 @@ export default async function handler(
                     assetTicker: assetTicker,
                     price: price,
                     quantity: quantity,
+                    dateCreated: date,
                 },
             );
 

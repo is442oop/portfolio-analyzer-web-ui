@@ -28,7 +28,6 @@ const dashboard = () => {
         },
     );
 
-    if (allAssetsList) console.log(allAssetsList);
     const { data: portfolioObj, isLoading: portfolioObjLoading } = useQuery(
         "portfolioList",
         async () => {
@@ -41,7 +40,6 @@ const dashboard = () => {
         },
     );
 
-    // TEST
     const {
         data: portfolioAssetHistory,
         isLoading: portfolioAssetListLoading,
@@ -52,7 +50,9 @@ const dashboard = () => {
             console.log(userId);
             // await new Promise((resolve) => setTimeout(resolve, 1000));
             const response = await fetch(
-                `/api/users/${userId}/portfolios/balance?duration=${selectedPeriod}`,
+                `/api/users/${userId}/portfolios/balance?duration=${
+                    selectedPeriod === "1" ? "2" : selectedPeriod
+                }`,
             );
             const res = await response.json();
             return res.overallPortfolioHistoryData;
@@ -78,6 +78,7 @@ const dashboard = () => {
 
     useEffect(() => {
         refetchHistory();
+        console.log(selectedPeriod);
     }, [selectedPeriod]);
 
     if (portfolioAssetHistory) console.log(portfolioAssetHistory);

@@ -61,19 +61,22 @@ const IndividualPortfolio = () => {
         "portfolioAssetHistory",
         async () => {
             console.log(router.query.pid);
+
             const response = await fetch(
-                `/api/portfolios/${router.query.pid}/balance?duration=${selectedPeriod}`,
+                `/api/portfolios/${router.query.pid}/balance?duration=${
+                    selectedPeriod === "1" ? "2" : selectedPeriod
+                }`,
             );
             const res = await response.json();
             console.log(res);
 
             return res.portfolioHistoryData;
         },
-        {
-            enabled: !!router.query.pid,
-        },
+        // {
+        //     enabled: !!router.query.pid,
+        // },
     );
-    if (portfolioAssetHistory) console.log(portfolioAssetHistory);
+
     useEffect(() => {
         refetchHistory();
     }, [selectedPeriod]);

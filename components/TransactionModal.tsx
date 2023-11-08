@@ -322,6 +322,7 @@ export const TransactionModal = () => {
             assetTicker: ticker,
             price: parseFloat(stockPrice),
             quantity: parseFloat(quantity),
+            date: parseInt((date!.getTime() / 1000).toFixed(0)),
         });
     };
 
@@ -330,13 +331,19 @@ export const TransactionModal = () => {
         assetTicker: string;
         price: number;
         quantity: number;
+        date: number;
     }) => {
-        const response = await axios.post(`/api/portfolios/assets`, {
-            portfolioId: pid,
-            assetTicker: ticker,
-            price: parseFloat(stockPrice),
-            quantity: parseFloat(quantity),
-        });
+        const response = await axios.post(
+            `/api/portfolios/assets`,
+            data,
+            // {
+            //     portfolioId: pid,
+            //     assetTicker: ticker,
+            //     price: parseFloat(stockPrice),
+            //     quantity: parseFloat(quantity),
+            //     date: parseInt((date!.getTime() / 1000).toFixed(0)),
+            // }
+        );
         return response.data;
     };
 
