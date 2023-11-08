@@ -117,7 +117,7 @@ export default function PerspectiveViewer({
         <div className={cn("flex h-full items-stretch", className)}>
             <perspective-viewer
                 ref={ref}
-                style={{ height: "100%", width: "100%" }} // somehow tailwind doesn't work here
+                style={{ minHeight: "800px", height: "100%", width: "100%" }} // somehow tailwind doesn't work here
             ></perspective-viewer>
         </div>
     );
