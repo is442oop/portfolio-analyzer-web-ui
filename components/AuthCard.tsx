@@ -123,7 +123,6 @@ export function AuthCard() {
                   password,
               });
 
-        setIsLoading(false);
         if (error) {
             const msg = isNewUser
                 ? "failed to create account"
@@ -139,11 +138,8 @@ export function AuthCard() {
                 title: `Welcome, ${data.user!.email}!`,
             });
         }
-        console.log(data);
 
-        // insert post watchlist here
-        // const response = await createWatchlist(data.user!.id, ["AAPL"]);
-        // console.log(response);
+        setIsLoading(false);
         router.push("/dashboard");
     };
 
