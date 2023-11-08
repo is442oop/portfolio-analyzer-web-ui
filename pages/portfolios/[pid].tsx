@@ -11,7 +11,13 @@ import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import { User, createPagesServerClient } from "@supabase/auth-helpers-nextjs";
 
-const IndividualPortfolio = ({ pid, user }: { pid: string; user: User }) => {
+const IndividualPortfolio = ({
+    pid,
+    userId,
+}: {
+    pid: string;
+    userId: string;
+}) => {
     const router = useRouter();
     const [selectedPeriod, setSelectedPeriod] = useState("7");
     const { portfolioDetails, isPortfolioDetailsLoading } =
@@ -103,7 +109,7 @@ const IndividualPortfolio = ({ pid, user }: { pid: string; user: User }) => {
                 )}
                 {portfolioDetails && (
                     <DashboardHeader
-                        userId={user.id}
+                        userId={userId}
                         portfolioAssets={individualPortfolioAssets!}
                         balance={currentBalance!}
                         edit={true}
@@ -141,7 +147,7 @@ const IndividualPortfolio = ({ pid, user }: { pid: string; user: User }) => {
                                 />
 
                                 <AssetAllocationChart
-                                    userId={user.id}
+                                    userId={userId}
                                     isIndividualPortfolio={true}
                                     pid={pid}
                                 />
@@ -168,9 +174,10 @@ export default IndividualPortfolio;
 export const getServerSideProps = async (context: any) => {
     const supabase = createPagesServerClient(context);
     const {
-        data: { session },
-    } = await supabase.auth.getSession();
-    if (!session)
+        data: { user },
+        error,
+    } = await supabase.auth.getUser();
+    if (error || !user)
         return {
             redirect: {
                 destination: "/auth",
@@ -182,7 +189,7 @@ export const getServerSideProps = async (context: any) => {
     return {
         props: {
             pid,
-            user: session.user,
+            userId: user.id,
         },
     };
 };

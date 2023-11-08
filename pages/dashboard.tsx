@@ -9,14 +9,14 @@ import PortfolioList from "@/components/PortfolioList";
 import { useSessionDetails } from "@/hooks/useSessionDetails";
 import { User, createPagesServerClient } from "@supabase/auth-helpers-nextjs";
 
-const dashboard = ({ user }: { user: User }) => {
+const dashboard = ({ userId }: { userId: string }) => {
     const [currentBalance, setCurrentBalance] = useState<number>(0);
     const [selectedPeriod, setSelectedPeriod] = useState("7");
     // const userDetails = useSessionDetails();
     const [latestPrices, setLatestPrices] = useState();
     // const [isLoading, setIsLoading] = useState(true);
-    const userId = user.id;
-    console.log(user.id);
+    // const userId = user.id;
+    // console.log(user.id);
 
     // Data for the table
     const { data: allAssetsList, isLoading: allAssetsListLoading } = useQuery(
@@ -165,7 +165,7 @@ export const getServerSideProps = async (context: any) => {
 
     return {
         props: {
-            user: user,
+            userId: user.id,
         },
     };
 };
