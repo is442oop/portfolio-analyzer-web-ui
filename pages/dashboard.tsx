@@ -175,6 +175,7 @@ export const getServerSideProps = async (context: any) => {
         data: { user },
         error,
     } = await supabase.auth.getUser();
+    console.log(user);
     if (error || !user)
         return {
             redirect: {
