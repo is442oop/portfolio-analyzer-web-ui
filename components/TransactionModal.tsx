@@ -332,17 +332,7 @@ export const TransactionModal = () => {
         quantity: number;
         date: number;
     }) => {
-        const response = await axios.post(
-            `/api/portfolios/assets`,
-            data,
-            // {
-            //     portfolioId: pid,
-            //     assetTicker: ticker,
-            //     price: parseFloat(stockPrice),
-            //     quantity: parseFloat(quantity),
-            //     date: parseInt((date!.getTime() / 1000).toFixed(0)),
-            // }
-        );
+        const response = await axios.post(`/api/portfolios/assets`, data);
         return response.data;
     };
 
