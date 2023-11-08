@@ -16,7 +16,7 @@ const watchlist = () => {
                     {/* TODO add ticker logic */}
                     <WatchlistModal />
                 </div>
-                <div className="flex grow flex-col space-y-6 pt-2">
+                <div className="flex grow flex-col space-y-10 pt-2">
                     <UserWatchlist />
                     <PerspectiveViewer />
                 </div>
