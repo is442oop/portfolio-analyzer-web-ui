@@ -40,6 +40,21 @@ declare type Portfolio = {
     description: String;
 };
 
+declare type TickerPrice = {
+    price : number;
+}
+
+declare type TickerPriceData = {
+    ticker: string,
+    name: string,
+    price: number,
+    price24hDeltaPercentage: number,
+    price7dDeltaPercentage: number,
+    marketCap: number,
+    volume24h: number,
+    sparkline: { value: number}[],
+}
+
 declare type AllocationChartProps = {
     stock: string;
     percentage: number;

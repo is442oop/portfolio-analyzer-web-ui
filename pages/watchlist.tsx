@@ -1,5 +1,6 @@
 import { Layout } from "@/components/Layout";
 import UserWatchlist from "@/components/UserWatchlist";
+import { WatchlistModal } from "@/components/WatchlistModal";
 import { Button } from "@/components/ui/Button";
 import React from "react";
 import PerspectiveViewer from "@/components/PerspectiveViewer";
@@ -13,7 +14,7 @@ const watchlist = () => {
                         Watchlist
                     </h2>
                     {/* TODO add ticker logic */}
-                    <Button> + Ticker</Button>
+                    <WatchlistModal />
                 </div>
                 <div className="flex grow flex-col space-y-10 pt-2">
                     <UserWatchlist />
