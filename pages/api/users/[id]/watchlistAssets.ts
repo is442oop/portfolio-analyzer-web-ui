@@ -1,23 +1,33 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import axios from "axios";
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<WatchlistAsset[]>,
 ) {
     // TODO: convert this to a POST request and pass in the tickers as a body when "add ticker" logic is ready
-    const watchlistTickers = [
-        "AAPL",
-        "MSFT",
-        "GOOG",
-        "GOOGL",
-        "AMZN",
-        "NVDA",
-        "META",
-    ];
+    // const watchlistTickers = [
+    //     "AAPL",
+    //     "MSFT",
+    //     "GOOG",
+    //     "GOOGL",
+    //     "AMZN",
+    //     "NVDA",
+    //     "META",
+    // ];
+    const { id }  = req.query;
     const assets = [];
     const apiKey = process.env.ALPHA_VANTAGE_API_KEY;
 
-    const promises = watchlistTickers.map(async (ticker) => {
+    let watchlistTickers = [];
+    
+    
+    try {
+        const response = await axios.get(`${process.env.API_URL}/api/watchlist/user/${id}`);
+        const data = await response.data;
+        watchlistTickers = data.watchlist_assets;
+
+    const promises = watchlistTickers.map(async (ticker: any) => {
         const intraday = await fetch(
             `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${ticker}&interval=60min&outputsize=full&apikey=${apiKey}`,
         );
@@ -75,4 +85,7 @@ export default async function handler(
             return { ...assets };
         }),
     );
+    } catch (error) {
+        console.log(error);
+    }
 }
