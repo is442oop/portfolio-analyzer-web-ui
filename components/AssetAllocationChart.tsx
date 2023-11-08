@@ -27,23 +27,30 @@ const AssetAllocationChart = ({
     };
     const getAllPortfolioAllocationData = async () => {
         const response = await fetch(
-            `/api/users/d988bdd8-e569-4026-970a-dd6c286ebe6d/portfolios/allocation/${selectedAllocation.toLowerCase()}`,
+            `/api/users/${userId}/portfolios/allocation/${selectedAllocation.toLowerCase()}`,
         );
         return await response.json();
     };
 
     const {
-        data: assetAllocationData,
+        data: indivAssetAllocationData,
         isLoading: allocationDataLoading,
         refetch,
     } = useQuery<AllocationChartProps[]>(
-        "allocationData",
-        isIndividualPortfolio
-            ? getIndivAllocationData
-            : getAllPortfolioAllocationData,
+        "indivAllocationData",
+        getIndivAllocationData,
         { enabled: !!router.isReady, initialData: [] },
     );
 
+    const {
+        data: allAssetAllocationData,
+        isLoading,
+        refetch: refetchAll,
+    } = useQuery<AllocationChartProps[]>(
+        "allAllocationData",
+        getAllPortfolioAllocationData,
+        { enabled: !!userId, initialData: [] },
+    );
     useEffect(() => {
         refetch();
     }, [selectedAllocation]);
@@ -58,16 +65,27 @@ const AssetAllocationChart = ({
                     periods={["Ticker", "Industry"]}
                 />
             </div>
-            {assetAllocationData && (
-                <AllocationPieChart
-                    selectedAllocation={
-                        selectedAllocation === "Industry"
-                            ? "industry"
-                            : "assetTicker"
-                    }
-                    allocationData={assetAllocationData}
-                />
-            )}
+            {isIndividualPortfolio
+                ? indivAssetAllocationData && (
+                      <AllocationPieChart
+                          selectedAllocation={
+                              selectedAllocation === "Industry"
+                                  ? "industry"
+                                  : "assetTicker"
+                          }
+                          allocationData={indivAssetAllocationData}
+                      />
+                  )
+                : allAssetAllocationData && (
+                      <AllocationPieChart
+                          selectedAllocation={
+                              selectedAllocation === "Industry"
+                                  ? "industry"
+                                  : "assetTicker"
+                          }
+                          allocationData={allAssetAllocationData}
+                      />
+                  )}
         </div>
     );
 };

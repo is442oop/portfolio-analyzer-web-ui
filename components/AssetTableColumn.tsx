@@ -103,7 +103,8 @@ export const Columns: ColumnDef<Asset>[] = [
                         title: "Asset deleted successfully",
                     });
                     queryClient.invalidateQueries("individualPortfolioAssets");
-                    queryClient.invalidateQueries("allocationData");
+                    queryClient.invalidateQueries("indivAllocationData");
+                    queryClient.invalidateQueries("allAllocationData");
                 },
             });
             return (

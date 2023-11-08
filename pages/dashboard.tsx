@@ -30,8 +30,8 @@ const dashboard = () => {
         },
     );
 
-    const { data: portfolioAssetList, isLoading: portfolioAssetListLoading } =
-        useQuery("portfolioAssetList");
+    // const { data: portfolioAssetList, isLoading: portfolioAssetListLoading } =
+    //     useQuery("portfolioAssetList");
 
     return (
         <Layout>
