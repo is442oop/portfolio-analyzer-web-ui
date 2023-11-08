@@ -2,21 +2,17 @@ import { DashboardHeader } from "@/components/DashboardHeader";
 import { Layout } from "@/components/Layout";
 import PortfolioHistoryChart from "@/components/PortfolioHistoryChart";
 import AssetTable from "@/components/AssetTable";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import AssetAllocationChart from "@/components/AssetAllocationChart";
 import PortfolioList from "@/components/PortfolioList";
-import { useSessionDetails } from "@/hooks/useSessionDetails";
-import { User, createPagesServerClient } from "@supabase/auth-helpers-nextjs";
+import { createPagesServerClient } from "@supabase/auth-helpers-nextjs";
+import { PortfolioModal } from "@/components/PortfolioModal";
 
 const dashboard = ({ userId }: { userId: string }) => {
     const [currentBalance, setCurrentBalance] = useState<number>(0);
     const [selectedPeriod, setSelectedPeriod] = useState("7");
-    // const userDetails = useSessionDetails();
     const [latestPrices, setLatestPrices] = useState();
-    // const [isLoading, setIsLoading] = useState(true);
-    // const userId = user.id;
-    // console.log(user.id);
 
     // Data for the table
     const { data: allAssetsList, isLoading: allAssetsListLoading } = useQuery(
@@ -79,7 +75,6 @@ const dashboard = ({ userId }: { userId: string }) => {
         },
         {
             onSuccess: async (portfolioAssetHistory) => {
-                console.log(portfolioAssetHistory);
                 if (portfolioAssetHistory !== undefined) {
                     setLatestPrices(
                         portfolioAssetHistory[portfolioAssetHistory?.length - 1]
@@ -91,56 +86,76 @@ const dashboard = ({ userId }: { userId: string }) => {
         },
     );
 
-    // useEffect(() => {
-    //     if (userId !== undefined) setIsLoading(false);
-    //     refetchHistory();
-    // }, [userId]);
-
     useEffect(() => {
         refetchHistory();
     }, [selectedPeriod]);
 
+    useEffect(() => {
+        console.log(portfolioObj);
+    }, [portfolioObj]);
     return (
         <Layout>
             <div className="h-fit min-h-screen space-y-10 py-10 pl-0 pr-10 sm:p-10">
-                <div>
-                    <DashboardHeader
-                        userId={userId}
-                        latestPrices={latestPrices!}
-                        balance={currentBalance!}
-                    />
-                    <div className="flex flex-col gap-1 xl:flex-row xl:justify-center">
-                        <PortfolioHistoryChart
-                            portfolioAssetHistory={portfolioAssetHistory}
-                            setSelectedPeriod={setSelectedPeriod}
-                            selectedPeriod={selectedPeriod}
-                            portfolioAssetListLoading={
-                                portfolioAssetListLoading
-                            }
+                {!portfolioObj ? (
+                    <div className="flex justify-between">
+                        <h2 className="text-2xl font-semibold text-primary">
+                            You do not have any portfolios
+                        </h2>
+                        <PortfolioModal
+                            prefilledPortfolioDetails={{
+                                portfolioName: "",
+                                portfolioDesc: "",
+                            }}
+                            id={userId}
+                            edit={false}
                         />
+                    </div>
+                ) : (
+                    <>
+                        {portfolioAssetHistory && (
+                            <div>
+                                <DashboardHeader
+                                    userId={userId}
+                                    latestPrices={latestPrices!}
+                                    balance={currentBalance!}
+                                />
+                                <div className="flex flex-col gap-1 xl:flex-row xl:justify-center">
+                                    <PortfolioHistoryChart
+                                        portfolioAssetHistory={
+                                            portfolioAssetHistory
+                                        }
+                                        setSelectedPeriod={setSelectedPeriod}
+                                        selectedPeriod={selectedPeriod}
+                                        portfolioAssetListLoading={
+                                            portfolioAssetListLoading
+                                        }
+                                    />
 
-                        <AssetAllocationChart
-                            userId={userId}
-                            isIndividualPortfolio={false}
-                        />
-                    </div>
-                </div>
-                <div>
-                    <div className="mt-12 py-4 text-2xl font-semibold text-primary">
-                        Holdings
-                    </div>
-                    {allAssetsList && (
-                        <AssetTable
-                            data={allAssetsList}
-                            isLoading={allAssetsListLoading}
-                        />
-                    )}
-                </div>
-                {portfolioObj && (
-                    <PortfolioList
-                        id={userId!}
-                        portfolioList={portfolioObj.portfolioList}
-                    />
+                                    <AssetAllocationChart
+                                        userId={userId}
+                                        isIndividualPortfolio={false}
+                                    />
+                                </div>
+                            </div>
+                        )}
+                        <div>
+                            <div className="mt-12 py-4 text-2xl font-semibold text-primary">
+                                Holdings
+                            </div>
+                            {allAssetsList && (
+                                <AssetTable
+                                    data={allAssetsList}
+                                    isLoading={allAssetsListLoading}
+                                />
+                            )}
+                        </div>
+                        {portfolioObj && (
+                            <PortfolioList
+                                id={userId!}
+                                portfolioList={portfolioObj.portfolioList}
+                            />
+                        )}
+                    </>
                 )}
             </div>
         </Layout>
@@ -155,7 +170,6 @@ export const getServerSideProps = async (context: any) => {
         data: { user },
         error,
     } = await supabase.auth.getUser();
-    console.log(user);
     if (error || !user)
         return {
             redirect: {

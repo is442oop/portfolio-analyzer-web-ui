@@ -1,5 +1,3 @@
-import { Dispatch, SetStateAction, useState } from "react";
-
 import {
     AreaChart,
     Area,
@@ -10,7 +8,6 @@ import {
     ResponsiveContainer,
 } from "recharts";
 import { ChartControls } from "./ChartControls";
-import { useSessionDetails } from "@/hooks/useSessionDetails";
 import { Icons } from "./ui/Icons";
 
 const PortfolioHistoryChart = ({
@@ -32,7 +29,7 @@ const PortfolioHistoryChart = ({
                 <ChartControls
                     selectedPeriod={selectedPeriod}
                     setSelectedPeriod={setSelectedPeriod}
-                    periods={["1", "7", "30", "90"]}
+                    periods={["1 Days", "7 Days", "30 Days", "90 Days"]}
                 />
             </div>
             {portfolioAssetListLoading && !portfolioAssetHistory ? (
@@ -85,34 +82,3 @@ const PortfolioHistoryChart = ({
 };
 
 export default PortfolioHistoryChart;
-
-// const PortfolioHistorydata = [
-//     {
-//         date: "2022-06-01",
-//         balance: 10000,
-//     },
-//     {
-//         date: "2022-06-02",
-//         balance: 11000,
-//     },
-//     {
-//         date: "2022-06-03",
-//         balance: 4000,
-//     },
-//     {
-//         date: "2022-06-04",
-//         balance: 11222,
-//     },
-//     {
-//         date: "2022-06-05",
-//         balance: 9000,
-//     },
-//     {
-//         date: "2022-06-06",
-//         balance: 15012,
-//     },
-//     {
-//         date: "2022-06-07",
-//         balance: 14444,
-//     },
-// ];

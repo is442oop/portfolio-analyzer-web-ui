@@ -91,6 +91,8 @@ export const PortfolioModal: React.FC<PortfolioModalProps> = ({
                 queryClient.invalidateQueries("portfolioList");
                 queryClient.invalidateQueries("indivAllocationData");
                 queryClient.invalidateQueries("allAllocationData");
+                queryClient.invalidateQueries("portfolioAssetHistory");
+                queryClient.invalidateQueries("allPortfolioAssetHistory");
             },
         },
     );
