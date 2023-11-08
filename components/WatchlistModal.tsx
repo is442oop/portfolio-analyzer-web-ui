@@ -317,6 +317,7 @@ export const WatchlistModal = () => {
     const { pid } = router.query;
     const [userDetails, setUserDetails] = useState<User>();
     const supabase = createClientComponentClient();
+    const [watchlistTickers, setWatchlistTickers] = useState<string[]>([]);
 
     const getUser = async () => {
         const {
@@ -326,18 +327,43 @@ export const WatchlistModal = () => {
         return user;
     };
 
+    const getWatchlistTickers = async () => {
+        let existingTickers = [];
+        const response = await axios.get(
+            `/api/users/${userDetails?.id}/watchlistAssets`,
+        );
+        const data = await response.data;
+        for (let i = 0; i < data.length; i++) {
+            existingTickers.push(data[i].ticker);
+        }
+        console.log(existingTickers);
+        setWatchlistTickers(existingTickers);
+    };
+
     useEffect(() => {
         getUser();
     }, []);
 
+    useEffect(() => {
+        getWatchlistTickers();
+    }, [userDetails]);
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
         const tickerToBeAdded = [ticker];
+        console.log("This", watchlistTickers);
 
-        const response = await axios.put(`/api/watchlist/user/${userDetails?.id}/add`, {
-            watchlist_asset: tickerToBeAdded,
-        });
+        if (watchlistTickers.includes(tickerToBeAdded[0])) {
+            alert("Ticker already exists in watchlist!");
+            return;
+        }
+
+        const response = await axios.put(
+            `/api/watchlist/user/${userDetails?.id}/add`,
+            {
+                watchlist_asset: tickerToBeAdded,
+            },
+        );
         console.log(response);
 
         // quick workaround for now is to refresh page
