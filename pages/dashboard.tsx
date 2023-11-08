@@ -7,15 +7,18 @@ import { useQuery } from "react-query";
 import AssetAllocationChart from "@/components/AssetAllocationChart";
 import PortfolioList from "@/components/PortfolioList";
 import { useSessionDetails } from "@/hooks/useSessionDetails";
+import { User, createPagesServerClient } from "@supabase/auth-helpers-nextjs";
 
-const dashboard = () => {
+const dashboard = ({ userId }: { userId: string }) => {
     const [currentBalance, setCurrentBalance] = useState<number>(0);
     const [selectedPeriod, setSelectedPeriod] = useState("7");
-    const userDetails = useSessionDetails();
+    // const userDetails = useSessionDetails();
     const [latestPrices, setLatestPrices] = useState();
-    const [isLoading, setIsLoading] = useState(true);
-    const userId = userDetails?.id;
+    // const [isLoading, setIsLoading] = useState(true);
+    // const userId = user.id;
+    // console.log(user.id);
 
+    // Data for the table
     const { data: allAssetsList, isLoading: allAssetsListLoading } = useQuery(
         "allAssetsList",
         async () => {
@@ -44,7 +47,8 @@ const dashboard = () => {
             },
         },
     );
-    if (allAssetsList) console.log(allAssetsList);
+
+    // Data for the list of portfolios
     const { data: portfolioObj, isLoading: portfolioObjLoading } = useQuery(
         "portfolioList",
         async () => {
@@ -57,15 +61,14 @@ const dashboard = () => {
         },
     );
 
+    // Data for the portfolio history chart
     const {
         data: portfolioAssetHistory,
         isLoading: portfolioAssetListLoading,
         refetch: refetchHistory,
     } = useQuery(
-        "portfolioAssetHistory",
+        "allPortfolioAssetHistory",
         async () => {
-            console.log(userId);
-            // await new Promise((resolve) => setTimeout(resolve, 1000));
             const response = await fetch(
                 `/api/users/${userId}/portfolios/balance?duration=${
                     selectedPeriod === "1" ? "2" : selectedPeriod
@@ -84,27 +87,26 @@ const dashboard = () => {
                     );
                 }
             },
-            enabled: !!selectedPeriod && !!userId,
+            enabled: !!userId,
         },
     );
 
-    useEffect(() => {
-        if (userId !== undefined) setIsLoading(false);
-    }, [userId]);
+    // useEffect(() => {
+    //     if (userId !== undefined) setIsLoading(false);
+    //     refetchHistory();
+    // }, [userId]);
 
     useEffect(() => {
         refetchHistory();
-        console.log(selectedPeriod);
     }, [selectedPeriod]);
 
-    if (portfolioAssetHistory) console.log(portfolioAssetHistory);
     return (
         <Layout>
             <div className="h-fit min-h-screen space-y-10 py-10 pl-0 pr-10 sm:p-10">
                 <div>
                     <DashboardHeader
+                        userId={userId}
                         latestPrices={latestPrices!}
-                        isLoading={isLoading}
                         balance={currentBalance!}
                     />
                     <div className="flex flex-col gap-1 xl:flex-row xl:justify-center">
@@ -113,11 +115,14 @@ const dashboard = () => {
                             setSelectedPeriod={setSelectedPeriod}
                             selectedPeriod={selectedPeriod}
                             portfolioAssetListLoading={
-                                isLoading && !portfolioAssetHistory
+                                portfolioAssetListLoading
                             }
                         />
 
-                        <AssetAllocationChart isIndividualPortfolio={false} />
+                        <AssetAllocationChart
+                            userId={userId}
+                            isIndividualPortfolio={false}
+                        />
                     </div>
                 </div>
                 <div>
@@ -143,3 +148,24 @@ const dashboard = () => {
 };
 
 export default dashboard;
+
+export const getServerSideProps = async (context: any) => {
+    const supabase = createPagesServerClient(context);
+    const {
+        data: { user },
+        error,
+    } = await supabase.auth.getUser();
+    if (error || !user)
+        return {
+            redirect: {
+                destination: "/auth",
+                permanent: false,
+            },
+        };
+
+    return {
+        props: {
+            userId: user.id,
+        },
+    };
+};

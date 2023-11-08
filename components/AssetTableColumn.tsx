@@ -105,6 +105,9 @@ export const Columns: ColumnDef<Asset>[] = [
                     queryClient.invalidateQueries("individualPortfolioAssets");
                     queryClient.invalidateQueries("indivAllocationData");
                     queryClient.invalidateQueries("allAllocationData");
+                    queryClient.invalidateQueries("allAssetsList");
+                    queryClient.invalidateQueries("portfolioAssetHistory");
+                    queryClient.invalidateQueries("allPortfolioAssetHistory");
                 },
             });
             return (

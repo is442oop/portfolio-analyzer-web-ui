@@ -302,7 +302,6 @@ const tickers: ticker[] = [
     },
 ];
 
-// TODO: refactor to be able to be prefilled with data for updating portfolio name
 export const TransactionModal = () => {
     const queryClient = useQueryClient();
     const [open, setOpen] = useState(false);
@@ -358,6 +357,7 @@ export const TransactionModal = () => {
             setStockPrice("");
             queryClient.invalidateQueries("individualPortfolioAssets");
             queryClient.invalidateQueries("portfolioDetails");
+            queryClient.invalidateQueries("portfolioAssetHistory");
         },
     });
 

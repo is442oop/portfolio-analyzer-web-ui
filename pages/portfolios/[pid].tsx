@@ -9,8 +9,15 @@ import { usePortfolioDetails } from "@/hooks/usePortfolioDetails";
 import AssetAllocationChart from "@/components/AssetAllocationChart";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
+import { User, createPagesServerClient } from "@supabase/auth-helpers-nextjs";
 
-const IndividualPortfolio = () => {
+const IndividualPortfolio = ({
+    pid,
+    userId,
+}: {
+    pid: string;
+    userId: string;
+}) => {
     const router = useRouter();
     const [selectedPeriod, setSelectedPeriod] = useState("7");
     const { portfolioDetails, isPortfolioDetailsLoading } =
@@ -25,9 +32,7 @@ const IndividualPortfolio = () => {
     } = useQuery(
         "individualPortfolioAssets",
         async () => {
-            const response = await fetch(
-                `/api/portfolios/assets/${router.query.pid}`,
-            );
+            const response = await fetch(`/api/portfolios/assets/${pid}`);
             const res = await response.json();
             return res.portfolioAssetList;
         },
@@ -52,10 +57,11 @@ const IndividualPortfolio = () => {
             enabled: !!router.isReady,
         },
     );
-    useEffect(() => {
-        console.log(router.query.id);
-        if (router.query.id !== undefined) setIsLoading(false);
-    }, [router.query.id]);
+    // useEffect(() => {
+    //     console.log(router.query.id);
+    //     if (router.query.id !== undefined) setIsLoading(false);
+    // }, [router.query.id]);
+    console.log(pid);
     // historical data for portfolio
     const {
         data: portfolioAssetHistory,
@@ -65,7 +71,7 @@ const IndividualPortfolio = () => {
         "portfolioAssetHistory",
         async () => {
             const response = await fetch(
-                `/api/portfolios/${router.query.pid}/balance?duration=${
+                `/api/portfolios/${pid}/balance?duration=${
                     selectedPeriod === "1" ? "2" : selectedPeriod
                 }`,
             );
@@ -103,10 +109,11 @@ const IndividualPortfolio = () => {
                 )}
                 {portfolioDetails && (
                     <DashboardHeader
+                        userId={userId}
+                        portfolioAssets={individualPortfolioAssets!}
                         balance={currentBalance!}
                         edit={true}
                         latestPrices={latestPrices!}
-                        isLoading={isLoading && portfolioAssetListLoading}
                         portfolioName={portfolioDetails.portfolioName}
                         portfolioDesc={portfolioDetails.description}
                     />
@@ -140,8 +147,9 @@ const IndividualPortfolio = () => {
                                 />
 
                                 <AssetAllocationChart
+                                    userId={userId}
                                     isIndividualPortfolio={true}
-                                    pid={parseInt(router.query.pid as string)}
+                                    pid={pid}
                                 />
                             </div>
                             <div className="mt-12 flex items-center justify-between pb-5">
@@ -162,3 +170,26 @@ const IndividualPortfolio = () => {
 };
 
 export default IndividualPortfolio;
+
+export const getServerSideProps = async (context: any) => {
+    const supabase = createPagesServerClient(context);
+    const {
+        data: { user },
+        error,
+    } = await supabase.auth.getUser();
+    if (error || !user)
+        return {
+            redirect: {
+                destination: "/auth",
+                permanent: false,
+            },
+        };
+
+    const { pid } = context.query;
+    return {
+        props: {
+            pid,
+            userId: user.id,
+        },
+    };
+};
