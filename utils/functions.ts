@@ -1,8 +1,10 @@
 export const formatUsd = (amount: number) => {
-    return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-    }).format(amount);
+    return Number.isNaN(amount)
+        ? 0
+        : new Intl.NumberFormat("en-US", {
+              style: "currency",
+              currency: "USD",
+          }).format(amount);
 };
 
 export const formatPercentage = (amount: number) => {
@@ -20,11 +22,10 @@ export const formatNumber = (amount: number) => {
     }).format(amount);
 };
 
-
 export const formatUsdWatchlist = (amount: number) => {
     let formattedAmount = amount;
-    let finalformattedAmount
-    let format = ""
+    let finalformattedAmount;
+    let format = "";
     if (amount >= 1e9) {
         formattedAmount = Number((amount / 1e9).toFixed(2));
         format = " B";
@@ -44,4 +45,3 @@ export const formatUsdWatchlist = (amount: number) => {
 export const formatAvatarFallback = (email: string) => {
     if (email) return email.substring(0, 2).toUpperCase();
 };
-

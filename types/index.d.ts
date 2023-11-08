@@ -11,14 +11,12 @@ declare type ChartControlsProps = {
 };
 
 declare type Asset = {
-    ticker: string;
-    name: string;
-    logoUrl: string;
-    balance: number;
+    assetTicker: string;
     price: number;
-    price24hDeltaPercentage: number;
+    quantity: number;
     value: number;
-}
+    portfolioId: string;
+};
 
 declare type WatchlistAsset = {
     ticker: string;
@@ -31,7 +29,6 @@ declare type WatchlistAsset = {
     sparkline: Record<string, any>[];
 };
 
-
 declare interface TimeSeriesData {
     "4. close": number;
 }
@@ -43,6 +40,7 @@ declare type Portfolio = {
     description: String;
 };
 
+<<<<<<< HEAD
 declare type TickerPrice = {
     price : number;
 }
@@ -57,3 +55,22 @@ declare type TickerPriceData = {
     volume24h: number,
     sparkline: { value: number}[],
 }
+=======
+declare type AllocationChartProps = {
+    stock: string;
+    percentage: number;
+};
+
+declare type PortfolioResponse = {
+    assetTicker: string;
+    price: number;
+    dateCreated: number;
+    dateCreatedStringMap: { dateCreated: string };
+    dateModified: number;
+    dateModifiedStringMap: { dateModified: string };
+    portfolioAssetId: number;
+    portfolioId: number;
+    quantity: number;
+    value: number;
+};
+>>>>>>> 2c513a9f29a960f61ddf7f91e74467a1abce1dc4

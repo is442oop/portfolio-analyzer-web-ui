@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
@@ -30,6 +30,8 @@ import { Calendar as CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/Calendar";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { useMutation, useQueryClient } from "react-query";
+import { toast } from "./ui/Toaster/use-toast";
 
 type ticker = {
     value: string;
@@ -302,27 +304,62 @@ const tickers: ticker[] = [
 
 // TODO: refactor to be able to be prefilled with data for updating portfolio name
 export const TransactionModal = () => {
-    const [open, setOpen] = React.useState(false);
-    const [tickerValue, setTickerValue] = React.useState("");
-    const [ticker, setTicker] = React.useState("");
-    const [date, setDate] = React.useState<Date>();
+    const queryClient = useQueryClient();
+    const [open, setOpen] = useState(false);
+    const [tickerValue, setTickerValue] = useState("");
+    const [ticker, setTicker] = useState("");
+    const [date, setDate] = useState<Date>();
 
-    const [stockPrice, setStockPrice] = useState(0);
-    const [quantity, setQuantity] = useState(0);
+    const [stockPrice, setStockPrice] = useState("");
+    const [quantity, setQuantity] = useState("");
     const router = useRouter();
     const { pid } = router.query;
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-        const response = await axios.post(`/api/portfolio/asset`, {
+        mutate({
             portfolioId: pid,
             assetTicker: ticker,
-            price: stockPrice,
-            quantity: quantity,
+            price: parseFloat(stockPrice),
+            quantity: parseFloat(quantity),
+            date: parseInt((date!.getTime() / 1000).toFixed(0)),
         });
-        console.log(response);
     };
+
+    const createTransaction = async (data: {
+        portfolioId: string | string[] | undefined;
+        assetTicker: string;
+        price: number;
+        quantity: number;
+        date: number;
+    }) => {
+        const response = await axios.post(
+            `/api/portfolios/assets`,
+            data,
+            // {
+            //     portfolioId: pid,
+            //     assetTicker: ticker,
+            //     price: parseFloat(stockPrice),
+            //     quantity: parseFloat(quantity),
+            //     date: parseInt((date!.getTime() / 1000).toFixed(0)),
+            // }
+        );
+        return response.data;
+    };
+
+    const { mutate } = useMutation(createTransaction, {
+        onSuccess: () => {
+            toast({
+                variant: "success",
+                title: "Successfully added transaction!",
+            });
+            setTickerValue("");
+            setQuantity("");
+            setStockPrice("");
+            queryClient.invalidateQueries("individualPortfolioAssets");
+            queryClient.invalidateQueries("portfolioDetails");
+        },
+    });
 
     return (
         <>
@@ -428,28 +465,27 @@ export const TransactionModal = () => {
                         </div>
 
                         <div className="mt-4 flex justify-around gap-4">
-                            <div className="max-w-fit items-center gap-1.5">
+                            <div className="max-w-fit items-center gap-y-2">
                                 <Label htmlFor="quantity">Quantity</Label>
                                 <Input
                                     type="number"
                                     id="quantity"
-                                    placeholder="0.00"
+                                    placeholder="0"
                                     onChange={(e) =>
-                                        setQuantity(parseFloat(e.target.value))
+                                        setQuantity(e.target.value)
                                     }
                                     required
                                     value={quantity}
                                 />
                             </div>
-                            <div className="max-w-fit items-center gap-1.5">
+                            <div className="max-w-fit items-center gap-y-2">
                                 <Label htmlFor="price">Stock Price</Label>
                                 <Input
                                     type="number"
                                     id="price"
+                                    placeholder="0.00"
                                     onChange={(e) => {
-                                        setStockPrice(
-                                            parseFloat(e.target.value),
-                                        );
+                                        setStockPrice(e.target.value);
                                     }}
                                     value={stockPrice}
                                 />
@@ -493,8 +529,14 @@ export const TransactionModal = () => {
                         <div className="mt-4 h-[75px] w-full rounded-xl bg-gray-200">
                             <div className="grid w-full max-w-sm items-center gap-1.5 p-4">
                                 <Label htmlFor="spent">Total Spent</Label>
-                                <p id="spent" className="text-xl font-bold">
-                                    {formatUsd(quantity * stockPrice)}
+                                <p
+                                    id="spent"
+                                    className="scrollbar-transparent overflow-x-scroll text-xl font-bold"
+                                >
+                                    {formatUsd(
+                                        parseFloat(quantity) *
+                                            parseFloat(stockPrice),
+                                    )}
                                 </p>
                             </div>
                         </div>
@@ -502,8 +544,8 @@ export const TransactionModal = () => {
                         <DialogClose
                             type="submit"
                             disabled={
-                                quantity == 0 ||
-                                stockPrice == 0 ||
+                                parseFloat(quantity) == 0 ||
+                                parseFloat(stockPrice) == 0 ||
                                 !date ||
                                 !tickerValue
                             }

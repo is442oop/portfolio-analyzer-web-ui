@@ -18,7 +18,9 @@ export const ChartControls = ({
                                 ? "#FFFFFF"
                                 : "transparent",
                     }}
-                    onClick={() => setSelectedPeriod(period)}
+                    onClick={() => {
+                        setSelectedPeriod(period);
+                    }}
                 >
                     {period}
                 </Button>

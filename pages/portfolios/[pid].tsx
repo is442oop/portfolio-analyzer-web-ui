@@ -1,54 +1,100 @@
-import React, { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { Layout } from "@/components/Layout";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { TransactionModal } from "@/components/TransactionModal";
 import PortfolioHistoryChart from "@/components/PortfolioHistoryChart";
-import { AssetAllocationChart } from "@/components/AssetAllocationChart";
 import AssetTable from "@/components/AssetTable";
 import { Icons } from "@/components/ui/Icons";
 import { usePortfolioDetails } from "@/hooks/usePortfolioDetails";
+import AssetAllocationChart from "@/components/AssetAllocationChart";
+import { useRouter } from "next/router";
+import { useQuery } from "react-query";
 
 const IndividualPortfolio = () => {
+    const router = useRouter();
+    const [selectedPeriod, setSelectedPeriod] = useState("7");
     const { portfolioDetails, isPortfolioDetailsLoading } =
         usePortfolioDetails();
+    const [latestPrices, setLatestPrices] = useState();
+    const [isLoading, setIsLoading] = useState(true);
+    const [currentBalance, setCurrentBalance] = useState<number>();
 
-    // TODO: get portfolio balance from db
-    const [individualPortfolioData, setIndividualPortfolioData] = useState({
-        currentBalance: 0,
-        previousBalance: 0, // 24hrs ago balance
-    });
-
-    // TODO: get portfolio assets from db
-    const [individualPortfolioAssets, setIndividualPortfolioAssets] = useState<
-        Asset[]
-    >([
-        {
-            ticker: "BTC",
-            name: "Bitcoin",
-            logoUrl:
-                "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png",
-            balance: 1.0,
-            price: 28000.9,
-            price24hDeltaPercentage: 0.23,
-            value: 28000.9,
+    const {
+        data: individualPortfolioAssets,
+        isLoading: individualPortfolioAssetsLoading,
+    } = useQuery(
+        "individualPortfolioAssets",
+        async () => {
+            const response = await fetch(
+                `/api/portfolios/assets/${router.query.pid}`,
+            );
+            const res = await response.json();
+            return res.portfolioAssetList;
         },
         {
-            ticker: "BNB",
-            name: "BNB",
-            logoUrl:
-                "https://s2.coinmarketcap.com/static/img/coins/64x64/1839.png",
-            balance: 41,
-            price: 210.3,
-            price24hDeltaPercentage: 0.23,
-            value: 210.3 * 41,
-        },
-    ]);
+            onSuccess: (individualPortfolioAssets) => {
+                individualPortfolioAssets?.forEach(
+                    (portfolio: PortfolioResponse) => {
+                        portfolio.value = portfolio.quantity * portfolio.price;
+                    },
+                );
 
-    // const { data, isLoading: tableData } = useQuery("data", async () => {
-    //     const response = await fetch("/api/users/test/assets");
-    //     const assets = await response.json();
-    //     return assets;
-    // });
+                // get balance for current portfolio
+                const initialValue = 0;
+                const currentBalance = individualPortfolioAssets?.reduce(
+                    (accumulator: number, currentValue: PortfolioResponse) => {
+                        return accumulator + currentValue.value;
+                    },
+                    initialValue,
+                );
+                setCurrentBalance(currentBalance);
+            },
+            enabled: !!router.isReady,
+        },
+    );
+    useEffect(() => {
+        console.log(router.query.id);
+        if (router.query.id !== undefined) setIsLoading(false);
+    }, [router.query.id]);
+    // historical data for portfolio
+    const {
+        data: portfolioAssetHistory,
+        isLoading: portfolioAssetListLoading,
+        refetch: refetchHistory,
+    } = useQuery(
+        "portfolioAssetHistory",
+        async () => {
+            const response = await fetch(
+                `/api/portfolios/${router.query.pid}/balance?duration=${
+                    selectedPeriod === "1" ? "2" : selectedPeriod
+                }`,
+            );
+            const res = await response.json();
+            console.log(res);
+
+            return res.portfolioHistoryData;
+        },
+        {
+            onSuccess: async (portfolioAssetHistory) => {
+                if (portfolioAssetHistory !== undefined) {
+                    setLatestPrices(
+                        portfolioAssetHistory[portfolioAssetHistory?.length - 1]
+                            .balance,
+                    );
+                }
+            },
+            enabled: !!router.query.pid,
+        },
+    );
+
+    useEffect(() => {
+        if (router.isReady) refetchHistory();
+    }, [router.isReady]);
+
+    useEffect(() => {
+        refetchHistory();
+    }, [selectedPeriod]);
+
     return (
         <Layout>
             <div className="h-fit min-h-screen py-10 pl-0 pr-10 sm:p-10">
@@ -57,43 +103,59 @@ const IndividualPortfolio = () => {
                 )}
                 {portfolioDetails && (
                     <DashboardHeader
+                        balance={currentBalance!}
                         edit={true}
-                        portfolioData={individualPortfolioData}
+                        latestPrices={latestPrices!}
+                        isLoading={isLoading && portfolioAssetListLoading}
                         portfolioName={portfolioDetails.portfolioName}
                         portfolioDesc={portfolioDetails.description}
                     />
                 )}
-                {individualPortfolioAssets.length === 0 ? (
-                    <div className="my-auto flex h-fit flex-col items-center justify-center gap-y-3 pt-20">
-                        <div className="space-y-1 text-center">
-                            <h1 className="font-semibold">
-                                This portfolio needs some final touches ...
-                            </h1>
-                            <h2 className="text-gray-400">
-                                Add an asset to get started
-                            </h2>
-                        </div>
-
-                        <TransactionModal />
-                    </div>
-                ) : (
-                    <div className="p-4">
-                        <div className="flex flex-col gap-3 lg:flex-row">
-                            <PortfolioHistoryChart />
-                            <AssetAllocationChart />
-                        </div>
-                        <div className="mt-12 flex items-center justify-between">
-                            <div className="text-xl font-semibold">
-                                Holdings
+                {!individualPortfolioAssets ||
+                    (individualPortfolioAssets.length === 0 && (
+                        <div className="my-auto flex h-fit flex-col items-center justify-center gap-y-3 pt-20">
+                            <div className="space-y-1 text-center">
+                                <h1 className="font-semibold">
+                                    This portfolio needs some final touches ...
+                                </h1>
+                                <h2 className="text-gray-400">
+                                    Add a ticker to get started
+                                </h2>
                             </div>
+
                             <TransactionModal />
                         </div>
-                        {/* <AssetTable
-                            data={individualPortfolioAssets}
-                            isLoading={tableData}
-                        /> */}
-                    </div>
-                )}
+                    ))}
+                {individualPortfolioAssets &&
+                    individualPortfolioAssets.length !== 0 && (
+                        <div>
+                            <div className="flex flex-col gap-3 xl:flex-row">
+                                <PortfolioHistoryChart
+                                    portfolioAssetHistory={
+                                        portfolioAssetHistory
+                                    }
+                                    setSelectedPeriod={setSelectedPeriod}
+                                    selectedPeriod={selectedPeriod}
+                                    portfolioAssetListLoading={isLoading}
+                                />
+
+                                <AssetAllocationChart
+                                    isIndividualPortfolio={true}
+                                    pid={parseInt(router.query.pid as string)}
+                                />
+                            </div>
+                            <div className="mt-12 flex items-center justify-between pb-5">
+                                <div className="text-xl font-semibold">
+                                    Holdings
+                                </div>
+                                <TransactionModal />
+                            </div>
+                            <AssetTable
+                                data={individualPortfolioAssets}
+                                isLoading={individualPortfolioAssetsLoading}
+                            />
+                        </div>
+                    )}
             </div>
         </Layout>
     );
