@@ -21,6 +21,18 @@ const dashboard = () => {
     //     return assets;
     // });
 
+    const { data: allAssetsList, isLoading: allAssetsListLoading } = useQuery(
+        "allAssetsList",
+        async () => {
+            const response = await fetch(
+                "/api/portfolios/assets/user/d988bdd8-e569-4026-970a-dd6c286ebe6d",
+            );
+            const assets = await response.json();
+            return assets.portfolioAssetList;
+        },
+    );
+
+    if (allAssetsList) console.log(allAssetsList);
     const { data: portfolioObj, isLoading: portfolioObjLoading } = useQuery(
         "portfolioList",
         async () => {
@@ -92,7 +104,12 @@ const dashboard = () => {
                 </div>
                 <div>
                     <div className="mt-12 text-xl font-semibold">Holdings</div>
-                    {/* {data && <AssetTable data={data} isLoading={isLoading} />} */}
+                    {allAssetsList && (
+                        <AssetTable
+                            data={allAssetsList}
+                            isLoading={allAssetsListLoading}
+                        />
+                    )}
                 </div>
                 {portfolioObj && (
                     <PortfolioList
