@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { Layout } from "@/components/Layout";
 import { DashboardHeader } from "@/components/DashboardHeader";
 import { TransactionModal } from "@/components/TransactionModal";
@@ -15,6 +15,8 @@ const IndividualPortfolio = () => {
     const [selectedPeriod, setSelectedPeriod] = useState("7");
     const { portfolioDetails, isPortfolioDetailsLoading } =
         usePortfolioDetails();
+    const [valuation, setValuation] = useState<number>();
+    const [latestPrices, setLatestPrices] = useState();
 
     const [currentBalance, setCurrentBalance] = useState<number>();
 
@@ -72,14 +74,28 @@ const IndividualPortfolio = () => {
 
             return res.portfolioHistoryData;
         },
+        {
+            onSuccess: async (portfolioAssetHistory) => {
+                if (portfolioAssetHistory !== undefined) {
+                    setLatestPrices(
+                        portfolioAssetHistory[portfolioAssetHistory?.length - 1]
+                            .balance,
+                    );
+                }
+            },
+        },
         // {
         //     enabled: !!router.query.pid,
         // },
     );
 
     useEffect(() => {
+        setValuation(latestPrices! - currentBalance!);
+    }, [currentBalance, latestPrices]);
+    useEffect(() => {
         refetchHistory();
     }, [selectedPeriod]);
+
     return (
         <Layout>
             <div className="h-fit min-h-screen py-10 pl-0 pr-10 sm:p-10">
@@ -89,7 +105,7 @@ const IndividualPortfolio = () => {
                 {portfolioDetails && (
                     <DashboardHeader
                         edit={true}
-                        currentBalance={currentBalance!}
+                        valuation={valuation!}
                         portfolioName={portfolioDetails.portfolioName}
                         portfolioDesc={portfolioDetails.description}
                     />
