@@ -31,7 +31,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/github_username/repo_name">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="https://github.com/is442oop/portfolio-analyzer-backend/assets/101630007/44e4c2e0-4a38-44f4-8a6d-be65d51458b6" alt="Logo" width="200" height="200">
   </a>
 
 <h3 align="center">Portfolio Analyzer</h3>
