@@ -29,7 +29,7 @@ const AssetData = () => {
         "data",
         async () => {
             const response = await fetch(
-                `/api/users/${userDetails?.id}/watchlistAssets`,
+                `/api/users/${userDetails!.id}/watchlistAssets`,
             );
             if (!response.ok) {
                 throw new Error("Network response was not ok");
