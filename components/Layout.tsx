@@ -1,6 +1,5 @@
 import Sidebar from "./Sidebar";
 import { TailwindIndicator } from "./TailwindIndicator";
-import { Toaster } from "./ui/Toaster/toaster";
 
 interface LayoutProps {
     children?: React.ReactElement[] | React.ReactElement;
