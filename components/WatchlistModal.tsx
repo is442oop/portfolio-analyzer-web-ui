@@ -339,6 +339,9 @@ export const WatchlistModal = () => {
             watchlist_asset: tickerToBeAdded,
         });
         console.log(response);
+
+        // quick workaround for now is to refresh page
+        router.reload();
     };
 
     return (
