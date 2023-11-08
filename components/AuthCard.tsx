@@ -80,11 +80,29 @@ export function AuthCard() {
             email: email,
             username: email,
         });
-        if (res.status !== 200) {
+        if (res.status !== 200) {    
             return { data, error: res.data };
         }
+        const responseWatchlist = await createWatchlist(data.user!.id, ["AAPL"]);
         return { data, error };
     };
+
+
+
+    const createWatchlist = async (userId: string, defaultAsset: string[]) => {
+        try {
+            const response = await axios.post("/api/users/watchlist", {
+                userId: userId,
+                watchlist_assets: defaultAsset,
+            });
+            const data = await response.data;
+            return data;
+        } catch (error) {
+            console.log(error);
+        }
+        
+    }
+
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -122,6 +140,10 @@ export function AuthCard() {
             });
         }
         console.log(data);
+
+        // insert post watchlist here
+        // const response = await createWatchlist(data.user!.id, ["AAPL"]);
+        // console.log(response);
         router.push("/dashboard");
     };
 
