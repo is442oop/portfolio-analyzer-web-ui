@@ -1,38 +1,44 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import { Badge } from "./ui/Badge";
 import { PortfolioModal } from "./PortfolioModal";
 import { formatPercentage, formatUsd } from "@/utils/functions";
+import { useSessionDetails } from "@/hooks/useSessionDetails";
+import { cn } from "@/utils/cn";
+import { Icons } from "./ui/Icons";
+import { Ballet } from "next/font/google";
+import { Badge } from "./ui/Badge";
 
 type DashboardHeaderProps = {
-    portfolioData: {
-        currentBalance: number;
-        previousBalance: number;
-    };
+    latestPrices: number;
+    balance: number;
     edit?: boolean;
     portfolioName?: string;
     portfolioDesc?: string;
+    portfolioAssets?: PortfolioResponse[];
+    userId: string;
 };
 
 export const DashboardHeader = ({
+    portfolioAssets,
+    userId,
+    balance,
     edit = false,
-    portfolioData,
+    latestPrices = 0,
     portfolioName = "",
     portfolioDesc = "",
 }: DashboardHeaderProps) => {
     const [showBalance, setShowBalance] = useState(true);
-
+    // const userDetails = useSessionDetails();
+    // const userId = userDetails?.id;
+    console.log(portfolioAssets, latestPrices, balance);
     const percentageChange =
-        portfolioData.currentBalance === 0 &&
-        portfolioData.previousBalance === 0
+        balance === 0 && latestPrices === 0
             ? 0
-            : ((portfolioData.currentBalance - portfolioData.previousBalance) /
-                  portfolioData.previousBalance) *
-              100;
+            : (latestPrices - balance) / balance;
 
     const isPositiveChange = percentageChange >= 0;
     return (
-        <div className="space-y-4 rounded-lg bg-white p-4">
+        <div className="space-y-4 rounded-lg bg-white py-4">
             <h1 className="text-2xl font-semibold text-primary">
                 {portfolioName === "" ? "Dashboard" : portfolioName}
             </h1>
@@ -68,37 +74,47 @@ export const DashboardHeader = ({
                     </div>
                 </div>
                 <div className="flex items-center justify-between">
-                    {showBalance ? (
-                        <p className="text-2xl font-bold tracking-wider text-black sm:text-3xl">
-                            {formatUsd(portfolioData.currentBalance)}
-                        </p>
-                    ) : (
-                        <p className="text-2xl font-bold text-black sm:text-3xl">
-                            •••••••••
-                        </p>
-                    )}
+                    <div className="space-y-1">
+                        {latestPrices === 0 && portfolioAssets?.length !== 0 ? (
+                            <Icons.spinner className="animate-spin text-primary" />
+                        ) : showBalance ? (
+                            <p
+                                className={cn(
+                                    "text-2xl font-bold tracking-wider text-black sm:text-3xl",
+                                )}
+                            >
+                                {formatUsd(latestPrices)}
+                                {/* {formatUsd(portfolioData.currentBalance)} */}
+                            </p>
+                        ) : (
+                            <p className="text-2xl font-bold text-black sm:text-3xl">
+                                •••••••••
+                            </p>
+                        )}
+                        {latestPrices !== 0 && (
+                            <div className="flex items-center space-x-1 ">
+                                <p
+                                    className={`text-base font-bold tracking-wider ${
+                                        isPositiveChange
+                                            ? "text-green-600"
+                                            : "text-destructive"
+                                    }`}
+                                >
+                                    {isPositiveChange && "+"}
+                                    {formatPercentage(percentageChange)}
+                                </p>
+                                <Badge variant={"secondary"}>24hr</Badge>
+                            </div>
+                        )}
+                    </div>
                     <PortfolioModal
+                        id={userId!}
                         edit={edit}
                         prefilledPortfolioDetails={{
                             portfolioName: portfolioName,
                             portfolioDesc: portfolioDesc,
                         }}
                     />
-                </div>
-
-                {/* Percentage Change */}
-                <div className="flex items-center space-x-1 ">
-                    <p
-                        className={`text-base font-bold tracking-wider ${
-                            isPositiveChange
-                                ? "text-green-600"
-                                : "text-destructive"
-                        }`}
-                    >
-                        {isPositiveChange && "+"}
-                        {formatPercentage(percentageChange)}
-                    </p>
-                    <Badge variant={"secondary"}>24hr</Badge>
                 </div>
             </div>
         </div>

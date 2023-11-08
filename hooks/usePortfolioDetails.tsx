@@ -8,7 +8,7 @@ export const usePortfolioDetails = () => {
         useQuery(
             "portfolioDetails",
             async () => {
-                const response = await fetch(`/api/portfolio/${pid}`);
+                const response = await fetch(`/api/portfolios/${pid}`);
                 const portfolioDetails = await response.json();
                 return portfolioDetails;
             },

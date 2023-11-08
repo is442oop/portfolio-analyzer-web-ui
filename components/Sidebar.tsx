@@ -13,6 +13,7 @@ import { MenuButton } from "./Menu";
 import SidebarItem from "./SidebarItem";
 
 import { Profile } from "./Profile";
+import Link from "next/link";
 
 export const sidebarLinks: SidebarItemType[] = [
     {
@@ -57,9 +58,11 @@ const Sidebar = () => {
                     onClick={() => setOpen(!open)}
                 />
                 <div>
-                    <h1 className="w-full p-2 text-center text-xl font-bold text-primary">
-                        {open ? "Goldman Sachs" : "GS"}
-                    </h1>
+                    <Link href={"/dashboard"}>
+                        <h1 className="w-full p-2 text-center text-xl font-bold text-primary">
+                            {open ? "Goldman Sachs" : "GS"}
+                        </h1>
+                    </Link>
                     <ul className="flex flex-col gap-y-2 pt-3">
                         {sidebarLinks.map((link, index) => (
                             <SidebarItem

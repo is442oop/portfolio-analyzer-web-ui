@@ -9,6 +9,13 @@
         "lint": "next lint"
     },
     "dependencies": {
+        "@finos/perspective": "2.1.2",
+        "@finos/perspective-viewer": "2.1.2",
+        "@finos/perspective-viewer-d3fc": "2.1.2",
+        "@finos/perspective-viewer-datagrid": "2.1.2",
+        "@finos/perspective-webpack-plugin": "2.1.2",
+        "superstore-arrow": "^1.0.0",
+        "stoppable": "^1.1.0",
         "@radix-ui/react-avatar": "^1.0.4",
         "@radix-ui/react-dialog": "^1.0.5",
         "@radix-ui/react-dropdown-menu": "^2.0.6",

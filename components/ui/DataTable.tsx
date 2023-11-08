@@ -1,12 +1,15 @@
 import React from "react";
 import {
     ColumnDef,
+    ColumnFiltersState,
     flexRender,
     getCoreRowModel,
+    getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
     SortingState,
     useReactTable,
+    VisibilityState,
 } from "@tanstack/react-table";
 
 import {
@@ -26,6 +29,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/Select";
+import { Input } from "./Input";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -37,17 +41,28 @@ export function DataTable<TData, TValue>({
     data,
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([]);
+    const [columnFilters, setColumnFilters] =
+        React.useState<ColumnFiltersState>([]);
+    const [columnVisibility, setColumnVisibility] =
+        React.useState<VisibilityState>({});
+    const [rowSelection, setRowSelection] = React.useState({});
     const table = useReactTable({
         data,
         columns,
+        onSortingChange: setSorting,
+        onColumnFiltersChange: setColumnFilters,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
-        onSortingChange: setSorting,
         getSortedRowModel: getSortedRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
+        onColumnVisibilityChange: setColumnVisibility,
+        onRowSelectionChange: setRowSelection,
         state: {
             sorting,
+            columnFilters,
+            columnVisibility,
+            rowSelection,
         },
-        // autoResetPageIndex: false,
         initialState: {
             pagination: {
                 pageIndex: 0,
@@ -57,7 +72,21 @@ export function DataTable<TData, TValue>({
     });
 
     return (
-        <div>
+        <div className="space-y-2">
+            <Input
+                placeholder="Search Assets..."
+                value={
+                    (table
+                        .getColumn("assetTicker")
+                        ?.getFilterValue() as string) ?? ""
+                }
+                onChange={(event) =>
+                    table
+                        .getColumn("assetTicker")
+                        ?.setFilterValue(event.target.value)
+                }
+                className="max-w-full "
+            />
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
@@ -111,7 +140,7 @@ export function DataTable<TData, TValue>({
                     </TableBody>
                 </Table>
             </div>
-            <div className="flex items-center justify-end gap-5 pt-8">
+            <div className="flex items-center justify-end gap-5 pt-1">
                 <div className="flex items-center space-x-2">
                     <Button
                         variant="outline"
