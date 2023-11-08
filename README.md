@@ -44,9 +44,9 @@
     <br />
     <a href="https://is442-oop.netlify.app/">View Demo</a>
     ·
-    <a href="https://github.com/is442oop/portfolio-analyzer-backend/issues">Report Bug</a>
+    <a href="https://github.com/is442oop/portfolio-analyzer-web-ui/issues">Report Bug</a>
     ·
-    <a href="https://github.com/is442oop/portfolio-analyzer-backend/issues">Request Feature</a>
+    <a href="https://github.com/is442oop/portfolio-analyzer-web-ui/issues">Request Feature</a>
   </p>
 </div>
 
@@ -95,15 +95,6 @@ This project is a portfolio analyzer designed to help investment bankers and fun
 
 * [![Next][Next.js]][Next-url]
 * [![React][React.js]][React-url]
-* [![Spring Boot][Springboot-java]][Springboot-url]
-* [![Java][Java-pic]][Java-url]
-* [![Maven][Apache-Maven]][Maven-url]
-* [![Hibernate][Hibernate]][Hibernate-url]
-* [![Supabase][Supabase]][Supbase-url]
-* [![Postgres][Postgres]][Postgres-url]
-* [![Docker][Docker]][Docker-url ]
-* [![Vercel][Vercel]][Vercel-url]
-* [![Google Cloud][Google-Cloud]][Google-Cloud-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -116,41 +107,29 @@ Follow these steps to get the application up and running quickly.
 
 ### Prerequisites
 
-* **Java JDK 17**: You'll need Java Development Kit (JDK) installed on your system. You can download and install it from the [official Oracle website](https://www.oracle.com/java/technologies/downloads/)
-* **Apache Maven**: A build automation tool used for managing and building Java projects. You can download and install Maven from the [official Apache Maven website](https://maven.apache.org/).
 * **Node.js**: JavaScript runtime used for running the application. You can download and install Node.js from the [official Node.js website](https://nodejs.org/en/download).
 * **Supabase**: An open source Firebase alternative. You can create your own project from the [official Supabase website](https://supabase.com/)
 
 
 ### Installation
 
-1. Get a free API Key at [Alpha Vantage](https://www.alphavantage.co/support/#api-key)
-2. Clone the frontend repo
+
+1. Clone the frontend repo
    ```sh
    git clone https://github.com/is442oop/portfolio-analyzer-web-ui.git
    ```
-3. Install NPM packages
+2. Install NPM packages
    ```sh
    cd portfolio-analyzer-web-ui
    npm install
    ```
-4. Create a `.env` file in `portfolio-analyzer-web-ui` root folder with your API keys and Supabase URL.
+3. Create a `.env` file in `portfolio-analyzer-web-ui` root folder with your API keys and Supabase URL.
     ```
     NEXT_PUBLIC_SUPABASE_ANON_KEY=ENTER-YOUR-KEY
     NEXT_PUBLIC_SUPABASE_URL=ENTER-DATABASE-URL
     API_URL=http://localhost:8080
     ALPHA_VANTAGE_API_KEY=ENTER-API-KEY
     ```
-
-5. Clone the backend repo
-    ```
-    https://github.com/is442oop/portfolio-analyzer-backend.git
-    ```
-
-6. Create a `.env` file in `src\main\resources` with your API key
-   ```
-   APIKEY=ENTER-API-KEY
-   ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -161,46 +140,6 @@ Starting up the frontend server
 npm install
 npm run dev
 ```
-
-Starting up the backend server
-* For Windows, the [`make.bat`](make.bat) script can be used to run various commands
-
-  ```sh
-  C:\path\to\project\portfolio-analyzer-backend> make.bat help
-  Available targets:
-    dev    : Run Docker Compose and Maven project
-    up     : Start Docker services in the background
-    down   : Stop and remove Docker containers, networks, volumes
-    prune  : Remove unused Docker containers, networks, volumes, images
-    build  : Clean and build the Maven project
-    mvn    : Run the Maven project
-    help   : Show this help message
-  ```
-  For quick start, run the following command in your terminal from the root backend folder
-  ```powershell
-  make.bat dev
-  ```
-
-* For OSX/WSL/Linux (Unix-based), a [`makefile`](makefile) can be used instead
-
-  ```sh
-  ~/path/to/project/portfolio-analyzer-backend
-  ❯ make help
-  Available targets:
-    dev    : Run Docker Compose and Maven project
-    up     : Start Docker services in the background
-    down   : Stop and remove Docker containers, networks, volumes
-    prune  : Remove unused Docker containers, networks, volumes, images
-    build  : Clean and build the Maven project
-    mvn    : Run the Maven project
-    help   : Show this help message
-  ```
-  For quick start, run the following command in your terminal from the root backend folder
-
-  ```zsh  
-  make dev
-  ```
-
 
 <!-- USAGE EXAMPLES -->
 ## Usage
