@@ -135,7 +135,7 @@ npm run dev
 
 https://github.com/is442oop/portfolio-analyzer-backend/assets/101630007/a9b13251-f070-4c89-9a22-713a4515d21e
 
-To better understand the backend services running, a [Swagger UI](http://localhost:8080/api/swagger-ui/index.html#/) has been created to visualise and test backend API endpoints. Start up the backend services to view the UI.
+To better understand the backend services running, a [Swagger UI](https://portfolio-analyzer-backend-7ygtvoboaa-as.a.run.app/api/swagger-ui/index.html) has been created to visualise and test backend API endpoints. Start up the backend services to view the UI.
 
 ![image](https://github.com/is442oop/portfolio-analyzer-backend/assets/101630007/49bca898-293c-4ad5-a48f-8a17819189db)
 
