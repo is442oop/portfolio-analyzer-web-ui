@@ -29,7 +29,8 @@
 <br />
 <div align="center">
   <a href="https://github.com/github_username/repo_name">
-    <img src="https://github.com/is442oop/portfolio-analyzer-backend/assets/101630007/44e4c2e0-4a38-44f4-8a6d-be65d51458b6" alt="Logo" width="200" height="200"> 
+    <img src="https://github.com/is442oop/portfolio-analyzer-backend/assets/101630007/44e4c2e0-4a38-44f4-8a6d-be65d51458b6" alt="Logo" width="200" height="200">
+
   </a>
 
 <h3 align="center">Portfolio Analyzer</h3>
@@ -77,7 +78,7 @@
 
 This project is a portfolio analyzer designed to help investment bankers and fund managers manage and analyze their investment portfolios. Whether you're a seasoned investor looking for advanced analytics or a novice investor wanting to track your investments, our project aims to provides the tools and insights you need to make informed financial decisions.
 
-![image](https://github.com/is442oop/portfolio-analyzer-backend/assets/101630007/00f1d53d-2be6-4b25-9dbc-2866c80fc6be)
+![image](https://github.com/is442oop/portfolio-analyzer-web-ui/assets/68373112/1e3ab529-ae53-4bb4-ba26-ea8d698531d0)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -107,7 +108,6 @@ Follow these steps to get the application up and running quickly.
     ```
 2. Install NPM packages
     ```sh
-    cd portfolio-analyzer-web-ui
     npm install
     ```
 3. Create a `.env` file in `portfolio-analyzer-web-ui` root folder with your API keys and Supabase URL.
