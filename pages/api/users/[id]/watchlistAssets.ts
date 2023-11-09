@@ -25,7 +25,9 @@ export default async function handler(
                 const timeSeries60minArray = Object.values(
                     tickerdata["AssetIntraday"]
                 ) as number[];
-                const timeSeries7days = timeSeries60minArray.slice(0, 168);
+
+            
+                const timeSeries7days = timeSeries60minArray.slice(0, 113);
                 const percent24h = (timeSeries60minArray[0] - timeSeries60minArray[15]) / timeSeries60minArray[15];
                 const percent7d = (timeSeries60minArray[0] - timeSeries60minArray[111]) / timeSeries60minArray[111];
                 const price = tickerdata["Global Quote Price"];
