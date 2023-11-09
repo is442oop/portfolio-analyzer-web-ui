@@ -137,7 +137,9 @@ const IndividualPortfolio = ({
                                     }
                                     setSelectedPeriod={setSelectedPeriod}
                                     selectedPeriod={selectedPeriod}
-                                    portfolioAssetListLoading={isLoading}
+                                    portfolioAssetListLoading={
+                                        portfolioAssetListLoading
+                                    }
                                 />
 
                                 <AssetAllocationChart
@@ -450,11 +452,18 @@ export const getServerSideProps = async (context: any) => {
                 `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${t.ticker}&apikey=${process.env.ALPHA_VANTAGE_API_KEY}`,
             );
             const data = await response.json();
-            const price = data["Global Quote"]["05. price"];
+            let price;
+            try {
+                price = data["Global Quote"]["05. price"];
+            } catch (error) {
+                console.log(data);
+                return;
+            }
             t.price = parseFloat(price) ?? 0;
             return t;
         }),
     );
+
     return {
         props: {
             pid,
