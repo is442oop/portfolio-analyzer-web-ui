@@ -91,12 +91,17 @@ const dashboard = ({ userId }: { userId: string }) => {
     }, [selectedPeriod]);
 
     useEffect(() => {
-        console.log(portfolioObj);
+        console.log("portfolioObj", portfolioObj);
+        portfolioObj &&
+            console.log("portfolioObj", !portfolioObj.portfolioList);
     }, [portfolioObj]);
     return (
         <Layout>
             <div className="h-fit min-h-screen space-y-10 py-10 pl-0 pr-10 sm:p-10">
-                {!portfolioObj ? (
+                {!portfolioObjLoading &&
+                !allAssetsListLoading &&
+                !portfolioAssetListLoading &&
+                !portfolioObj.portfolioList?.length ? (
                     <div className="flex justify-between">
                         <h2 className="text-2xl font-semibold text-primary">
                             You do not have any portfolios
@@ -112,32 +117,30 @@ const dashboard = ({ userId }: { userId: string }) => {
                     </div>
                 ) : (
                     <>
-                        {portfolioAssetHistory && (
-                            <div>
-                                <DashboardHeader
-                                    userId={userId}
-                                    latestPrices={latestPrices!}
-                                    balance={currentBalance!}
+                        <div>
+                            <DashboardHeader
+                                userId={userId}
+                                latestPrices={latestPrices!}
+                                balance={currentBalance!}
+                            />
+                            <div className="flex flex-col gap-1 xl:flex-row xl:justify-center">
+                                <PortfolioHistoryChart
+                                    portfolioAssetHistory={
+                                        portfolioAssetHistory
+                                    }
+                                    setSelectedPeriod={setSelectedPeriod}
+                                    selectedPeriod={selectedPeriod}
+                                    portfolioAssetListLoading={
+                                        portfolioAssetListLoading
+                                    }
                                 />
-                                <div className="flex flex-col gap-1 xl:flex-row xl:justify-center">
-                                    <PortfolioHistoryChart
-                                        portfolioAssetHistory={
-                                            portfolioAssetHistory
-                                        }
-                                        setSelectedPeriod={setSelectedPeriod}
-                                        selectedPeriod={selectedPeriod}
-                                        portfolioAssetListLoading={
-                                            portfolioAssetListLoading
-                                        }
-                                    />
 
-                                    <AssetAllocationChart
-                                        userId={userId}
-                                        isIndividualPortfolio={false}
-                                    />
-                                </div>
+                                <AssetAllocationChart
+                                    userId={userId}
+                                    isIndividualPortfolio={false}
+                                />
                             </div>
-                        )}
+                        </div>
                         <div>
                             <div className="mt-12 py-4 text-2xl font-semibold text-primary">
                                 Holdings

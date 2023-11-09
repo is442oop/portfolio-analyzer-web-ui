@@ -32,7 +32,7 @@ const PortfolioHistoryChart = ({
                     periods={["1 Days", "7 Days", "30 Days", "90 Days"]}
                 />
             </div>
-            {portfolioAssetListLoading && !portfolioAssetHistory ? (
+            {portfolioAssetListLoading ? (
                 <Icons.spinner className="mx-auto h-full animate-spin text-primary" />
             ) : (
                 <ResponsiveContainer width="100%" height={400}>
