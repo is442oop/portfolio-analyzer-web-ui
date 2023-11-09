@@ -25,9 +25,12 @@ export default async function handler(
                 const timeSeries60minArray = Object.values(
                     tickerdata["AssetIntraday"]
                 ) as number[];
-                const timeSeries7days = timeSeries60minArray.slice(0, 168);
-                const percent24h = (timeSeries60minArray[0] - timeSeries60minArray[23]) / timeSeries60minArray[23];
-                const percent7d = (timeSeries60minArray[0] - timeSeries60minArray[167]) / timeSeries60minArray[167];
+                
+                const timeSeries7days = timeSeries60minArray.slice(0, 113);
+                const percent24h = (timeSeries60minArray[0] - timeSeries60minArray[16]) / timeSeries60minArray[16];
+                const percent7d = (timeSeries60minArray[0] - timeSeries60minArray[111]) / timeSeries60minArray[111];
+                console.log("7 DAYS:" + percent7d);
+                console.log(timeSeries60minArray[111]);
                 const price = tickerdata["Global Quote Price"];
                 const volume24h = Number(tickerdata["Global Quote Volume"]);
                 const marketCap = Number(tickerdata["AssetOverview MarketCapitalization"]);
