@@ -102,7 +102,7 @@ export const DashboardHeader = ({
                                     {isPositiveChange && "+"}
                                     {formatPercentage(percentageChange)}
                                 </p>
-                                <Badge variant={"secondary"}>24hr</Badge>
+                                <Badge variant={"secondary"}>All Time</Badge>
                             </div>
                         )}
                     </div>
